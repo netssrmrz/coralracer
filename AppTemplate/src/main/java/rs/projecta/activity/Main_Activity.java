@@ -17,6 +17,7 @@ implements android.widget.Button.OnClickListener
 		super.onCreate(saved_state);
     this.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
     level = rs.projecta.level.Level.Get(rs.projecta.level.Flappy_Bird.class);
+    //level = rs.projecta.level.Level.Get(rs.projecta.level.Race_Level.class);
     
     list_view = new android.widget.LinearLayout(this);
     list_view.setOrientation(android.widget.LinearLayout.VERTICAL);
@@ -65,6 +66,7 @@ implements android.widget.Button.OnClickListener
       is_fast=true;
 
     level_class = (String)button.getTag();
+    //i = new android.content.Intent(this, Play2_Activity.class);
     i = new android.content.Intent(this, Play_Activity.class);
     i.setFlags(android.content.Intent.FLAG_ACTIVITY_NO_HISTORY);
     i.putExtra("level_class", level_class);

@@ -3,15 +3,12 @@ package rs.projecta.activity;
 public class Play_Activity 
 extends android.app.Activity
 implements 
-  rs.projecta.Tilt_Event_Listener,
   rs.projecta.world.World_Step_Listener
 {
-  public rs.projecta.view.Game_View gfx_view;
+  public android.view.SurfaceView gfx_view;
   public rs.projecta.Tilt_Manager tilt_man;
   public rs.projecta.world.World world;
   public rs.projecta.level.Level curr_level;
-  public rs.projecta.object.Player player;
-  public float max_d, prev_d;
   public android.widget.LinearLayout main_view;
 
   @Override
@@ -30,16 +27,15 @@ implements
       android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);
     this.getWindow().getDecorView().setBackgroundColor(0xff000000);
     
-    this.max_d=0;
-    this.prev_d=0;
     this.curr_level=rs.projecta.level.Level.Get(this);
     is_fast=this.getIntent().getBooleanExtra("is_fast", false);
     this.world=new rs.projecta.world.World(this, this, this.curr_level, is_fast);
-    
-    this.tilt_man=new rs.projecta.Tilt_Manager(this);
-    this.tilt_man.tilt_event_listener=this;
-    
-    this.gfx_view = new rs.projecta.view.Game_View(this, this.world);
+    this.world.Set_Listener(this);
+    this.tilt_man=new rs.projecta.Tilt_Manager(this, this.world);
+    //if (this.Supports_ES2())
+      //this.gfx_view = new rs.projecta.view.Game2_View(this, this.world);
+    //else
+      this.gfx_view = new rs.projecta.view.Game_View(this, this.world);
     
     com.google.android.gms.ads.AdView mAdView =
       new com.google.android.gms.ads.AdView(this);
@@ -67,18 +63,11 @@ implements
 				android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 1f));
   }
   
-  public void On_Tilt_Changed(float[] o, float[] v, float[] d)
+  public boolean Supports_ES2()
   {
-    if (this.world.debug)
-    {
-      if (d[2]-this.prev_d>max_d)
-        max_d=d[2]-this.prev_d;
-      this.world.debug_msg[1] = "Tilt: " + d[2] + "\n";
-      this.world.debug_msg[1] += "max Tilt: " + max_d + "\n";
-    }
-    //this.player.User_Action(d[1], d[2]);
-    //this.player.Accelerate(d[1]);    
-    this.player.Turn(d[2]);
+    return ((android.app.ActivityManager)this
+     .getSystemService(android.content.Context.ACTIVITY_SERVICE))
+     .getDeviceConfigurationInfo().reqGlEsVersion>=0x20000;
   }
   
   @Override
@@ -103,14 +92,13 @@ implements
  
   public void On_World_Step(rs.projecta.world.World w)
   {
-    this.gfx_view.Draw_World_Step();
+    ((rs.projecta.view.Game_View)this.gfx_view).Draw_World_Step();
   }
 
   public void On_World_Init(rs.projecta.world.World w)
   {
     if (this.gfx_view!=null)
-      this.gfx_view.world_view.Init(w);
-    this.player=w.objs.Get_Player();
+      ((rs.projecta.view.Game_View)this.gfx_view).world_view.Init(w);
   }
   
   public void On_World_Finish(rs.projecta.world.World w)

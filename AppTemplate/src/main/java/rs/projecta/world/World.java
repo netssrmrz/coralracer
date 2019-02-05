@@ -13,7 +13,7 @@ java.lang.Runnable
   public boolean debug, prof, is_fast;
   public rs.projecta.level.Level level;
   public Thread game_loop;
-  public rs.projecta.world.World_Step_Listener world_step_listener;
+  public java.util.Vector<rs.projecta.world.World_Step_Listener> world_step_listeners;
   public rs.projecta.world.Object_List objs;
   public int state;
   public boolean do_processing;
@@ -40,12 +40,17 @@ java.lang.Runnable
     this.is_fast = is_fast;
     this.ctx = ctx;
     this.debug_msg = new String[5];
-    this.world_step_listener = l;
+    this.world_step_listeners = new java.util.Vector<rs.projecta.world.World_Step_Listener>();
 
     //this.Init_Sound();
     this.Init_Level(level);
   }
 
+  public void Set_Listener(rs.projecta.world.World_Step_Listener l)
+  {
+    this.world_step_listeners.add(l);
+  }
+  
   public void Init_Sound()
   {
     android.media.SoundPool.Builder b;
@@ -121,6 +126,7 @@ java.lang.Runnable
 
   public void Init_Level()
   {
+    int i;
     //android.util.Log.d("Init_Level()", "Entered");
 
     this.rnd = new java.util.Random(0);
@@ -136,14 +142,15 @@ java.lang.Runnable
     if (this.level != null)
       this.level.Build(this);
 
-    if (this.world_step_listener != null)
-      this.world_step_listener.On_World_Init(this);
+    for (i=0; i<this.world_step_listeners.size(); i++)
+      this.world_step_listeners.get(i).On_World_Init(this);
   }
 
   public void run()
   {
     long now;
     float sec_step;
+    int i;
     //android.util.Log.d("World.run()", "Entered");
 
     if (this.prof)
@@ -158,9 +165,9 @@ java.lang.Runnable
 
       sec_step = this.lapsed_time / 1800000000f;
       this.phys_world.step(sec_step, 8, 8);
-
-      if (this.world_step_listener != null)
-        this.world_step_listener.On_World_Step(this); // draw
+  
+      for (i=0; i<this.world_step_listeners.size(); i++)
+        this.world_step_listeners.get(i).On_World_Step(this); // draw
 
       if (this.level != null)
         this.level.Update();
@@ -174,8 +181,8 @@ java.lang.Runnable
     this.game_loop = null;
     if (this.state == STATE_LEVELCOMPLETE || this.state == STATE_LEVELFAIL)
     {
-      if (this.world_step_listener != null)
-        this.world_step_listener.On_World_Finish(this);
+      for (i=0; i<this.world_step_listeners.size(); i++)
+        this.world_step_listeners.get(i).On_World_Finish(this);
     }
   }
 
