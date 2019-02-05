@@ -229,6 +229,19 @@ public class Type
     return res;
   }
 	
+  public static float[] To_Float_Array(java.util.List l)
+  {
+    float[] res;
+    int i;
+    
+    res=new float[l.size()];
+    for (i=0; i<res.length; i++)
+    {
+      res[i]=To_Float(l.get(i));
+    }
+    return res;
+  }
+  
 	public static java.lang.Float To_Float(Object obj)
   {
     java.lang.Float res=null;
@@ -249,6 +262,8 @@ public class Type
           res=((java.lang.Integer)obj).floatValue();
         else if (obj instanceof java.lang.Double)
           res=((java.lang.Double)obj).floatValue();
+        else if (obj instanceof java.lang.Float)
+          res=(float)obj;
         //else if (obj instanceof java.sql.Timestamp)
 				//res=((java.sql.Timestamp)obj).getTime();
         //else if (obj instanceof java.util.Date)
@@ -257,7 +272,7 @@ public class Type
           res=new Float(((java.sql.Date)obj).getTime());
         else
         {
-          str=rs.android.Util.Remove_Other_Chars("1234567890.", To_String(obj));
+          str=rs.android.Util.Remove_Other_Chars("1234567890.-", To_String(obj));
           res=java.lang.Float.parseFloat(str);
         }
       }
