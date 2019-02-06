@@ -58,19 +58,13 @@ implements android.widget.Button.OnClickListener
     android.content.Intent i;
     String level_class;
     rs.projecta.view.Wave_Drawable b;
-    boolean is_fast=false;
     
     b=(rs.projecta.view.Wave_Drawable)this.list_view.getBackground();
-    //rs.android.ui.Util.Show_Note(this, "min_elapsed: "+b.min_elapsed);
-    if (b.min_elapsed<10000000)
-      is_fast=true;
 
     level_class = (String)button.getTag();
-    //i = new android.content.Intent(this, Play2_Activity.class);
     i = new android.content.Intent(this, Play_Activity.class);
     i.setFlags(android.content.Intent.FLAG_ACTIVITY_NO_HISTORY);
     i.putExtra("level_class", level_class);
-    i.putExtra("is_fast", is_fast);
     this.startActivity(i);
   }
 }

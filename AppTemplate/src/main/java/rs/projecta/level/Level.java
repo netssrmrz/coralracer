@@ -2,9 +2,6 @@ package rs.projecta.level;
 
 public class Level
 {
-  //public rs.projecta.object.Player player;
-  //public Object camera;
-  
   public String Get_Next_Level()
   {
     return null;
@@ -77,26 +74,4 @@ public class Level
   {
     
   }
-  
-  /*public float Get_Camera_X()
-  {
-    float res=0;
-    
-    if (this.camera!=null && this.camera instanceof rs.projecta.object.Has_Position)
-    {
-      res=((rs.projecta.object.Has_Position)this.camera).Get_X();
-    }
-    return res;
-  }
-  
-  public float Get_Camera_Y()
-  {
-    float res=0;
-
-    if (this.camera!=null && this.camera instanceof rs.projecta.object.Has_Position)
-    {
-      res=((rs.projecta.object.Has_Position)this.camera).Get_Y();
-    }
-    return res;
-  }*/
 }

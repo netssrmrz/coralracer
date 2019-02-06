@@ -1,19 +1,20 @@
 package rs.projecta.view;
 
 public class Canvas_View
-extends Game_View
+extends android.view.SurfaceView
 implements 
   android.view.SurfaceHolder.Callback,
   java.lang.Runnable,
-  rs.projecta.world.World_Step_Listener
+  rs.projecta.world.World_Step_Listener,
+  rs.projecta.view.Game_View
 {
   public android.view.SurfaceHolder surface;
   public rs.projecta.world.World world;
   public Thread game_loop;
-  //public Object camera;
   public android.graphics.Paint p;
   public float scale;
   public rs.projecta.Debug_Renderer debug_renderer;
+  public Object camera;
 
   public Canvas_View(android.content.Context ctx, rs.projecta.world.World world)
   {
@@ -103,18 +104,21 @@ implements
       this.Draw_Console(c);
   }
   
-  @Override
   public void onResume()
   {
     //android.util.Log.d("onResume()", "Entered");
     this.Start_Loop();
   }
   
-  @Override
   public void onPause()
   {
     //android.util.Log.d("onPause()", "Entered");
     this.Stop_Loop();
+  }
+
+  public Object Get_Camera()
+  {
+    return camera;
   }
 
   // ===================================================================================

@@ -5,7 +5,7 @@ extends android.app.Activity
 implements 
   rs.projecta.world.World_Step_Listener
 {
-  public rs.projecta.view.Game_View gfx_view;
+  public android.view.SurfaceView gfx_view;
   public rs.projecta.Tilt_Manager tilt_man;
   public rs.projecta.world.World world;
   public rs.projecta.level.Level curr_level;
@@ -14,7 +14,7 @@ implements
   @Override
   public void onCreate(android.os.Bundle saved_state)
   {
-    boolean is_fast;
+    boolean supports_es2=false;
     
     super.onCreate(saved_state);
 
@@ -28,13 +28,17 @@ implements
     this.getWindow().getDecorView().setBackgroundColor(0xff000000);
     
     this.curr_level=rs.projecta.level.Level.Get(this);
-    is_fast=this.getIntent().getBooleanExtra("is_fast", false);
-    this.world=new rs.projecta.world.World(this, this, this.curr_level, is_fast);
+  
+    supports_es2 = this.Supports_ES2();
+    if (supports_es2)
+      this.world=new rs.projecta.world.World(this, this, this.curr_level, rs.projecta.world.World.HINT_ES2);
+    else
+      this.world=new rs.projecta.world.World(this, this, this.curr_level, rs.projecta.world.World.HINT_NONE);
     this.world.Set_Listener(this);
     this.tilt_man=new rs.projecta.Tilt_Manager(this, this.world);
-    //if (this.Supports_ES2())
-      //this.gfx_view = new rs.projecta.view.Game2_View(this, this.world);
-    //else
+    if (supports_es2)
+      this.gfx_view = new rs.projecta.view.OpenGL_View(this, this.world);
+    else
       this.gfx_view = new rs.projecta.view.Canvas_View(this, this.world);
     
     com.google.android.gms.ads.AdView mAdView =
@@ -76,8 +80,7 @@ implements
     super.onResume();
     
     //android.util.Log.d("onResume()", "Entered");
-    //this.world.Start_Loop();
-    this.gfx_view.onResume();
+    ((rs.projecta.view.Game_View)this.gfx_view).onResume();
     this.tilt_man.Register();
   }
 
@@ -88,8 +91,7 @@ implements
     
     //android.util.Log.d("onPause()", "Entered");
     this.tilt_man.Unregister();
-    //this.world.Stop_Loop();
-    this.gfx_view.onPause();
+    ((rs.projecta.view.Game_View)this.gfx_view).onPause();
   }
  
   public void On_World_Step(rs.projecta.world.World w)

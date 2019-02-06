@@ -13,7 +13,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
   public final float trgt_v=40;
   public final float f=80;
 
-	public Player(float x, float y, rs.projecta.world.World world)
+	public Player(float x, float y, rs.projecta.world.World world, int hint)
 	{
     org.jbox2d.dynamics.BodyDef body_def;
     org.jbox2d.dynamics.FixtureDef fix_def;

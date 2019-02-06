@@ -101,11 +101,30 @@ public class Object_List
   
   public void Draw_OpenGL(rs.projecta.view.OpenGL_View v)
   {
+    float x=0, y=0, a=0;
+  
     for (Object o: this.objs)
     {
-      if (o instanceof rs.projecta.object.ogl.Is_Drawable_OpenGL)
+      if (o instanceof rs.projecta.object.Is_Drawable)
       {
-        v.Draw_Obj((rs.projecta.object.ogl.Is_Drawable_OpenGL)o);
+        v.Save_Transform();
+  
+        if (o instanceof rs.projecta.object.Has_Position)
+        {
+          x = ((rs.projecta.object.Has_Position) o).Get_X();
+          y = ((rs.projecta.object.Has_Position) o).Get_Y();
+          android.opengl.Matrix.translateM(v.proj, 0, x, y, 0);
+        }
+  
+        if (o instanceof rs.projecta.object.Has_Direction)
+        {
+          a = ((rs.projecta.object.Has_Direction) o).Get_Angle_Degrees();
+          android.opengl.Matrix.rotateM(v.proj, 0, a, 0, 0, 1);
+        }
+  
+        ((rs.projecta.object.Is_Drawable)o).Draw(v, null);
+  
+        v.Restore_Transform();
       }
     }
   }

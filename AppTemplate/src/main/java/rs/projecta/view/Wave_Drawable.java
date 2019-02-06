@@ -29,7 +29,7 @@ implements rs.projecta.object.Has_Position
     for (c=0; c<WAVES; c++)
       this.bks[c]=new rs.projecta.object.Background_Waves(
         this, (float)c/40f+1f, android.graphics.Color.rgb(
-          0, 0, (int)( (256f/(float)WAVES) * (float)(WAVES-c) )));
+          0, 0, (int)( (256f/(float)WAVES) * (float)(WAVES-c) )), 0);
     
     this.p=new android.graphics.Paint();
     this.p.setStyle(android.graphics.Paint.Style.STROKE);

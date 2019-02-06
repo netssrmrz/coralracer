@@ -22,11 +22,11 @@ implements Is_Drawable
 
     r=Distance(0, 0, c.getWidth(), c.getHeight())/2f;
     
-    if (v.camera!=null && 
-      v.camera instanceof rs.projecta.object.Has_Position)
+    if (v.Get_Camera()!=null &&
+      v.Get_Camera() instanceof rs.projecta.object.Has_Position)
     {
-      x=((rs.projecta.object.Has_Position)v.camera).Get_X();
-      y=((rs.projecta.object.Has_Position)v.camera).Get_Y();
+      x=((rs.projecta.object.Has_Position)v.Get_Camera()).Get_X();
+      y=((rs.projecta.object.Has_Position)v.Get_Camera()).Get_Y();
     }
     
     x1=x-r;

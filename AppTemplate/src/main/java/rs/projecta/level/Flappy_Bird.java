@@ -23,8 +23,7 @@ extends Level
   @Override
   public String Get_Description()
   {
-    return "Tilt this device left and right to steer Mr. Fish through "+
-      "the coral walls.";
+    return "Tilt this device left and right to steer Mr. Fish through the coral walls.";
   }
 
   @Override
@@ -32,10 +31,10 @@ extends Level
   {
     rs.projecta.object.Background_Waves bd, bd2, bd3;
 
-    player = new rs.projecta.object.Player(0, -100, w);
-    bd=new rs.projecta.object.Background_Waves(this.player, 1.2f, 0xff0000ff);
-    bd2=new rs.projecta.object.Background_Waves(this.player, 1.4f, 0xff0000cc);
-    bd3=new rs.projecta.object.Background_Waves(this.player, 1.6f, 0xff000088);
+    player = new rs.projecta.object.Player(0, -100, w, w.hint);
+    bd=new rs.projecta.object.Background_Waves(this.player, 1.2f, 0xff0000ff, w.hint);
+    bd2=new rs.projecta.object.Background_Waves(this.player, 1.4f, 0xff0000cc, w.hint);
+    bd3=new rs.projecta.object.Background_Waves(this.player, 1.6f, 0xff000088, w.hint);
     
     this.trg_step = 1000;
     this.trg_pos = 0; 
@@ -47,14 +46,14 @@ extends Level
     w.objs.Add(bd);
     w.objs.Add(player);
 
-    this.Add_Walls(trg_step);
-    this.Close_Door();
+    //this.Add_Walls(trg_step);
+    //this.Close_Door();
   }
 
   @Override
   public void Update()
   {
-    if (this.player.Get_Y() < this.trg_pos)
+    /*if (this.player.Get_Y() < this.trg_pos)
     {
       this.Add_Score();
       this.Add_Walls(this.trg_pos);
@@ -68,23 +67,20 @@ extends Level
       
       if (this.w.sounds!=null)
       {
-      if (this.player.Get_Y() < -this.trg_step)
-        this.w.sounds.play(this.w.soundid_door, 1, 1, 0, 0, 1);
-    }
-  }
+        if (this.player.Get_Y() < -this.trg_step)
+          this.w.sounds.play(this.w.soundid_door, 1, 1, 0, 0, 1);
+      }
+    }*/
   }
 
   public void Add_Walls(float trg_pos)
   {
     // right wall
-    this.w.objs.Add(new rs.projecta.object.Wall(
-      w, 500, trg_pos - (this.trg_step * 1.5f), 20, this.trg_step / 2f, 0f));
+    this.w.objs.Add(new rs.projecta.object.Wall(w, 500, trg_pos - (this.trg_step * 1.5f), 20, this.trg_step / 2f, 0f));
     // left wall
-    this.w.objs.Add(new rs.projecta.object.Wall(
-      w, -500, trg_pos - (this.trg_step * 1.5f), 20, this.trg_step / 2f, 0f));
+    this.w.objs.Add(new rs.projecta.object.Wall(w, -500, trg_pos - (this.trg_step * 1.5f), 20, this.trg_step / 2f, 0f));
     // top wall
-    this.w.objs.Add(new rs.projecta.object.Flappy_Wall(
-      w, 0, trg_pos - this.trg_step, 0, this.w.rnd.nextFloat()));
+    this.w.objs.Add(new rs.projecta.object.Flappy_Wall(w, 0, trg_pos - this.trg_step, 0, this.w.rnd.nextFloat()));
   }
 
   public void Remove_Walls()
@@ -114,8 +110,7 @@ extends Level
 
     if (this.score > 0)
     {
-      score = new rs.projecta.object.Score(this.w, Integer.toString(this.score), 
-        this.player);
+      score = new rs.projecta.object.Score(this.w, Integer.toString(this.score), this.player);
       this.w.objs.Add(score);
     }
     this.score++;

@@ -8,11 +8,11 @@ implements
   public org.jbox2d.dynamics.World phys_world;
   public float phys_scale;
   public String debug_msg[];
-  public boolean debug, prof, is_fast;
+  public boolean debug, prof;
   public rs.projecta.level.Level level;
   public java.util.Vector<rs.projecta.world.World_Step_Listener> world_step_listeners;
   public rs.projecta.world.Object_List objs;
-  public int state;
+  public int state, hint;
   public boolean do_processing;
   public java.util.Random rnd;
   public long last_update, lapsed_time;
@@ -25,16 +25,19 @@ implements
   public static final int STATE_LEVELCOMPLETE=2;
   public static final int STATE_QUIT=3;
   public static final int STATE_LEVELFAIL=4;
-
+  
+  public static final int HINT_ES2=1;
+  public static final int HINT_NONE=0;
+  
   public World(
     android.content.Context ctx,
     rs.projecta.world.World_Step_Listener l, 
     rs.projecta.level.Level level,
-    boolean is_fast)
+    int hint)
   {
     //this.debug=true;
     //this.prof=true;
-    this.is_fast = is_fast;
+    this.hint = hint;
     this.ctx = ctx;
     this.debug_msg = new String[5];
     this.world_step_listeners = new java.util.Vector<rs.projecta.world.World_Step_Listener>();
@@ -153,21 +156,6 @@ implements
     while (this.do_processing)
     {
       this.Update();
-      
-      /*now = System.nanoTime();
-      this.lapsed_time = now - this.last_update;
-      this.last_update = now;
-
-      sec_step = this.lapsed_time / 1800000000f;
-      this.phys_world.step(sec_step, 8, 8);
-  
-      for (i=0; i<this.world_step_listeners.size(); i++)
-        this.world_step_listeners.get(i).On_World_Step(this); // draw
-
-      if (this.level != null)
-        this.level.Update();
-
-      this.objs.Process();*/
     }
 
     if (this.prof)
