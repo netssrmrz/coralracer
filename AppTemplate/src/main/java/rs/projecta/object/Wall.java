@@ -1,5 +1,4 @@
 package rs.projecta.object;
-//import org.jbox2d.dynamics.*;
 
 public class Wall
 implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
@@ -10,8 +9,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
   public rs.projecta.world.World world;
   public float x1, y1, x2, y2;
 
-  public Wall(rs.projecta.world.World world, float x, float y, 
-    float rx, float ry, float a_degrees)
+  public Wall(rs.projecta.world.World world, float x, float y, float rx, float ry, float a_degrees)
   {
     org.jbox2d.dynamics.BodyDef body_def;
     org.jbox2d.dynamics.FixtureDef fix_def;

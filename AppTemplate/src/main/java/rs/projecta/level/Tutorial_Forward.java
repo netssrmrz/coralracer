@@ -29,7 +29,7 @@ extends Level
   {
     rs.projecta.object.Finish finish;
 
-    player = new rs.projecta.object.Player(0, -20, w);
+    player = new rs.projecta.object.Player(0, -20, w, w.hint);
     finish = new rs.projecta.object.Finish(w, 0, -3800);
     this.w=w;
 
