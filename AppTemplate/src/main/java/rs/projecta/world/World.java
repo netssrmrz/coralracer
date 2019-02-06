@@ -3,16 +3,16 @@ package rs.projecta.world;
 
 public class World
 implements 
-org.jbox2d.callbacks.ContactListener,
-android.media.SoundPool.OnLoadCompleteListener,
-java.lang.Runnable
+  org.jbox2d.callbacks.ContactListener,
+  android.media.SoundPool.OnLoadCompleteListener
+  //java.lang.Runnable
 {
   public org.jbox2d.dynamics.World phys_world;
   public float phys_scale;
   public String debug_msg[];
   public boolean debug, prof, is_fast;
   public rs.projecta.level.Level level;
-  public Thread game_loop;
+  //public Thread game_loop;
   public java.util.Vector<rs.projecta.world.World_Step_Listener> world_step_listeners;
   public rs.projecta.world.Object_List objs;
   public int state;
@@ -84,6 +84,7 @@ java.lang.Runnable
 
   public void Level_Fail()
   {
+    //android.util.Log.d("World", "Level_Fail()");
     this.do_processing = false;
     this.state = rs.projecta.world.World.STATE_LEVELFAIL;
   }
@@ -103,19 +104,14 @@ java.lang.Runnable
 
   public void endContact(org.jbox2d.dynamics.contacts.Contact p1)
   {
-    // TODO: Implement this method
   }
 
-  public void preSolve(org.jbox2d.dynamics.contacts.Contact p1, 
-                       org.jbox2d.collision.Manifold p2)
+  public void preSolve(org.jbox2d.dynamics.contacts.Contact p1, org.jbox2d.collision.Manifold p2)
   {
-    // TODO: Implement this method
   }
 
-  public void postSolve(org.jbox2d.dynamics.contacts.Contact p1, 
-                        org.jbox2d.callbacks.ContactImpulse p2)
+  public void postSolve(org.jbox2d.dynamics.contacts.Contact p1, org.jbox2d.callbacks.ContactImpulse p2)
   {
-    // TODO: Implement this method
   }
 
   public void Init_Level(rs.projecta.level.Level level)
@@ -146,7 +142,7 @@ java.lang.Runnable
       this.world_step_listeners.get(i).On_World_Init(this);
   }
 
-  public void run()
+  public void Do_Processing()
   {
     long now;
     float sec_step;
@@ -178,7 +174,6 @@ java.lang.Runnable
     if (this.prof)
       android.os.Debug.stopMethodTracing();
 
-    this.game_loop = null;
     if (this.state == STATE_LEVELCOMPLETE || this.state == STATE_LEVELFAIL)
     {
       for (i=0; i<this.world_step_listeners.size(); i++)
@@ -186,7 +181,7 @@ java.lang.Runnable
     }
   }
 
-  public void Start_Loop()
+  /*public void Start_Loop()
   {
     //android.util.Log.d("Start_Loop()", "Entered");
     if (this.game_loop == null)
@@ -195,9 +190,9 @@ java.lang.Runnable
       this.game_loop = new Thread(this);
       this.game_loop.start();
     }
-  }
+  }*/
 
-  public void Stop_Loop()
+  /*public void Stop_Loop()
   {
     //android.util.Log.d("Stop_Loop()", "Entered");
     if (this.game_loop != null)
@@ -210,7 +205,7 @@ java.lang.Runnable
       this.sounds.release();
       this.sounds = null;
     } 
-  }
+  }*/
 
   public String Gen_Level_Script()
   {

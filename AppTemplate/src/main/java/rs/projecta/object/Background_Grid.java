@@ -16,8 +16,7 @@ implements Is_Drawable
     //this.camera=camera;
 	}
   
-	public void Draw(rs.projecta.view.World_View v, 
-    android.graphics.Canvas c)
+	public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
 	{
     float r, TILE_SIZE=50, x1, y1, x2, y2, x3, y3, x=0, y=0;
 

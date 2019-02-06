@@ -76,7 +76,7 @@ public class Object_List
     return res;
   }
 
-  public void Draw(rs.projecta.view.World_View v, android.graphics.Canvas c)
+  public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
     for (Object o: this.objs)
     {
@@ -95,6 +95,17 @@ public class Object_List
         ((rs.projecta.object.Is_Drawable)o).Draw(v, c);
 
         c.restore();
+      }
+    }
+  }
+  
+  public void Draw_OpenGL(rs.projecta.view.Game2_View v)
+  {
+    for (Object o: this.objs)
+    {
+      if (o instanceof rs.projecta.object.ogl.Is_Drawable_OpenGL)
+      {
+        v.Draw_Obj((rs.projecta.object.ogl.Is_Drawable_OpenGL)o);
       }
     }
   }

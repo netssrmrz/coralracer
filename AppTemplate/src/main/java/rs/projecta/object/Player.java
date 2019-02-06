@@ -107,7 +107,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
       this.w.sounds.play(this.w.soundid_start, 1, 1, 0, 0, 1);
   }
 
-	public void Draw(rs.projecta.view.World_View v, android.graphics.Canvas c)
+	public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
 	{
       this.frame=this.frame+this.frame_delta*((float)this.w.lapsed_time/1000000f);
       this.frame=this.frame%this.frame_max;

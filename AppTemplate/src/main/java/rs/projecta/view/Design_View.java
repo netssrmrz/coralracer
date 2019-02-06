@@ -1,7 +1,7 @@
 package rs.projecta.view;
 
 public class Design_View
-extends World_View
+extends Game_View
 { 
   public Design_View(android.content.Context context, rs.projecta.world.World world)
   {

@@ -76,7 +76,8 @@ implements
     super.onResume();
     
     //android.util.Log.d("onResume()", "Entered");
-    this.world.Start_Loop();
+    //this.world.Start_Loop();
+    ((rs.projecta.view.Game_View)this.gfx_view).onResume();
     this.tilt_man.Register();
   }
 
@@ -87,23 +88,21 @@ implements
     
     //android.util.Log.d("onPause()", "Entered");
     this.tilt_man.Unregister();
-    this.world.Stop_Loop();
+    //this.world.Stop_Loop();
+    ((rs.projecta.view.Game_View)this.gfx_view).onPause();
   }
  
   public void On_World_Step(rs.projecta.world.World w)
   {
-    ((rs.projecta.view.Game_View)this.gfx_view).Draw_World_Step();
   }
 
   public void On_World_Init(rs.projecta.world.World w)
   {
-    if (this.gfx_view!=null)
-      ((rs.projecta.view.Game_View)this.gfx_view).world_view.Init(w);
   }
   
   public void On_World_Finish(rs.projecta.world.World w)
   {
-    //android.util.Log.d("Play_Activity.On_World_Finish()", "Entered");
+    //android.util.Log.d("Play_Activity", "On_World_Finish()");
     android.content.Intent i;
 
     if (w.state==rs.projecta.world.World.STATE_LEVELCOMPLETE)
@@ -112,11 +111,6 @@ implements
       i.setFlags(android.content.Intent.FLAG_ACTIVITY_NO_HISTORY);
       i.putExtra("level_class", this.curr_level.getClass().getName());
       this.startActivity(i);
-    }
-    else if (w.state==rs.projecta.world.World.STATE_LEVELFAIL)
-    {
-      this.world.Init_Level();
-      this.world.Start_Loop();
     }
   }
 }

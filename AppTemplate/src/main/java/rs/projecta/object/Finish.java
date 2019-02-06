@@ -35,7 +35,7 @@ implements Has_Position, Is_Drawable
     this.p.setColor(0xff0000ff);
   }
   
-  public void Draw(rs.projecta.view.World_View v, android.graphics.Canvas c)
+  public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
     c.drawCircle(0, 0, 50, this.p);
   }

@@ -18,7 +18,7 @@ implements Is_Drawable, Has_Position, Has_Direction
   }
 
   @Override
-  public void Draw(rs.projecta.view.World_View v, android.graphics.Canvas c)
+  public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
     float tx, ty, x=0, y=0;
 

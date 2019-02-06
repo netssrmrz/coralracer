@@ -51,7 +51,7 @@ implements Is_Drawable ,Has_Position
   }
 
   @Override
-  public void Draw(rs.projecta.view.World_View v, android.graphics.Canvas c)
+  public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
     c.drawCircle(0, 0, this.radius+(this.frame/2), p);
     

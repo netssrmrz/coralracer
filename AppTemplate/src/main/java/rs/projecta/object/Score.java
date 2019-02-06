@@ -66,7 +66,7 @@ implements Is_Drawable
   }*/
 
   // canvas text
-  public void Draw(rs.projecta.view.World_View v, android.graphics.Canvas c)
+  public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
     this.size=this.size+this.size_delta*((float)this.w.lapsed_time/1000000f);
     if (this.size>this.size_max)

@@ -41,7 +41,7 @@ implements Is_Drawable
     }
   }
   
-  public void Draw(rs.projecta.view.World_View v, android.graphics.Canvas c)
+  public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {    
     float tx, ty;
     

@@ -62,7 +62,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
   }
 
   @Override
-  public void Draw(rs.projecta.view.World_View v, android.graphics.Canvas c)
+  public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
     c.drawRect(x1, y1, x2, y2, p);
   }
