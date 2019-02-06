@@ -99,7 +99,7 @@ public class Object_List
     }
   }
   
-  public void Draw_OpenGL(rs.projecta.view.Game2_View v)
+  public void Draw_OpenGL(rs.projecta.view.OpenGL_View v)
   {
     for (Object o: this.objs)
     {

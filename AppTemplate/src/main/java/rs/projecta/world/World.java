@@ -1,18 +1,15 @@
 package rs.projecta.world;
-//import android.media.*;
 
 public class World
 implements 
   org.jbox2d.callbacks.ContactListener,
   android.media.SoundPool.OnLoadCompleteListener
-  //java.lang.Runnable
 {
   public org.jbox2d.dynamics.World phys_world;
   public float phys_scale;
   public String debug_msg[];
   public boolean debug, prof, is_fast;
   public rs.projecta.level.Level level;
-  //public Thread game_loop;
   public java.util.Vector<rs.projecta.world.World_Step_Listener> world_step_listeners;
   public rs.projecta.world.Object_List objs;
   public int state;
@@ -155,7 +152,9 @@ implements
     this.do_processing = true;
     while (this.do_processing)
     {
-      now = System.nanoTime();
+      this.Update();
+      
+      /*now = System.nanoTime();
       this.lapsed_time = now - this.last_update;
       this.last_update = now;
 
@@ -168,7 +167,7 @@ implements
       if (this.level != null)
         this.level.Update();
 
-      this.objs.Process(); // remove and update
+      this.objs.Process();*/
     }
 
     if (this.prof)
@@ -180,32 +179,32 @@ implements
         this.world_step_listeners.get(i).On_World_Finish(this);
     }
   }
-
-  /*public void Start_Loop()
+  
+  public void Update()
   {
-    //android.util.Log.d("Start_Loop()", "Entered");
-    if (this.game_loop == null)
-    {
-      this.Init_Sound();
-      this.game_loop = new Thread(this);
-      this.game_loop.start();
-    }
-  }*/
+    long now;
+    float sec_step;
+    int i;
+    
+    now = System.nanoTime();
+    this.lapsed_time = now - this.last_update;
+    this.last_update = now;
+  
+    sec_step = this.lapsed_time / 1800000000f;
+    this.phys_world.step(sec_step, 8, 8);
+  
+    for (i=0; i<this.world_step_listeners.size(); i++)
+      this.world_step_listeners.get(i).On_World_Step(this); // draw
+  
+    if (this.level != null)
+      this.level.Update();
+  
+    this.objs.Process(); // remove and update
 
-  /*public void Stop_Loop()
-  {
-    //android.util.Log.d("Stop_Loop()", "Entered");
-    if (this.game_loop != null)
-    {
-      this.do_processing = false;
-      try
-      {this.game_loop.join();}
-      catch (java.lang.Exception e)
-      {}
-      this.sounds.release();
-      this.sounds = null;
-    } 
-  }*/
+    /*if (this.game_loop==null && this.world_step_listener != null &&
+          this.state!=STATE_PLAY)
+      this.world_step_listener.On_World_Finish(this);*/
+  }
 
   public String Gen_Level_Script()
   {

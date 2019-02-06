@@ -5,7 +5,7 @@ extends android.app.Activity
 implements 
   rs.projecta.world.World_Step_Listener
 {
-  public android.view.SurfaceView gfx_view;
+  public rs.projecta.view.Game_View gfx_view;
   public rs.projecta.Tilt_Manager tilt_man;
   public rs.projecta.world.World world;
   public rs.projecta.level.Level curr_level;
@@ -35,7 +35,7 @@ implements
     //if (this.Supports_ES2())
       //this.gfx_view = new rs.projecta.view.Game2_View(this, this.world);
     //else
-      this.gfx_view = new rs.projecta.view.Game_View(this, this.world);
+      this.gfx_view = new rs.projecta.view.Canvas_View(this, this.world);
     
     com.google.android.gms.ads.AdView mAdView =
       new com.google.android.gms.ads.AdView(this);
@@ -77,7 +77,7 @@ implements
     
     //android.util.Log.d("onResume()", "Entered");
     //this.world.Start_Loop();
-    ((rs.projecta.view.Game_View)this.gfx_view).onResume();
+    this.gfx_view.onResume();
     this.tilt_man.Register();
   }
 
@@ -89,7 +89,7 @@ implements
     //android.util.Log.d("onPause()", "Entered");
     this.tilt_man.Unregister();
     //this.world.Stop_Loop();
-    ((rs.projecta.view.Game_View)this.gfx_view).onPause();
+    this.gfx_view.onPause();
   }
  
   public void On_World_Step(rs.projecta.world.World w)
