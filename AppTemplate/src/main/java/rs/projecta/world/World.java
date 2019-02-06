@@ -251,4 +251,15 @@ implements
     else
       android.util.Log.d("World.onLoadComplete()", "sound load failed");
   }
-}
+  
+  public org.jbox2d.common.Vec2 To_Phys_Pt(org.jbox2d.common.Vec2 pt)
+  {
+    pt.x = To_Phys_Dim(pt.x);
+    pt.y = To_Phys_Dim(pt.y);
+    return pt;
+  }
+  
+  public float To_Phys_Dim(float d)
+  {
+    return d / this.phys_scale;
+  }}

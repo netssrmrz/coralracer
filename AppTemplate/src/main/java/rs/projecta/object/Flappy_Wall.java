@@ -10,8 +10,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
   public boolean door_closed;
   public rs.projecta.world.World world;
 
-  public Flappy_Wall(rs.projecta.world.World world, float x, float y, 
-                     float a_degrees, float gap_loc)
+  public Flappy_Wall(rs.projecta.world.World world, float x, float y, float a_degrees, float gap_loc)
   {
     float wall_width, gap_pos;
     android.graphics.PointF p;
@@ -36,7 +35,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
     {
       this.w1x = (wall_width - tot_width) / 2f;
       p = rs.android.ui.Util.Rotate(x, y, this.w1x, 0, a);
-      this.w1 = new Wall(world, p.x, p.y, wall_width / 2f, 40, a);
+      this.w1 = new Wall(world, p.x, p.y, wall_width / 2f, 40, a, this.world.hint);
     }
 
     // right wall
@@ -45,19 +44,27 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
     {
       this.w2_x = (tot_width - wall_width) / 2f;
       p = rs.android.ui.Util.Rotate(x, y, this.w2_x, 0, a);
-      this.w2 = new Wall(world, p.x, p.y, wall_width / 2f, 40, a);
+      this.w2 = new Wall(world, p.x, p.y, wall_width / 2f, 40, a, this.world.hint);
     }
     
     // door
     wall_width = gap_width;
     this.door_x = gap_pos-tot_width/2f;
     p = rs.android.ui.Util.Rotate(x, y, this.door_x, 0, a);
-    this.door = new Wall(world, p.x, p.y, wall_width / 2f, 40, a);
+    this.door = new Wall(world, p.x, p.y, wall_width / 2f, 40, a, this.world.hint);
     this.Open();
   }
-
+  
   @Override
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
+  {
+    if (this.world.hint==rs.projecta.world.World.HINT_ES2)
+      this.Draw_OpenGL((rs.projecta.view.OpenGL_View)v);
+    else
+      this.Draw_Canvas(v, c);
+  }
+  
+  public void Draw_Canvas(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
     if (this.w1 != null)
     {
@@ -66,7 +73,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
       this.w1.Draw(v, c);
       c.restore();
     }
-
+    
     if (this.w2 != null)
     {
       c.save();
@@ -81,6 +88,33 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
       c.translate(door_x, 0);
       this.door.Draw(v, c);
       c.restore();
+    }
+  }
+  
+  public void Draw_OpenGL(rs.projecta.view.OpenGL_View v)
+  {
+    if (this.w1 != null)
+    {
+      v.Save_Transform();
+      android.opengl.Matrix.translateM(v.proj, 0, w1x, 0, 0);
+      this.w1.Draw_OpenGL(v);
+      v.Restore_Transform();
+    }
+    
+    if (this.w2 != null)
+    {
+      v.Save_Transform();
+      android.opengl.Matrix.translateM(v.proj, 0, w2_x, 0, 0);
+      this.w2.Draw_OpenGL(v);
+      v.Restore_Transform();
+    }
+    
+    if (this.door != null && this.door_closed)
+    {
+      v.Save_Transform();
+      android.opengl.Matrix.translateM(v.proj, 0, door_x, 0, 0);
+      this.door.Draw_OpenGL(v);
+      v.Restore_Transform();
     }
   }
 

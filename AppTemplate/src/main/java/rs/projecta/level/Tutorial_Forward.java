@@ -44,19 +44,19 @@ extends Level
   public void Add_Walls(float trg_pos)
   {
     this.w.objs.Add(new rs.projecta.object.Wall(
-      this.w, 500, trg_pos, 20, 500, 0f));
+      this.w, 500, trg_pos, 20, 500, 0f, this.w.hint));
     this.w.objs.Add(new rs.projecta.object.Wall(
-      this.w, -500, trg_pos, 20, 500, 0f));
+      this.w, -500, trg_pos, 20, 500, 0f, this.w.hint));
   }
   
   public void Add_Start_Walls(float trg_pos)
   {
     this.w.objs.Add(new rs.projecta.object.Wall(
-      this.w, 500, -500, 20, 500, 0f));
+      this.w, 500, -500, 20, 500, 0f, this.w.hint));
     this.w.objs.Add(new rs.projecta.object.Wall(
-      this.w, -500, -500, 20, 500, 0f));
+      this.w, -500, -500, 20, 500, 0f, this.w.hint));
     this.w.objs.Add(new rs.projecta.object.Wall(
-      this.w, 00, trg_pos, 500, 20, 0f));
+      this.w, 00, trg_pos, 500, 20, 0f, this.w.hint));
   }
   
   @Override

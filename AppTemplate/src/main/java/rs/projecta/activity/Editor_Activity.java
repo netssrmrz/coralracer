@@ -127,7 +127,7 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
         this.world, 
         ((rs.projecta.object.Has_Position)this.camera).Get_X(), 
         ((rs.projecta.object.Has_Position)this.camera).Get_Y(), 
-        200, 10, 0);
+        200, 10, 0, this.world.hint);
       this.world.objs.Add(this.curr_obj);
       this.world_view.camera = this.curr_obj;
     }
@@ -187,7 +187,7 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
           this.world, 
           ((rs.projecta.object.Has_Position)this.camera).Get_X(), 
           ((rs.projecta.object.Has_Position)this.camera).Get_Y(), 
-          200, 10, 0);
+          200, 10, 0, this.world.hint);
         this.world.objs.Add(this.curr_obj);
         this.world_view.camera = this.curr_obj;
       }
@@ -197,7 +197,7 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
           this.world, 
           ((rs.projecta.object.Has_Position)this.camera).Get_X(), 
           ((rs.projecta.object.Has_Position)this.camera).Get_Y(), 
-          100, 10, 0);
+          100, 10, 0, this.world.hint);
         this.world.objs.Add(this.curr_obj);
         this.world_view.camera = this.curr_obj;
       }
