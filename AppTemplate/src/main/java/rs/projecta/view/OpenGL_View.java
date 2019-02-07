@@ -2,7 +2,10 @@ package rs.projecta.view;
 
 public class OpenGL_View
 extends android.opengl.GLSurfaceView
-implements android.opengl.GLSurfaceView.Renderer, rs.projecta.view.Game_View
+implements
+  android.opengl.GLSurfaceView.Renderer,
+  rs.projecta.view.Game_View,
+  rs.projecta.world.World_Step_Listener
 {
   public int col_loc, mat_loc, att_loc;
   public float[] proj;
@@ -15,6 +18,8 @@ implements android.opengl.GLSurfaceView.Renderer, rs.projecta.view.Game_View
   public OpenGL_View(android.content.Context ctx, rs.projecta.world.World world)
   {
     super(ctx);
+    
+    world.Set_Listener(this);
 
     this.setEGLContextClientVersion(2);
     this.setRenderer(this);
@@ -97,12 +102,6 @@ implements android.opengl.GLSurfaceView.Renderer, rs.projecta.view.Game_View
     //android.util.Log.d("Game2_View.Draw_World_Step()", "Entered");
 
     this.world.Update();
-    /*if (this.world.debug)
-    {
-      this.world.debug_msg[0]="";
-      this.world.debug_msg[0]+="c.getWidth(): "+this.w+"\n";
-      this.world.debug_msg[0]+="c.getHeight(): "+this.h+"\n";
-    }*/
   
     this.Save_Transform();
     android.opengl.Matrix.translateM(this.proj, 0, this.w / 2f, this.h / 2f, 0);
@@ -113,6 +112,7 @@ implements android.opengl.GLSurfaceView.Renderer, rs.projecta.view.Game_View
         this.proj, 0,
         -((rs.projecta.object.Has_Direction) this.camera).Get_Angle_Degrees(),
         0, 0, 1);
+    
     if (this.camera instanceof rs.projecta.object.Has_Position)
       android.opengl.Matrix.translateM(
         this.proj, 0,
@@ -120,25 +120,23 @@ implements android.opengl.GLSurfaceView.Renderer, rs.projecta.view.Game_View
         -((rs.projecta.object.Has_Position) this.camera).Get_Y(),
         0);
   
-    //c.drawColor(0xff000022);
     android.opengl.GLES20.glClear(android.opengl.GLES20.GL_COLOR_BUFFER_BIT);
     this.world.objs.Draw_OpenGL(this);
 
-    /*if (this.debug_renderer!=null)
-    {
-      this.debug_renderer.canvas=c;
-      this.world.phys_world.drawDebugData();
-    }*/
-  
     this.Restore_Transform();
-  
-    //if (this.world.debug)
-    //this.Draw_Console(c);
   }
   
   public Object Get_Camera()
   {
     return camera;
+  }
+  
+  public void On_World_State_Change(rs.projecta.world.World w)
+  {
+    if (w.state==rs.projecta.world.World.STATE_INIT)
+    {
+      this.camera = w.objs.Get_Player();
+    }
   }
   
   // ===================================================================================

@@ -31,9 +31,9 @@ implements
   
     supports_es2 = this.Supports_ES2();
     if (supports_es2)
-      this.world=new rs.projecta.world.World(this, this, this.curr_level, rs.projecta.world.World.HINT_ES2);
+      this.world=new rs.projecta.world.World(this, this.curr_level, rs.projecta.world.World.HINT_ES2);
     else
-      this.world=new rs.projecta.world.World(this, this, this.curr_level, rs.projecta.world.World.HINT_NONE);
+      this.world=new rs.projecta.world.World(this, this.curr_level, rs.projecta.world.World.HINT_NONE);
     this.world.Set_Listener(this);
     this.tilt_man=new rs.projecta.Tilt_Manager(this, this.world);
     if (supports_es2)
@@ -93,16 +93,8 @@ implements
     this.tilt_man.Unregister();
     ((rs.projecta.view.Game_View)this.gfx_view).onPause();
   }
- 
-  public void On_World_Step(rs.projecta.world.World w)
-  {
-  }
-
-  public void On_World_Init(rs.projecta.world.World w)
-  {
-  }
   
-  public void On_World_Finish(rs.projecta.world.World w)
+  public void On_World_State_Change(rs.projecta.world.World w)
   {
     //android.util.Log.d("Play_Activity", "On_World_Finish()");
     android.content.Intent i;

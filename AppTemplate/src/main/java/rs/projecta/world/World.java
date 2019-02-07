@@ -20,18 +20,21 @@ implements
   public int soundid_whack, soundid_start, soundid_door;
   public android.content.Context ctx;
 
-  public static final int STATE_STOP=0;
+  public static final int STATE_NONE=0;
   public static final int STATE_PLAY=1;
   public static final int STATE_LEVELCOMPLETE=2;
   public static final int STATE_QUIT=3;
   public static final int STATE_LEVELFAIL=4;
+  public static final int STATE_PAUSE=4;
+  public static final int STATE_STEP=5;
+  public static final int STATE_INIT=6;
   
   public static final int HINT_ES2=1;
   public static final int HINT_NONE=0;
   
   public World(
     android.content.Context ctx,
-    rs.projecta.world.World_Step_Listener l, 
+    //rs.projecta.world.World_Step_Listener l,
     rs.projecta.level.Level level,
     int hint)
   {
@@ -82,11 +85,22 @@ implements
     }
   }
 
-  public void Level_Fail()
+  /*public void Level_Fail()
   {
     //android.util.Log.d("World", "Level_Fail()");
     this.do_processing = false;
     this.state = rs.projecta.world.World.STATE_LEVELFAIL;
+  }*/
+  
+  public void Change_State(int state)
+  {
+    int i;
+    
+    this.state = state;
+    if (this.state == rs.projecta.world.World.STATE_LEVELFAIL)
+    {
+      this.Init_Level();
+    }
   }
 
   public void beginContact(org.jbox2d.dynamics.contacts.Contact c)
@@ -127,7 +141,6 @@ implements
 
     this.rnd = new java.util.Random(0);
     this.last_update = System.nanoTime();
-    this.state = STATE_PLAY; 
     this.phys_world = new org.jbox2d.dynamics.World(new org.jbox2d.common.Vec2(0, 0));
     this.phys_world.setAllowSleep(true);
     this.phys_world.setContactListener(this);
@@ -138,10 +151,18 @@ implements
     if (this.level != null)
       this.level.Build(this);
 
-    for (i=0; i<this.world_step_listeners.size(); i++)
-      this.world_step_listeners.get(i).On_World_Init(this);
+    this.Notify_State_Change(STATE_INIT);
   }
 
+  public void Notify_State_Change(int state)
+  {
+    int i;
+    
+    this.state = state;
+    for (i=0; i<this.world_step_listeners.size(); i++)
+      this.world_step_listeners.get(i).On_World_State_Change(this);
+  }
+  
   public void Do_Processing()
   {
     long now;
@@ -160,12 +181,6 @@ implements
 
     if (this.prof)
       android.os.Debug.stopMethodTracing();
-
-    if (this.state == STATE_LEVELCOMPLETE || this.state == STATE_LEVELFAIL)
-    {
-      for (i=0; i<this.world_step_listeners.size(); i++)
-        this.world_step_listeners.get(i).On_World_Finish(this);
-    }
   }
   
   public void Update()
@@ -181,17 +196,12 @@ implements
     sec_step = this.lapsed_time / 1800000000f;
     this.phys_world.step(sec_step, 8, 8);
   
-    for (i=0; i<this.world_step_listeners.size(); i++)
-      this.world_step_listeners.get(i).On_World_Step(this); // draw
+    this.Notify_State_Change(STATE_STEP);
   
     if (this.level != null)
       this.level.Update();
   
     this.objs.Process(); // remove and update
-
-    /*if (this.game_loop==null && this.world_step_listener != null &&
-          this.state!=STATE_PLAY)
-      this.world_step_listener.On_World_Finish(this);*/
   }
 
   public String Gen_Level_Script()
@@ -262,4 +272,5 @@ implements
   public float To_Phys_Dim(float d)
   {
     return d / this.phys_scale;
-  }}
+  }
+}

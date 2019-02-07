@@ -86,7 +86,7 @@ implements Is_Drawable, Has_Position
     if (r>r_max)
     {
       w.objs.Remove(this);
-      w.Level_Fail();
+      w.Change_State(rs.projecta.world.World.STATE_LEVELFAIL);
     }
     else
     {

@@ -70,16 +70,9 @@ implements
     }
 	}
   
-  public void On_World_Step(rs.projecta.world.World w)
+  public void On_World_State_Change(rs.projecta.world.World w)
   {
-  }
-  
-  public void On_World_Init(rs.projecta.world.World w)
-  {
-    this.player=w.objs.Get_Player();
-  }
-  
-  public void On_World_Finish(rs.projecta.world.World w)
-  {
+    if (w.state==rs.projecta.world.World.STATE_INIT)
+      this.player=w.objs.Get_Player();
   }
 }

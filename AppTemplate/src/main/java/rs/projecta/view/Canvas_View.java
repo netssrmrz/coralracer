@@ -129,37 +129,39 @@ implements
     this.onDrawFrame(c);
   }
   
-  public void On_World_Init(rs.projecta.world.World w)
-  {
-    this.Init(w);
-  }
-  
-  public void On_World_Step(rs.projecta.world.World w)
+  public void On_World_State_Change(rs.projecta.world.World w)
   {
     android.graphics.Canvas c;
 
-    this.surface = this.getHolder();
-    if (this.surface != null)
+    if (w.state==rs.projecta.world.World.STATE_INIT)
     {
-      try {c = this.surface.lockCanvas();}
-      catch(java.lang.Exception e) {c=null;}
-      if (c != null)
+      this.camera = w.objs.Get_Player();
+    }
+    else if (w.state==rs.projecta.world.World.STATE_STEP)
+    {
+      this.surface = this.getHolder();
+      if (this.surface != null)
       {
-        this.onDrawFrame(c);
-        this.getHolder().unlockCanvasAndPost(c);
+        try
+        {
+          c = this.surface.lockCanvas();
+        } catch (java.lang.Exception e)
+        {
+          c = null;
+        }
+        if (c != null)
+        {
+          this.onDrawFrame(c);
+          this.getHolder().unlockCanvasAndPost(c);
+        }
       }
     }
 	}
   
-  public void On_World_Finish(rs.projecta.world.World w)
-  {
-    //android.util.Log.d("Game_View", "On_World_Finish()");
-  }
-  
   public void Start_Loop()
   {
     //android.util.Log.d("Start_Loop()", "Entered");
-    if (this.game_loop == null)
+    if (this.game_loop == null || !this.game_loop.isAlive())
     {
       this.game_loop = new Thread(this);
   
@@ -171,7 +173,7 @@ implements
   public void Stop_Loop()
   {
     //android.util.Log.d("Stop_Loop()", "Entered");
-    if (this.game_loop != null)
+    if (this.game_loop != null && this.game_loop.isAlive())
     {
       this.world.do_processing = false;
       try
@@ -180,6 +182,7 @@ implements
       {}
       this.world.sounds.release();
       this.world.sounds = null;
+      this.game_loop=null;
     }
   }
   
@@ -187,12 +190,12 @@ implements
   {
     //android.util.Log.d("Game_View", "run()");
     this.world.Do_Processing();
-    this.game_loop = null;
+    /*this.game_loop = null;
     if (this.world.state==rs.projecta.world.World.STATE_LEVELFAIL)
     {
       this.world.Init_Level();
       this.Start_Loop();
-    }
+    }*/
   }
   
   public float Get_Camera_X()
