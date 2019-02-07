@@ -47,7 +47,7 @@ extends Level
     w.objs.Add(player);
 
     this.Add_Walls(trg_step);
-    //this.Close_Door();
+    this.Close_Door();
   }
 
   @Override
@@ -55,15 +55,15 @@ extends Level
   {
     if (this.player.Get_Y() < this.trg_pos)
     {
-      //this.Add_Score();
+      this.Add_Score();
       this.Add_Walls(this.trg_pos);
       this.trg_pos -= this.trg_step;
 
-      /*if (this.w.objs.Get_Count(rs.projecta.object.Flappy_Wall.class) > 3)
+      if (this.w.objs.Get_Count(rs.projecta.object.Flappy_Wall.class) > 3)
       {
         this.Remove_Walls();
         this.Close_Door();
-      }*/
+      }
       
       /*if (this.w.sounds!=null)
       {
