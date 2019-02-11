@@ -9,19 +9,20 @@ extends Level
   @Override
   public String Get_Next_Level()
   {
-    return rs.projecta.level.Tutorial_Turn.class.getName();
+    //return rs.projecta.level.Tutorial_Turn.class.getName();
+    return rs.projecta.level.Flappy_Bird.class.getName();
   }
   
   @Override
   public String Get_Title()
   {
-    return "Learn to Steer";
+    return "Tutorial 1";
   }
   
   @Override
   public String Get_Description()
   {
-    return "Tilt the device left and right to steer to the blue circle.";
+    return "Tilt the device left and right to adjust direction and steer forward to the blue circle.";
   }
   
   @Override

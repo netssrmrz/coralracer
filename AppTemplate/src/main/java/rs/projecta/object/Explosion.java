@@ -8,9 +8,7 @@ implements Is_Drawable, Has_Position
   public rs.projecta.world.World w;
   public android.graphics.Paint p;
   // open gl
-  public java.nio.FloatBuffer b;
-  public int pt_count;
-  public float red, green, blue, alpha;
+  public rs.projecta.ogl.Star star;
   
   public Explosion(rs.projecta.world.World w, float cx, float cy)
   {
@@ -41,49 +39,14 @@ implements Is_Drawable, Has_Position
   
   public void Init_OpenGL(int col)
   {
-    float[] points;
-    
-    points=this.Get_Points();
-    pt_count=points.length/2;
-    b=java.nio.ByteBuffer.allocateDirect(points.length*4)
-        .order(java.nio.ByteOrder.nativeOrder())
-        .asFloatBuffer();
-    b.put(points);
-    b.position(0);
-    
-    this.red=(float)android.graphics.Color.red(col)/255f;
-    this.green=(float)android.graphics.Color.green(col)/255f;
-    this.blue=(float)android.graphics.Color.blue(col)/255f;
-    this.alpha=(float)android.graphics.Color.alpha(col)/255f;
-  }
-  
-  public float[] Get_Points()
-  {
-    float a, s=1f;
-    float[] p;
-    int i;
-    
-    p=new float[40];
-    for (i=0; i<p.length; i+=2)
-    {
-      if (s==1f)
-        s=2f;
-      else
-        s=1f;
-      
-      a=(float)java.lang.Math.PI/((float)p.length/2f)*(float)i;
-      p[i]=(float)java.lang.Math.cos(a)*s;
-      p[i+1]=(float)java.lang.Math.sin(a)*s;
-    }
-    
-    return p;
+    this.star = new rs.projecta.ogl.Star(col);
   }
   
   @Override
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
-    r=r+this.r_delta*((float)this.w.lapsed_time/1000000f);
-    if (r>r_max)
+    this.r=this.r+this.r_delta*((float)this.w.lapsed_time/1000000f);
+    if (this.r>r_max)
     {
       w.objs.Remove(this);
       w.Change_State(rs.projecta.world.World.STATE_LEVELFAIL);
@@ -93,31 +56,18 @@ implements Is_Drawable, Has_Position
       if (this.w.hint==rs.projecta.world.World.HINT_ES2)
         this.Draw_OpenGL((rs.projecta.view.OpenGL_View)v);
       else
-        this.Draw_Canvas(v, c);
+        this.Draw_Canvas(c);
     }
   }
   
-  public void Draw_Canvas(rs.projecta.view.Game_View v, android.graphics.Canvas c)
+  public void Draw_Canvas(android.graphics.Canvas c)
   {
-      c.drawCircle(0, 0, r, p);
+    c.drawCircle(0, 0, this.r, p);
   }
   
   public void Draw_OpenGL(rs.projecta.view.OpenGL_View v)
   {
-    android.opengl.GLES20.glVertexAttribPointer(
-      v.att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, b);
-    android.opengl.GLES20.glEnableVertexAttribArray(v.att_loc);
-    
-    v.Save_Transform();
-    android.opengl.Matrix.scaleM(v.proj, 0, r, r, 1f);
-    
-    android.opengl.GLES20.glUniformMatrix4fv(v.mat_loc, 1, false, v.proj, 0);
-    android.opengl.GLES20.glUniform4f(
-      v.col_loc, this.red, this.green, this.blue, this.alpha);
-    android.opengl.GLES20.glDrawArrays(
-      android.opengl.GLES20.GL_LINE_LOOP, 0, this.pt_count);
-    
-    v.Restore_Transform();
+    this.star.Draw(v.ogl_ctx, this.r);
   }
   
   @Override

@@ -156,7 +156,7 @@ implements Is_Drawable
       this.pos.x = this.pos_obj.Get_X();
       this.pos.y = this.pos_obj.Get_Y();
   
-      this.pos = this.Calc_Text_Center(this.pos, this.p);
+      //this.pos = this.Calc_Text_Center(this.pos, this.p);
       if (this.w.hint==rs.projecta.world.World.HINT_ES2)
         this.Draw_OpenGL((rs.projecta.view.OpenGL_View)v);
       else
@@ -166,6 +166,7 @@ implements Is_Drawable
   
   public void Draw_Canvas(android.graphics.Canvas c)
   {
+    this.pos = this.Calc_Text_Center(this.pos, this.p);
     this.p.setTextSize(this.size);
     c.drawText(this.text, this.pos.x, this.pos.y, this.p);
   }
@@ -210,20 +211,19 @@ implements Is_Drawable
     
     si=(text-48)*2;
     
-    android.opengl.GLES20.glVertexAttribPointer(
-      v.att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, b);
-    android.opengl.GLES20.glEnableVertexAttribArray(v.att_loc);
+    android.opengl.GLES20.glVertexAttribPointer(v.ogl_ctx.att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, b);
+    android.opengl.GLES20.glEnableVertexAttribArray(v.ogl_ctx.att_loc);
     
-    v.Save_Transform();
-    android.opengl.Matrix.translateM(v.proj, 0, x, y, 0);
-    android.opengl.Matrix.scaleM(v.proj, 0, size, size, 1f);
+    //v.Save_Transform();
+    v.ogl_ctx.proj.Save();
+    android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, x, y, 0);
+    android.opengl.Matrix.scaleM(v.ogl_ctx.proj.vals, 0, size, size, 1f);
     
-    android.opengl.GLES20.glUniformMatrix4fv(v.mat_loc, 1, false, v.proj, 0);
-    android.opengl.GLES20.glUniform4f(
-      v.col_loc, this.red, this.green, this.blue, this.alpha);
-    android.opengl.GLES20.glDrawArrays(
-      android.opengl.GLES20.GL_LINES, point_info[si], point_info[si+1]);
+    android.opengl.GLES20.glUniformMatrix4fv(v.ogl_ctx.mat_loc, 1, false, v.ogl_ctx.proj.vals, 0);
+    android.opengl.GLES20.glUniform4f(v.ogl_ctx.col_loc, this.red, this.green, this.blue, this.alpha);
+    android.opengl.GLES20.glDrawArrays(android.opengl.GLES20.GL_LINES, point_info[si], point_info[si+1]);
     
-    v.Restore_Transform();
+    //v.Restore_Transform();
+    v.ogl_ctx.proj.Restore();
   }
 }

@@ -33,7 +33,7 @@ implements
   public void Init(rs.projecta.world.World w)
   {
     this.world = w;
-    this.camera = w.objs.Get_Player();
+    //this.camera = w.objs.Get_Player();
     
     if (this.world.debug)
     {
@@ -107,13 +107,30 @@ implements
   public void onResume()
   {
     //android.util.Log.d("onResume()", "Entered");
-    this.Start_Loop();
+    this.world.Init_Sound();
+
+    if (this.game_loop == null || !this.game_loop.isAlive())
+    {
+      this.game_loop = new Thread(this);
+      this.game_loop.start();
+    }
   }
   
   public void onPause()
   {
     //android.util.Log.d("onPause()", "Entered");
-    this.Stop_Loop();
+    this.world.sounds.release();
+    this.world.sounds = null;
+
+    if (this.game_loop != null && this.game_loop.isAlive())
+    {
+      this.world.do_processing = false;
+      try
+      {this.game_loop.join();}
+      catch (java.lang.Exception e)
+      {}
+      this.game_loop=null;
+    }
   }
 
   public Object Get_Camera()
@@ -129,15 +146,15 @@ implements
     this.onDrawFrame(c);
   }
   
-  public void On_World_State_Change(rs.projecta.world.World w)
+  public void On_World_State_Change(rs.projecta.world.World w, int state)
   {
     android.graphics.Canvas c;
 
-    if (w.state==rs.projecta.world.World.STATE_INIT)
+    if (state==rs.projecta.world.World.STATE_INIT)
     {
       this.camera = w.objs.Get_Player();
     }
-    else if (w.state==rs.projecta.world.World.STATE_STEP)
+    else if (state==rs.projecta.world.World.STATE_STEP)
     {
       this.surface = this.getHolder();
       if (this.surface != null)
@@ -157,34 +174,6 @@ implements
       }
     }
 	}
-  
-  public void Start_Loop()
-  {
-    //android.util.Log.d("Start_Loop()", "Entered");
-    if (this.game_loop == null || !this.game_loop.isAlive())
-    {
-      this.game_loop = new Thread(this);
-  
-      this.world.Init_Sound();
-      this.game_loop.start();
-    }
-  }
-  
-  public void Stop_Loop()
-  {
-    //android.util.Log.d("Stop_Loop()", "Entered");
-    if (this.game_loop != null && this.game_loop.isAlive())
-    {
-      this.world.do_processing = false;
-      try
-      {this.game_loop.join();}
-      catch (java.lang.Exception e)
-      {}
-      this.world.sounds.release();
-      this.world.sounds = null;
-      this.game_loop=null;
-    }
-  }
   
   public void run()
   {

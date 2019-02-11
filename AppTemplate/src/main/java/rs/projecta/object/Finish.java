@@ -6,6 +6,7 @@ implements Has_Position, Is_Drawable
   public android.graphics.Paint p;
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World world;
+  public rs.projecta.ogl.Circle circle;
 
   public Finish(rs.projecta.world.World world, float x, float y)
   {
@@ -16,8 +17,7 @@ implements Has_Position, Is_Drawable
 
     body_def=new org.jbox2d.dynamics.BodyDef();
     body_def.type=org.jbox2d.dynamics.BodyType.DYNAMIC;
-    body_def.position=new org.jbox2d.common.Vec2(
-      x/this.world.phys_scale, y/this.world.phys_scale);
+    body_def.position=new org.jbox2d.common.Vec2(x/this.world.phys_scale, y/this.world.phys_scale);
     body_def.angle=0;
     body_def.userData=this;
     body=world.phys_world.createBody(body_def);
@@ -30,26 +30,34 @@ implements Has_Position, Is_Drawable
     fix_def.restitution=1;
     fix_def.isSensor=true;
     body.createFixture(fix_def);
-
-    this.p = new android.graphics.Paint();
-    this.p.setColor(0xff0000ff);
+  
+    if (this.world.hint==rs.projecta.world.World.HINT_ES2)
+    {
+      this.circle = new rs.projecta.ogl.Circle(0xff0000ff);
+    }
+    else
+    {
+      this.p = new android.graphics.Paint();
+      this.p.setColor(0xff0000ff);
+    }
   }
   
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
-    c.drawCircle(0, 0, 50, this.p);
+    if (this.world.hint==rs.projecta.world.World.HINT_ES2)
+      this.circle.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50);
+    else
+      c.drawCircle(0, 0, 50, this.p);
   }
 
   public float Get_X()
   {
-    return rs.projecta.Util.Get_Transform(this.world, this.body, 
-      rs.projecta.Util.TID_X);
+    return rs.projecta.Util.Get_Transform(this.world, this.body, rs.projecta.Util.TID_X);
   }
 
   public float Get_Y()
   {
-    return rs.projecta.Util.Get_Transform(this.world, this.body, 
-      rs.projecta.Util.TID_Y);
+    return rs.projecta.Util.Get_Transform(this.world, this.body, rs.projecta.Util.TID_Y);
   }
   
   public void Set_X(float x)

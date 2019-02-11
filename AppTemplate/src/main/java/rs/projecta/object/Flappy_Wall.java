@@ -95,26 +95,32 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
   {
     if (this.w1 != null)
     {
-      v.Save_Transform();
-      android.opengl.Matrix.translateM(v.proj, 0, w1x, 0, 0);
+      //v.Save_Transform();
+      v.ogl_ctx.proj.Save();
+      android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, w1x, 0, 0);
       this.w1.Draw_OpenGL(v);
-      v.Restore_Transform();
+      //v.Restore_Transform();
+      v.ogl_ctx.proj.Restore();
     }
     
     if (this.w2 != null)
     {
-      v.Save_Transform();
-      android.opengl.Matrix.translateM(v.proj, 0, w2_x, 0, 0);
+      //v.Save_Transform();
+      v.ogl_ctx.proj.Save();
+      android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, w2_x, 0, 0);
       this.w2.Draw_OpenGL(v);
-      v.Restore_Transform();
+      //v.Restore_Transform();
+      v.ogl_ctx.proj.Restore();
     }
     
     if (this.door != null && this.door_closed)
     {
-      v.Save_Transform();
-      android.opengl.Matrix.translateM(v.proj, 0, door_x, 0, 0);
+      //v.Save_Transform();
+      v.ogl_ctx.proj.Save();
+      android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, door_x, 0, 0);
       this.door.Draw_OpenGL(v);
-      v.Restore_Transform();
+      //v.Restore_Transform();
+      v.ogl_ctx.proj.Restore();
     }
   }
 

@@ -17,7 +17,7 @@ extends Level
   @Override
   public String Get_Title()
   {
-    return "Click to Start";
+    return "Flappy Fish";
   }
 
   @Override
@@ -65,11 +65,11 @@ extends Level
         this.Close_Door();
       }
       
-      /*if (this.w.sounds!=null)
+      if (this.player.Get_Y() < -this.trg_step)
       {
-        if (this.player.Get_Y() < -this.trg_step)
+        if (this.w.sounds != null)
           this.w.sounds.play(this.w.soundid_door, 1, 1, 0, 0, 1);
-      }*/
+      }
     }
   }
 

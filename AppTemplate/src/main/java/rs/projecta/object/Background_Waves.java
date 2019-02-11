@@ -108,17 +108,19 @@ implements Is_Drawable
   
   public void Draw_OpenGL(rs.projecta.view.OpenGL_View v)
   {
-    android.opengl.GLES20.glVertexAttribPointer(v.att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, b);
-    android.opengl.GLES20.glEnableVertexAttribArray(v.att_loc);
+    android.opengl.GLES20.glVertexAttribPointer(v.ogl_ctx.att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, b);
+    android.opengl.GLES20.glEnableVertexAttribArray(v.ogl_ctx.att_loc);
     
-    v.Save_Transform();
-    android.opengl.Matrix.translateM(v.proj, 0, curr_tile_pos.x, curr_tile_pos.y, 0);
+    //v.Save_Transform();
+    v.ogl_ctx.proj.Save();
+    android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, curr_tile_pos.x, curr_tile_pos.y, 0);
     
-    android.opengl.GLES20.glUniformMatrix4fv(v.mat_loc, 1, false, v.proj, 0);
-    android.opengl.GLES20.glUniform4f(v.col_loc, this.red, this.green, this.blue, this.alpha);
+    android.opengl.GLES20.glUniformMatrix4fv(v.ogl_ctx.mat_loc, 1, false, v.ogl_ctx.proj.vals, 0);
+    android.opengl.GLES20.glUniform4f(v.ogl_ctx.col_loc, this.red, this.green, this.blue, this.alpha);
     android.opengl.GLES20.glDrawArrays(android.opengl.GLES20.GL_LINE_STRIP, 0, OGL_POINT_COUNT);
     
-    v.Restore_Transform();
+    //v.Restore_Transform();
+    v.ogl_ctx.proj.Restore();
   }
   
   public static void Select_Tile_To_Render(

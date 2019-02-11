@@ -7,9 +7,7 @@ implements
   rs.projecta.view.Game_View,
   rs.projecta.world.World_Step_Listener
 {
-  public int col_loc, mat_loc, att_loc;
-  public float[] proj;
-  public java.util.Stack<float[]> trans_buff;
+  public rs.projecta.ogl.Context ogl_ctx;
   public rs.projecta.world.World world;
   public rs.projecta.Debug_Renderer debug_renderer;
   public Object camera;
@@ -21,6 +19,7 @@ implements
     
     world.Set_Listener(this);
 
+    this.ogl_ctx = new rs.projecta.ogl.Context();
     this.setEGLContextClientVersion(2);
     this.setRenderer(this);
     //this.setRenderMode(android.opengl.GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -30,8 +29,7 @@ implements
   public void Init(rs.projecta.world.World w)
   {
     this.world = w;
-    this.trans_buff = new java.util.Stack<float[]>();
-    this.camera = w.objs.Get_Player();
+    //this.camera = w.objs.Get_Player();
 
     if (this.world.debug)
     {
@@ -43,39 +41,7 @@ implements
   @Override
   public void onSurfaceCreated(javax.microedition.khronos.opengles.GL10 p1, javax.microedition.khronos.egl.EGLConfig p2)
   {
-    String source;
-    int v_shader_id, f_shader_id, prog_id;
-    java.nio.FloatBuffer b;
-
-    //android.util.Log.d("onSurfaceCreated()", "Entered");
-    android.opengl.GLES20.glClearColor(0, 0, 0, 0.13f);
-
-    source =
-            "uniform mat4 u_Matrix;" +
-                    "attribute vec4 a_Position; " +
-                    "void main(){ gl_Position=u_Matrix*a_Position; }";
-    v_shader_id = this.Compile_Shader(android.opengl.GLES20.GL_VERTEX_SHADER, source);
-
-    source =
-            "precision mediump float;" +
-                    "uniform vec4 u_Color;" +
-                    "void main(){ gl_FragColor=u_Color; }";
-    f_shader_id = this.Compile_Shader(android.opengl.GLES20.GL_FRAGMENT_SHADER, source);
-
-    if (v_shader_id != 0 && f_shader_id != 0)
-    {
-      prog_id = this.Link_Program(v_shader_id, f_shader_id);
-      // dev only
-      this.Validate_Program(prog_id);
-      android.opengl.GLES20.glUseProgram(prog_id);
-
-      col_loc = android.opengl.GLES20.glGetUniformLocation(prog_id, "u_Color");
-      mat_loc = android.opengl.GLES20.glGetUniformLocation(prog_id, "u_Matrix");
-      att_loc = android.opengl.GLES20.glGetAttribLocation(prog_id, "a_Position");
-
-      this.proj = new float[16];
-      android.opengl.GLES20.glLineWidth(8);
-    }
+    this.ogl_ctx.Init();
   }
 
   @Override
@@ -86,8 +52,7 @@ implements
     this.w = w;
     this.h = h;
     this.scale = 0.0003f * (this.w + this.h) + 0.0928f;
-    //this.scale=0.5f;
-    android.opengl.Matrix.orthoM(proj, 0, 0, w, h, 0, -1, 1);
+    this.ogl_ctx.proj.Init(w, h);
   }
   
   @Override
@@ -100,22 +65,21 @@ implements
   public void onDrawFrame(javax.microedition.khronos.opengles.GL10 p1)
   {
     //android.util.Log.d("Game2_View.Draw_World_Step()", "Entered");
-
     this.world.Update();
   
-    this.Save_Transform();
-    android.opengl.Matrix.translateM(this.proj, 0, this.w / 2f, this.h / 2f, 0);
-    android.opengl.Matrix.scaleM(this.proj, 0, this.scale, this.scale, 1f);
+    this.ogl_ctx.proj.Save();
+    android.opengl.Matrix.translateM(this.ogl_ctx.proj.vals, 0, this.w / 2f, this.h / 2f, 0);
+    android.opengl.Matrix.scaleM(this.ogl_ctx.proj.vals, 0, this.scale, this.scale, 1f);
   
     if (this.camera instanceof rs.projecta.object.Has_Direction)
       android.opengl.Matrix.rotateM(
-        this.proj, 0,
+        this.ogl_ctx.proj.vals, 0,
         -((rs.projecta.object.Has_Direction) this.camera).Get_Angle_Degrees(),
         0, 0, 1);
     
     if (this.camera instanceof rs.projecta.object.Has_Position)
       android.opengl.Matrix.translateM(
-        this.proj, 0,
+        this.ogl_ctx.proj.vals, 0,
         -((rs.projecta.object.Has_Position) this.camera).Get_X(),
         -((rs.projecta.object.Has_Position) this.camera).Get_Y(),
         0);
@@ -123,7 +87,7 @@ implements
     android.opengl.GLES20.glClear(android.opengl.GLES20.GL_COLOR_BUFFER_BIT);
     this.world.objs.Draw_OpenGL(this);
 
-    this.Restore_Transform();
+    this.ogl_ctx.proj.Restore();;
   }
   
   public Object Get_Camera()
@@ -131,92 +95,17 @@ implements
     return camera;
   }
   
-  public void On_World_State_Change(rs.projecta.world.World w)
+  public void On_World_State_Change(rs.projecta.world.World w, int state)
   {
-    if (w.state==rs.projecta.world.World.STATE_INIT)
+    if (state==rs.projecta.world.World.STATE_INIT)
     {
       this.camera = w.objs.Get_Player();
     }
   }
   
-  // ===================================================================================
-
-  public void Validate_Program(int prog_id)
+  @Override
+  public void onResume()
   {
-    int[] status;
-    String log;
-
-    android.opengl.GLES20.glValidateProgram(prog_id);
-
-    status = new int[1];
-    android.opengl.GLES20.glGetProgramiv(prog_id, android.opengl.GLES20.GL_VALIDATE_STATUS, status, 0);
-    /*if (status[0]==0)
-    {
-      log = android.opengl.GLES20.glGetProgramInfoLog(prog_id);
-      android.util.Log.d("Validate_Program()", log);
-    }*/
-  }
-
-  public int Link_Program(int v_shader_id, int f_shader_id)
-  {
-    int prog_id = 0;
-    int[] status;
-    String log;
-
-    prog_id = android.opengl.GLES20.glCreateProgram();
-    if (prog_id != 0)
-    {
-      android.opengl.GLES20.glAttachShader(prog_id, v_shader_id);
-      android.opengl.GLES20.glAttachShader(prog_id, f_shader_id);
-      android.opengl.GLES20.glLinkProgram(prog_id);
-
-      status = new int[1];
-      android.opengl.GLES20.glGetProgramiv(prog_id,
-              android.opengl.GLES20.GL_LINK_STATUS, status, 0);
-      if (status[0] == 0)
-      {
-        log = android.opengl.GLES20.glGetProgramInfoLog(prog_id);
-        android.opengl.GLES20.glDeleteProgram(prog_id);
-        android.util.Log.d("Link_Program()", log);
-        prog_id = 0;
-      }
-    }
-    return prog_id;
-  }
-
-  public int Compile_Shader(int shader_type, String source)
-  {
-    int shader_id;
-    int[] status;
-    String log;
-
-    shader_id = android.opengl.GLES20.glCreateShader(shader_type);
-    if (shader_id != 0)
-    {
-      android.opengl.GLES20.glShaderSource(shader_id, source);
-      android.opengl.GLES20.glCompileShader(shader_id);
-
-      status = new int[1];
-      android.opengl.GLES20.glGetShaderiv(shader_id,
-              android.opengl.GLES20.GL_COMPILE_STATUS, status, 0);
-      if (status[0] == 0)
-      {
-        log = android.opengl.GLES20.glGetShaderInfoLog(shader_id);
-        android.opengl.GLES20.glDeleteShader(shader_id);
-        android.util.Log.d("Compile_Shader()", log);
-        shader_id = 0;
-      }
-    }
-    return shader_id;
-  }
-
-  public void Save_Transform()
-  {
-    this.trans_buff.push(java.util.Arrays.copyOf(this.proj, this.proj.length));
-  }
-
-  public void Restore_Transform()
-  {
-    this.proj = this.trans_buff.pop();
+    this.world.Init_Sound();
   }
 }

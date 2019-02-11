@@ -32,11 +32,7 @@ implements
   public static final int HINT_ES2=1;
   public static final int HINT_NONE=0;
   
-  public World(
-    android.content.Context ctx,
-    //rs.projecta.world.World_Step_Listener l,
-    rs.projecta.level.Level level,
-    int hint)
+  public World(android.content.Context ctx, rs.projecta.level.Level level, int hint)
   {
     //this.debug=true;
     //this.prof=true;
@@ -52,6 +48,7 @@ implements
   public void Set_Listener(rs.projecta.world.World_Step_Listener l)
   {
     this.world_step_listeners.add(l);
+    l.On_World_State_Change(this, STATE_INIT);
   }
   
   public void Init_Sound()
@@ -61,8 +58,7 @@ implements
 
     if (this.sounds == null)
     {
-      if (android.os.Build.VERSION.SDK_INT >= 
-          android.os.Build.VERSION_CODES.LOLLIPOP)
+      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
       {
         a = new android.media.AudioAttributes.Builder();
         a.setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION);
@@ -75,8 +71,7 @@ implements
       }
       else
       {
-        this.sounds = new android.media.SoundPool
-          (1, android.media.AudioManager.STREAM_MUSIC, 0);
+        this.sounds = new android.media.SoundPool(1, android.media.AudioManager.STREAM_MUSIC, 0);
       }
 
       this.soundid_whack = this.sounds.load(ctx, rs.projecta.R.raw.whack, 1);
@@ -84,13 +79,6 @@ implements
       this.soundid_door = this.sounds.load(ctx, rs.projecta.R.raw.door, 1);
     }
   }
-
-  /*public void Level_Fail()
-  {
-    //android.util.Log.d("World", "Level_Fail()");
-    this.do_processing = false;
-    this.state = rs.projecta.world.World.STATE_LEVELFAIL;
-  }*/
   
   public void Change_State(int state)
   {
@@ -160,7 +148,7 @@ implements
     
     this.state = state;
     for (i=0; i<this.world_step_listeners.size(); i++)
-      this.world_step_listeners.get(i).On_World_State_Change(this);
+      this.world_step_listeners.get(i).On_World_State_Change(this, state);
   }
   
   public void Do_Processing()

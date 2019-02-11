@@ -6,10 +6,8 @@ implements
   rs.projecta.world.World_Step_Listener
 {
   public android.hardware.Sensor mag_sensor, acc_sensor;
-	public float[] mag_vals, acc_vals, orig_orient, rot_matrix, orientation,
-    diff_orient;
+	public float[] mag_vals, acc_vals, orig_orient, rot_matrix, orientation, diff_orient;
   public android.content.Context ctx;
-  public rs.projecta.world.World world;
   public rs.projecta.object.Player player;
   
   public Tilt_Manager(android.content.Context ctx, rs.projecta.world.World world)
@@ -18,8 +16,8 @@ implements
     this.rot_matrix = new float[9];
     this.orientation = new float[3];
     this.diff_orient=new float[3];
-    this.world=world;
-    this.world.Set_Listener(this);
+    //this.player=world.objs.Get_Player();
+    world.Set_Listener(this);
   }
   
   public void Register()
@@ -70,9 +68,9 @@ implements
     }
 	}
   
-  public void On_World_State_Change(rs.projecta.world.World w)
+  public void On_World_State_Change(rs.projecta.world.World w, int state)
   {
-    if (w.state==rs.projecta.world.World.STATE_INIT)
+    if (state==rs.projecta.world.World.STATE_INIT)
       this.player=w.objs.Get_Player();
   }
 }

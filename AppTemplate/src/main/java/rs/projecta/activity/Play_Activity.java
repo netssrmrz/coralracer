@@ -94,12 +94,12 @@ implements
     ((rs.projecta.view.Game_View)this.gfx_view).onPause();
   }
   
-  public void On_World_State_Change(rs.projecta.world.World w)
+  public void On_World_State_Change(rs.projecta.world.World w, int state)
   {
     //android.util.Log.d("Play_Activity", "On_World_Finish()");
     android.content.Intent i;
 
-    if (w.state==rs.projecta.world.World.STATE_LEVELCOMPLETE)
+    if (state==rs.projecta.world.World.STATE_LEVELCOMPLETE)
     {
       i=new android.content.Intent(this, rs.projecta.activity.Finish_Activity.class);
       i.setFlags(android.content.Intent.FLAG_ACTIVITY_NO_HISTORY);

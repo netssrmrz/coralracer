@@ -185,17 +185,19 @@ implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
   {
     //android.util.Log.d("Player.Draw_OpenGL()", "Entered");
     
-    android.opengl.GLES20.glVertexAttribPointer(v.att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, b);
-    android.opengl.GLES20.glEnableVertexAttribArray(v.att_loc);
+    android.opengl.GLES20.glVertexAttribPointer(v.ogl_ctx.att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, b);
+    android.opengl.GLES20.glEnableVertexAttribArray(v.ogl_ctx.att_loc);
     
-    v.Save_Transform();
-    android.opengl.Matrix.scaleM(v.proj, 0, 4f, 4f, 1f);
+    //v.Save_Transform();
+    v.ogl_ctx.proj.Save();
+    android.opengl.Matrix.scaleM(v.ogl_ctx.proj.vals, 0, 4f, 4f, 1f);
     
-    android.opengl.GLES20.glUniformMatrix4fv(v.mat_loc, 1, false, v.proj, 0);
-    android.opengl.GLES20.glUniform4f(v.col_loc, this.red, this.green, this.blue, this.alpha);
+    android.opengl.GLES20.glUniformMatrix4fv(v.ogl_ctx.mat_loc, 1, false, v.ogl_ctx.proj.vals, 0);
+    android.opengl.GLES20.glUniform4f(v.ogl_ctx.col_loc, this.red, this.green, this.blue, this.alpha);
     android.opengl.GLES20.glDrawArrays(android.opengl.GLES20.GL_LINE_LOOP, (int)this.frame*OGL_POINT_COUNT, OGL_POINT_COUNT);
     
-    v.Restore_Transform();
+    //v.Restore_Transform();
+    v.ogl_ctx.proj.Restore();
   }
   
 	public float Get_X()

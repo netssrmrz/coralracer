@@ -107,24 +107,26 @@ public class Object_List
     {
       if (o instanceof rs.projecta.object.Is_Drawable)
       {
-        v.Save_Transform();
+        //v.Save_Transform();
+        v.ogl_ctx.proj.Save();
   
         if (o instanceof rs.projecta.object.Has_Position)
         {
           x = ((rs.projecta.object.Has_Position) o).Get_X();
           y = ((rs.projecta.object.Has_Position) o).Get_Y();
-          android.opengl.Matrix.translateM(v.proj, 0, x, y, 0);
+          android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, x, y, 0);
         }
   
         if (o instanceof rs.projecta.object.Has_Direction)
         {
           a = ((rs.projecta.object.Has_Direction) o).Get_Angle_Degrees();
-          android.opengl.Matrix.rotateM(v.proj, 0, a, 0, 0, 1);
+          android.opengl.Matrix.rotateM(v.ogl_ctx.proj.vals, 0, a, 0, 0, 1);
         }
   
         ((rs.projecta.object.Is_Drawable)o).Draw(v, null);
   
-        v.Restore_Transform();
+        //v.Restore_Transform();
+        v.ogl_ctx.proj.Restore();
       }
     }
   }
