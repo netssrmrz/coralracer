@@ -2,7 +2,9 @@ package rs.projecta.level;
 
 public class Level
 {
-  public String Get_Next_Level()
+  public rs.projecta.world.World w;
+
+  public Class<? extends Level> Get_Next_Level()
   {
     return null;
   }
@@ -14,7 +16,7 @@ public class Level
   
   public void Build(rs.projecta.world.World w)
   {
-    
+    this.w=w;
   }
   
   public String Get_Description()
@@ -73,5 +75,54 @@ public class Level
   public void Update()
   {
     
+  }
+  
+  public void Add_Wavy_Bkg(rs.projecta.world.World w, rs.projecta.object.Player player)
+  {
+    rs.projecta.object.Background_Waves bd, bd2, bd3;
+
+    bd=new rs.projecta.object.Background_Waves(player, 1.2f, 0xff0000ff, w.hint);
+    bd2=new rs.projecta.object.Background_Waves(player, 1.4f, 0xff0000cc, w.hint);
+    bd3=new rs.projecta.object.Background_Waves(player, 1.6f, 0xff000088, w.hint);
+  
+    w.objs.Add(bd3);
+    w.objs.Add(bd2);
+    w.objs.Add(bd);
+  }
+  
+  public void Add_Walls_Vertical(float x, float y)
+  {
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x+500, y, 20, 500, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x-500, y, 20, 500, 0f, this.w.hint));
+  }
+  
+  public void Add_Start_Walls(float x, float y)
+  {
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y+500, 500, 20, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x+500, y, 20, 500, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x-500, y, 20, 500, 0f, this.w.hint));
+  }
+  
+  public void Add_Finish_Walls(float x, float y)
+  {
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x+500, y, 20, 500, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x-500, y, 20, 500, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y-500, 500, 20, 0f, this.w.hint));
+  }
+  
+  public void Add_Walls_Horiz(float x, float y)
+  {
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y+500, 500, 20, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y-500, 500, 20, 0f, this.w.hint));
+  }
+  
+  public void Add_Walls_Turn_Right_Up(float x, float y)
+  {
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y, 20, 707, 45f, this.w.hint));
+  }
+  
+  public void Add_Walls_Turn_Left_Down(float x, float y)
+  {
+    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y, 20, 707, -45f, this.w.hint));
   }
 }

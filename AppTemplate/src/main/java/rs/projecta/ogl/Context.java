@@ -42,7 +42,7 @@ public class Context
       mat_loc = android.opengl.GLES20.glGetUniformLocation(prog_id, "u_Matrix");
       att_loc = android.opengl.GLES20.glGetAttribLocation(prog_id, "a_Position");
     
-      android.opengl.GLES20.glLineWidth(8);
+      android.opengl.GLES20.glLineWidth(6);
     }
   }
   
@@ -113,5 +113,21 @@ public class Context
       }
     }
     return prog_id;
+  }
+  
+  public void Draw(float r, float a_degrees, float x, float y, Pt_Buffer pts, Color color)
+  {
+    android.opengl.GLES20.glVertexAttribPointer(att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, pts.b);
+    android.opengl.GLES20.glEnableVertexAttribArray(att_loc);
+    
+    proj.Save();
+    android.opengl.Matrix.translateM(proj.vals, 0, x, y, 0);
+    android.opengl.Matrix.rotateM(proj.vals, 0, a_degrees, 0, 0, 1f);
+    android.opengl.Matrix.scaleM(proj.vals, 0, r, r, 1f);
+    
+    android.opengl.GLES20.glUniformMatrix4fv(mat_loc, 1, false, proj.vals, 0);
+    android.opengl.GLES20.glUniform4f(col_loc, color.red, color.green, color.blue, color.alpha);
+    android.opengl.GLES20.glDrawArrays(pts.mode, 0, pts.pt_count);
+    proj.Restore();
   }
 }

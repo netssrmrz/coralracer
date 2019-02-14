@@ -48,6 +48,7 @@ implements Is_Drawable, Has_Position
     this.r=this.r+this.r_delta*((float)this.w.lapsed_time/1000000f);
     if (this.r>r_max)
     {
+      android.util.Log.d("Explosion", "Draw(): this.r>r_max");
       w.objs.Remove(this);
       w.Change_State(rs.projecta.world.World.STATE_LEVELFAIL);
     }

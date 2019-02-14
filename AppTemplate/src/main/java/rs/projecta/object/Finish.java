@@ -7,6 +7,7 @@ implements Has_Position, Is_Drawable
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World world;
   public rs.projecta.ogl.Circle circle;
+  public rs.projecta.ogl.Arrow arrow;
 
   public Finish(rs.projecta.world.World world, float x, float y)
   {
@@ -33,7 +34,8 @@ implements Has_Position, Is_Drawable
   
     if (this.world.hint==rs.projecta.world.World.HINT_ES2)
     {
-      this.circle = new rs.projecta.ogl.Circle(0xff0000ff);
+      this.circle = new rs.projecta.ogl.Circle(0x00ff00ff);
+      this.arrow = new rs.projecta.ogl.Arrow(0x00ff00ff);
     }
     else
     {
@@ -45,7 +47,13 @@ implements Has_Position, Is_Drawable
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
     if (this.world.hint==rs.projecta.world.World.HINT_ES2)
-      this.circle.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50);
+    {
+      this.arrow.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50, 0, 70, 0);
+      this.arrow.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50, 90, 0, 70);
+      this.arrow.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50, 180, -70, 0);
+      this.arrow.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50, 270, 0, -70);
+      //this.circle.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50);
+    }
     else
       c.drawCircle(0, 0, 50, this.p);
   }

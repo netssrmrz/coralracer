@@ -1,8 +1,8 @@
 package rs.projecta.object;
 
 public class Player
-implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
-  Has_Auto_Movement
+implements
+  Is_Drawable, Has_Position, Has_Direction, Can_Collide, Has_Auto_Movement
 {
 	public android.graphics.Paint p;
   public org.jbox2d.dynamics.Body body;
@@ -10,8 +10,8 @@ implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
   public android.graphics.Path[] frames;
   public float frame, frame_delta, frame_max;
   public final float size=24f;
-  public final float trgt_v=40;
-  public final float f=80;
+  public final float trgt_v=60; // max velocity
+  public final float torque_factor=40; // turn rate
   public int hint;
   // open gl
   public java.nio.FloatBuffer b;
@@ -188,7 +188,6 @@ implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
     android.opengl.GLES20.glVertexAttribPointer(v.ogl_ctx.att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, b);
     android.opengl.GLES20.glEnableVertexAttribArray(v.ogl_ctx.att_loc);
     
-    //v.Save_Transform();
     v.ogl_ctx.proj.Save();
     android.opengl.Matrix.scaleM(v.ogl_ctx.proj.vals, 0, 4f, 4f, 1f);
     
@@ -196,7 +195,6 @@ implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
     android.opengl.GLES20.glUniform4f(v.ogl_ctx.col_loc, this.red, this.green, this.blue, this.alpha);
     android.opengl.GLES20.glDrawArrays(android.opengl.GLES20.GL_LINE_LOOP, (int)this.frame*OGL_POINT_COUNT, OGL_POINT_COUNT);
     
-    //v.Restore_Transform();
     v.ogl_ctx.proj.Restore();
   }
   
@@ -239,7 +237,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
     float curr_v, trgt_v, f=0;
 
     curr_v = this.body.getAngularVelocity();
-    trgt_v = tilt * 20f;
+    trgt_v = tilt * torque_factor;
     f = trgt_v - curr_v;
     this.body.applyTorque(f);
 	}
@@ -269,8 +267,13 @@ implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
       this.world.debug_msg += str;
     }*/
   }
-
-  public void Apply_Frwd_Force(org.jbox2d.dynamics.Body body, float f)
+  
+  public void Apply_Force(org.jbox2d.common.Vec2 f)
+  {
+    body.applyForceToCenter(f);
+  }
+  
+  public void Apply_Frwd_Force(float f)
   {
     org.jbox2d.common.Vec2 frwd_vec, body_frwd_vec;
     
@@ -311,36 +314,29 @@ implements Is_Drawable, Has_Position, Has_Direction, Can_Collide,
 
     if ((a != null && a instanceof Finish) || (b != null && b instanceof Finish))
     {
-      this.w.do_processing = false;
-      this.w.state = rs.projecta.world.World.STATE_LEVELCOMPLETE;
+      //android.util.Log.d("Player", "Contact(): instanceof Finish");
+      this.w.Change_State(rs.projecta.world.World.STATE_LEVELCOMPLETE);
     }
     
     if ((a != null && a instanceof Wall) || (b != null && b instanceof Wall))
     {
       Explosion.Add(this.w, this.Get_X(), this.Get_Y());
+      //android.util.Log.d("Player", "Contact(): instanceof Wall");
     }
-    
-    /*String m=null;
-    if (a!=null) m=rs.android.Util.AppendStr(m, a.getClass().getName(), ", ");
-    if (b!=null) m=rs.android.Util.AppendStr(m, b.getClass().getName(), ", ");
-    android.util.Log.d("projecta", "contact between "+m);*/
   }
   
   public void Update(long dt)
   {
-    float curr_v;
-    org.jbox2d.common.Vec2 frwd_vec, body_frwd_vec, body_vel_vec;
-
-    Remove_Lat_Vel(this.body);
+    org.jbox2d.common.Vec2 curr_abs_vel, req_rel_vel, req_abs_vel, diff_abs_vel, impulse;
     
-    frwd_vec = new org.jbox2d.common.Vec2(0, -1);
-    body_frwd_vec = this.body.getWorldVector(frwd_vec);
-    body_vel_vec = this.body.getLinearVelocity();
-    curr_v = org.jbox2d.common.Vec2.dot(body_vel_vec, body_frwd_vec);
+    curr_abs_vel = this.body.getLinearVelocity();
     
-    if (curr_v<trgt_v)
-    {
-      Apply_Frwd_Force(this.body, f);
-    } 
+    req_rel_vel = new org.jbox2d.common.Vec2(0, -trgt_v);
+    req_abs_vel = this.body.getWorldVector(req_rel_vel);
+    
+    diff_abs_vel = req_abs_vel.sub(curr_abs_vel);
+    impulse = diff_abs_vel.mul(this.body.getMass());
+    
+    this.body.applyLinearImpulse(impulse, this.body.getWorldCenter());
   }
 }

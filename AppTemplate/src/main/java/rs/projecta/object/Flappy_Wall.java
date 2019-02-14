@@ -22,7 +22,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
     this.y = y;
     this.a = a_degrees;
     this.tot_width = 1000;
-    this.gap_width = 100;
+    this.gap_width = 200;
     gap_pos = this.tot_width * gap_loc;
     if (gap_pos<this.gap_width/2f+20)
       gap_pos=this.gap_width/2f+20;
@@ -95,31 +95,25 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
   {
     if (this.w1 != null)
     {
-      //v.Save_Transform();
       v.ogl_ctx.proj.Save();
       android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, w1x, 0, 0);
       this.w1.Draw_OpenGL(v);
-      //v.Restore_Transform();
       v.ogl_ctx.proj.Restore();
     }
     
     if (this.w2 != null)
     {
-      //v.Save_Transform();
       v.ogl_ctx.proj.Save();
       android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, w2_x, 0, 0);
       this.w2.Draw_OpenGL(v);
-      //v.Restore_Transform();
       v.ogl_ctx.proj.Restore();
     }
     
     if (this.door != null && this.door_closed)
     {
-      //v.Save_Transform();
       v.ogl_ctx.proj.Save();
       android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, door_x, 0, 0);
       this.door.Draw_OpenGL(v);
-      //v.Restore_Transform();
       v.ogl_ctx.proj.Restore();
     }
   }

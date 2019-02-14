@@ -1,12 +1,12 @@
 package rs.projecta.level;
 
-public class Tutorial_Forward
-extends Level
+public class Tutorial_Black_Hole
+extends rs.projecta.level.Level
 {
   @Override
   public Class<? extends Level> Get_Next_Level()
   {
-    return rs.projecta.level.Tutorial_Turn.class;
+    return Flappy_Bird.class;
   }
   
   @Override
@@ -26,15 +26,18 @@ extends Level
   {
     rs.projecta.object.Finish finish;
     rs.projecta.object.Player player;
+    rs.projecta.object.Black_Hole black_hole;
   
     super.Build(w);
 
     player = new rs.projecta.object.Player(0, 300, w, w.hint);
     finish = new rs.projecta.object.Finish(w, 0, -2200);
+    black_hole = new rs.projecta.object.Black_Hole(w, 400, -1000, player);
   
     Add_Wavy_Bkg(w, player);
     w.objs.Add(finish);
     w.objs.Add(player);
+    w.objs.Add(black_hole);
 
     this.Add_Start_Walls(0, 0);
     this.Add_Walls_Vertical(0, -1000);

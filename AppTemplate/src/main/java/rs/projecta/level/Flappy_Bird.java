@@ -5,11 +5,10 @@ extends Level
 {
   public rs.projecta.object.Player player;
   public float trg_pos, trg_step;
-  public rs.projecta.world.World w;
   public int score;
 
   @Override
-  public String Get_Next_Level()
+  public Class<? extends Level> Get_Next_Level()
   {
     return null;
   }
@@ -29,21 +28,15 @@ extends Level
   @Override
   public void Build(rs.projecta.world.World w)
   {
-    rs.projecta.object.Background_Waves bd, bd2, bd3;
-  
+    super.Build(w);
     this.trg_step = 1000;
     this.trg_pos = 0;
-    this.w = w;
+    //this.w = w;
     this.score = 0;
 
     player = new rs.projecta.object.Player(0, -100, w, w.hint);
-    bd=new rs.projecta.object.Background_Waves(this.player, 1.2f, 0xff0000ff, this.w.hint);
-    bd2=new rs.projecta.object.Background_Waves(this.player, 1.4f, 0xff0000cc, w.hint);
-    bd3=new rs.projecta.object.Background_Waves(this.player, 1.6f, 0xff000088, w.hint);
-
-    w.objs.Add(bd3);
-    w.objs.Add(bd2);
-    w.objs.Add(bd);
+  
+    Add_Wavy_Bkg(w, this.player);
     w.objs.Add(player);
 
     this.Add_Walls(trg_step);

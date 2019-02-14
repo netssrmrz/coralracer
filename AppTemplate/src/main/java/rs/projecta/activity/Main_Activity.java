@@ -16,8 +16,7 @@ implements android.widget.Button.OnClickListener
     
 		super.onCreate(saved_state);
     this.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
-    level = rs.projecta.level.Level.Get(rs.projecta.level.Flappy_Bird.class);
-    //level = rs.projecta.level.Level.Get(rs.projecta.level.Race_Level.class);
+    level = rs.projecta.level.Level.Get(rs.projecta.level.Tutorial_Forward.class);
     
     list_view = new android.widget.LinearLayout(this);
     list_view.setOrientation(android.widget.LinearLayout.VERTICAL);

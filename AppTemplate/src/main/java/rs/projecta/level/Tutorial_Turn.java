@@ -4,35 +4,44 @@ public class Tutorial_Turn
 extends Level
 {
   @Override
-  public String Get_Next_Level()
+  public Class<? extends Level> Get_Next_Level()
   {
-    return rs.projecta.level.Tutorial_Forward.class.getName();
-    //return null;
+    return rs.projecta.level.Tutorial_Black_Hole.class;
   }
   
   @Override
   public String Get_Title()
   {
-    return "Turn Practice";
+    return "Turn 2";
   }
   
   @Override
   public String Get_Description()
   {
-    return "Practice negotiating tight corners.";
+    return "Practice negotiating turns.";
   }
   
   @Override
   public void Build(rs.projecta.world.World w)
   {
-    w.objs.Add(new rs.projecta.object.Finish(w, 3900, -3900));
-
-    w.objs.Add(new rs.projecta.object.Wall(w, -300, -1700, 10, 2000, 0, w.hint));
-    w.objs.Add(new rs.projecta.object.Wall(w, 1700, -3700, 2000, 10, 0, w.hint));
-    
-    w.objs.Add(new rs.projecta.object.Wall(w, 300, -1400, 10, 1700, 0, w.hint)); // top
-    //w.objs.add(new rs.projecta.object.Wall(w, 200, -1900, 10, 2000)); // right
-    //w.objs.add(new rs.projecta.object.Wall(w, -200, -1900, 10, 2000)); // left
-    //w.objs.add(new rs.projecta.object.Wall(w, 0, 100, 180, 10)); // bottom 
+    rs.projecta.object.Finish finish;
+    rs.projecta.object.Player player;
+  
+    super.Build(w);
+  
+    player = new rs.projecta.object.Player(0, 300, w, w.hint);
+    finish = new rs.projecta.object.Finish(w, 2000, -4200);
+  
+    Add_Wavy_Bkg(w, player);
+    w.objs.Add(finish);
+    w.objs.Add(player);
+  
+    this.Add_Start_Walls(0, 0);
+    this.Add_Walls_Vertical(0, -1000);
+    this.Add_Walls_Turn_Right_Up(0, -2000);
+    this.Add_Walls_Horiz(1000, -2000);
+    this.Add_Walls_Turn_Right_Up(2000, -2000);
+    this.Add_Walls_Vertical(2000, -3000);
+    this.Add_Finish_Walls(2000, -4000);
   }
 }

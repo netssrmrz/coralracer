@@ -107,7 +107,6 @@ public class Object_List
     {
       if (o instanceof rs.projecta.object.Is_Drawable)
       {
-        //v.Save_Transform();
         v.ogl_ctx.proj.Save();
   
         if (o instanceof rs.projecta.object.Has_Position)
@@ -125,7 +124,6 @@ public class Object_List
   
         ((rs.projecta.object.Is_Drawable)o).Draw(v, null);
   
-        //v.Restore_Transform();
         v.ogl_ctx.proj.Restore();
       }
     }

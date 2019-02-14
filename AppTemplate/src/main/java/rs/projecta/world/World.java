@@ -11,6 +11,7 @@ implements
   public boolean debug, prof;
   public rs.projecta.level.Level level;
   public java.util.Vector<rs.projecta.world.World_Step_Listener> world_step_listeners;
+  public java.util.Vector<rs.projecta.world.World_Update_Listener> world_update_listeners;
   public rs.projecta.world.Object_List objs;
   public int state, hint;
   public boolean do_processing;
@@ -40,15 +41,21 @@ implements
     this.ctx = ctx;
     this.debug_msg = new String[5];
     this.world_step_listeners = new java.util.Vector<rs.projecta.world.World_Step_Listener>();
+    this.world_update_listeners = new java.util.Vector<rs.projecta.world.World_Update_Listener>();
 
     //this.Init_Sound();
     this.Init_Level(level);
   }
-
+  
   public void Set_Listener(rs.projecta.world.World_Step_Listener l)
   {
     this.world_step_listeners.add(l);
     l.On_World_State_Change(this, STATE_INIT);
+  }
+  
+  public void Set_Listener(rs.projecta.world.World_Update_Listener l)
+  {
+    this.world_update_listeners.add(l);
   }
   
   public void Init_Sound()
@@ -84,11 +91,27 @@ implements
   {
     int i;
     
-    this.state = state;
-    if (this.state == rs.projecta.world.World.STATE_LEVELFAIL)
-    {
+    if (state == rs.projecta.world.World.STATE_LEVELFAIL)
       this.Init_Level();
-    }
+    else
+      this.Notify_State_Change(state);
+  }
+  
+  public void Notify_State_Change(int state)
+  {
+    int i;
+    
+    this.state = state;
+    for (i=0; i<this.world_step_listeners.size(); i++)
+      this.world_step_listeners.get(i).On_World_State_Change(this, state);
+  }
+  
+  public void Notify_Update()
+  {
+    int i;
+    
+    for (i=0; i<this.world_update_listeners.size(); i++)
+      this.world_update_listeners.get(i).On_World_Update(this);
   }
 
   public void beginContact(org.jbox2d.dynamics.contacts.Contact c)
@@ -141,14 +164,15 @@ implements
 
     this.Notify_State_Change(STATE_INIT);
   }
-
-  public void Notify_State_Change(int state)
+  
+  public void Init_Next_Level()
   {
-    int i;
-    
-    this.state = state;
-    for (i=0; i<this.world_step_listeners.size(); i++)
-      this.world_step_listeners.get(i).On_World_State_Change(this, state);
+    Class<? extends rs.projecta.level.Level> next_level_class;
+    rs.projecta.level.Level next_level;
+  
+    next_level_class = this.level.Get_Next_Level();
+    next_level = rs.projecta.level.Level.Get(next_level_class);
+    this.Init_Level(next_level);
   }
   
   public void Do_Processing()
@@ -184,7 +208,7 @@ implements
     sec_step = this.lapsed_time / 1800000000f;
     this.phys_world.step(sec_step, 8, 8);
   
-    this.Notify_State_Change(STATE_STEP);
+    this.Notify_Update();
   
     if (this.level != null)
       this.level.Update();

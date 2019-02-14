@@ -20,11 +20,8 @@ implements
 
     //android.util.Log.d("Test_Activity.onCreate()", "Entered");
     this.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
-    this.getWindow().addFlags(
-      android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    this.getWindow().setFlags(
-      android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN,
-      android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    this.getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    this.getWindow().setFlags(android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN, android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);
     this.getWindow().getDecorView().setBackgroundColor(0xff000000);
     
     this.curr_level=rs.projecta.level.Level.Get(this);
@@ -96,15 +93,19 @@ implements
   
   public void On_World_State_Change(rs.projecta.world.World w, int state)
   {
-    //android.util.Log.d("Play_Activity", "On_World_Finish()");
+    //android.util.Log.d("Play_Activity", "On_World_State_Change(): state="+state);
     android.content.Intent i;
 
     if (state==rs.projecta.world.World.STATE_LEVELCOMPLETE)
     {
-      i=new android.content.Intent(this, rs.projecta.activity.Finish_Activity.class);
-      i.setFlags(android.content.Intent.FLAG_ACTIVITY_NO_HISTORY);
-      i.putExtra("level_class", this.curr_level.getClass().getName());
-      this.startActivity(i);
+      w.Init_Next_Level();
+      //this.setResult(state);
+      //this.finish();
+      //android.util.Log.d("On_World_State_Change", "state==rs.projecta.world.World.STATE_LEVELCOMPLETE");
+      //i=new android.content.Intent(this, rs.projecta.activity.Finish_Activity.class);
+      //i.setFlags(android.content.Intent.FLAG_ACTIVITY_NO_HISTORY);
+      //i.putExtra("level_class", this.curr_level.getClass().getName());
+      //this.startActivity(i);
     }
   }
 }
