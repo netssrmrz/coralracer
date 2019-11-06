@@ -34,7 +34,7 @@ extends Level
     //this.w = w;
     this.score = 0;
 
-    player = new rs.projecta.object.Player(0, -100, w, w.hint);
+    player = new rs.projecta.object.Player(0, -100, w);
   
     Add_Wavy_Bkg(w, this.player);
     w.objs.Add(player);
@@ -69,9 +69,9 @@ extends Level
   public void Add_Walls(float trg_pos)
   {
     // right wall
-    this.w.objs.Add(new rs.projecta.object.Wall(w, 500, trg_pos - (this.trg_step * 1.5f), 20, this.trg_step / 2f, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Wall(w, 500, trg_pos - (this.trg_step * 1.5f), 20, this.trg_step / 2f, 0f));
     // left wall
-    this.w.objs.Add(new rs.projecta.object.Wall(w, -500, trg_pos - (this.trg_step * 1.5f), 20, this.trg_step / 2f, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Wall(w, -500, trg_pos - (this.trg_step * 1.5f), 20, this.trg_step / 2f, 0f));
     // top wall
     this.w.objs.Add(new rs.projecta.object.Flappy_Wall(w, 0, trg_pos - this.trg_step, 0, this.w.rnd.nextFloat()));
   }

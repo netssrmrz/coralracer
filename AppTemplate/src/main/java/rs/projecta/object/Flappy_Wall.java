@@ -35,7 +35,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
     {
       this.w1x = (wall_width - tot_width) / 2f;
       p = rs.android.ui.Util.Rotate(x, y, this.w1x, 0, a);
-      this.w1 = new Wall(world, p.x, p.y, wall_width / 2f, 40, a, this.world.hint);
+      this.w1 = new Wall(world, p.x, p.y, wall_width / 2f, 40, a);
     }
 
     // right wall
@@ -44,14 +44,14 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
     {
       this.w2_x = (tot_width - wall_width) / 2f;
       p = rs.android.ui.Util.Rotate(x, y, this.w2_x, 0, a);
-      this.w2 = new Wall(world, p.x, p.y, wall_width / 2f, 40, a, this.world.hint);
+      this.w2 = new Wall(world, p.x, p.y, wall_width / 2f, 40, a);
     }
     
     // door
     wall_width = gap_width;
     this.door_x = gap_pos-tot_width/2f;
     p = rs.android.ui.Util.Rotate(x, y, this.door_x, 0, a);
-    this.door = new Wall(world, p.x, p.y, wall_width / 2f, 40, a, this.world.hint);
+    this.door = new Wall(world, p.x, p.y, wall_width / 2f, 40, a);
     this.Open();
   }
   
@@ -176,9 +176,9 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
   {
     org.jbox2d.dynamics.Filter filter;
 
-    filter=this.door.fixture.getFilterData();
+    filter=this.door.body.getFixtureList().getFilterData();
     filter.groupIndex=-1;
-    this.door.fixture.setFilterData(filter);
+    this.door.body.getFixtureList().setFilterData(filter);
     this.door_closed=false;
   }
   
@@ -187,9 +187,9 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
     org.jbox2d.dynamics.Filter filter;
     
     //android.util.Log.d("Close", "Entry");
-    filter=this.door.fixture.getFilterData();
+    filter=this.door.body.getFixtureList().getFilterData();
     filter.groupIndex=0;
-    this.door.fixture.setFilterData(filter);
+    this.door.body.getFixtureList().setFilterData(filter);
     this.door_closed=true;
   }
 }

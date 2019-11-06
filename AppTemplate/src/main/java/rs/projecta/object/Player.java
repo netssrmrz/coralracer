@@ -12,19 +12,19 @@ implements
   public final float size=24f;
   public final float trgt_v=60; // max velocity
   public final float torque_factor=40; // turn rate
-  public int hint;
+  public float suspend_secs;
   // open gl
   public java.nio.FloatBuffer b;
   public int OGL_POINT_COUNT=12;
   public float red, green, blue, alpha;
   
-  public Player(float x, float y, rs.projecta.world.World world, int hint)
+  public Player(float x, float y, rs.projecta.world.World world)
   {
     org.jbox2d.dynamics.BodyDef body_def;
     org.jbox2d.dynamics.FixtureDef fix_def;
     
     this.w = world;
-    this.hint=hint;
+    this.suspend_secs = 0;
   
     body_def = new org.jbox2d.dynamics.BodyDef();
     body_def.type = org.jbox2d.dynamics.BodyType.DYNAMIC;
@@ -49,7 +49,7 @@ implements
     if (this.w.sounds!=null)
       this.w.sounds.play(this.w.soundid_start, 1, 1, 0, 0, 1);
   
-    if (this.hint==rs.projecta.world.World.HINT_ES2)
+    if (this.w.hint==rs.projecta.world.World.HINT_ES2)
       Init_OpenGL(0xffffffff);
     else
       Init_Canvas(0xffffffff);
@@ -167,7 +167,7 @@ implements
     this.frame=this.frame+this.frame_delta*((float)this.w.lapsed_time/1000000f);
     this.frame=this.frame%this.frame_max;
   
-    if (this.hint==rs.projecta.world.World.HINT_ES2)
+    if (this.w.hint==rs.projecta.world.World.HINT_ES2)
       this.Draw_OpenGL((rs.projecta.view.OpenGL_View)v);
     else
       this.Draw_Canvas(v, c);
@@ -307,36 +307,26 @@ implements
 
   public void Contact(org.jbox2d.dynamics.contacts.Contact c)
   {
-    Object a, b;
-
-    a = c.getFixtureA().getBody().getUserData();
-    b = c.getFixtureB().getBody().getUserData();
-
-    if ((a != null && a instanceof Finish) || (b != null && b instanceof Finish))
-    {
-      //android.util.Log.d("Player", "Contact(): instanceof Finish");
-      this.w.Change_State(rs.projecta.world.World.STATE_LEVELCOMPLETE);
-    }
-    
-    if ((a != null && a instanceof Wall) || (b != null && b instanceof Wall))
-    {
-      Explosion.Add(this.w, this.Get_X(), this.Get_Y());
-      //android.util.Log.d("Player", "Contact(): instanceof Wall");
-    }
+    this.suspend_secs = 0.2f;
   }
   
-  public void Update(long dt)
+  public void Update(float sec_step)
   {
     org.jbox2d.common.Vec2 curr_abs_vel, req_rel_vel, req_abs_vel, diff_abs_vel, impulse;
     
-    curr_abs_vel = this.body.getLinearVelocity();
-    
-    req_rel_vel = new org.jbox2d.common.Vec2(0, -trgt_v);
-    req_abs_vel = this.body.getWorldVector(req_rel_vel);
-    
-    diff_abs_vel = req_abs_vel.sub(curr_abs_vel);
-    impulse = diff_abs_vel.mul(this.body.getMass());
-    
-    this.body.applyLinearImpulse(impulse, this.body.getWorldCenter());
+    if (this.suspend_secs <= 0)
+    {
+      curr_abs_vel = this.body.getLinearVelocity();
+  
+      req_rel_vel = new org.jbox2d.common.Vec2(0, -trgt_v);
+      req_abs_vel = this.body.getWorldVector(req_rel_vel);
+  
+      diff_abs_vel = req_abs_vel.sub(curr_abs_vel);
+      impulse = diff_abs_vel.mul(this.body.getMass());
+  
+      this.body.applyLinearImpulse(impulse, this.body.getWorldCenter());
+    }
+    else
+      this.suspend_secs -= sec_step;
   }
 }

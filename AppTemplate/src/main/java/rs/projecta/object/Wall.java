@@ -1,61 +1,39 @@
 package rs.projecta.object;
 
 public class Wall
-implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
+implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup, Can_Collide
 {
   public org.jbox2d.dynamics.Body body;
-  public org.jbox2d.dynamics.Fixture fixture;
   public android.graphics.Paint p;
   public rs.projecta.world.World world;
   public float x1, y1, x2, y2;
-  public int hint;
   // open gl
   public java.nio.FloatBuffer b;
   public int pt_count;
   public float red, green, blue, alpha;
   
-  public Wall(rs.projecta.world.World world, float x, float y, float rx, float ry, float a_degrees, int hint)
+  public Wall(rs.projecta.world.World world, float x, float y, float rx, float ry, float a_degrees)
   {
-    org.jbox2d.dynamics.BodyDef body_def;
-    org.jbox2d.dynamics.FixtureDef fix_def;
-    org.jbox2d.common.Vec2 pos;
-    
+    org.jbox2d.collision.shapes.PolygonShape shape;
+  
     this.world=world;
-    this.hint=hint;
   
-    pos = new org.jbox2d.common.Vec2(x, y);
-    this.Init_Phys(pos, rx, ry, a_degrees);
+    shape=new org.jbox2d.collision.shapes.PolygonShape();
+    shape.setAsBox(this.world.To_Phys_Dim(rx), this.world.To_Phys_Dim(ry), new org.jbox2d.common.Vec2(0, 0), 0);
+    this.body = this.world.Add_Single_Fixture_Body
+      (shape, x, y, a_degrees, 2, false, org.jbox2d.dynamics.BodyType.STATIC, this);
   
-    if (this.hint==rs.projecta.world.World.HINT_ES2)
-      Init_OpenGL(rx, ry);
-    else
-      Init_Canvas(rx, ry);
+    Init_OpenGL(rx, ry);
   }
   
-  public org.jbox2d.dynamics.Body Init_Phys(org.jbox2d.common.Vec2 pos, float rx, float ry, float a)
+  public void Init_Phys(org.jbox2d.common.Vec2 pos, float rx, float ry, float a_degrees)
   {
-    org.jbox2d.dynamics.BodyDef body_def;
-    org.jbox2d.dynamics.FixtureDef fix_def;
     org.jbox2d.collision.shapes.PolygonShape shape;
-    
-    body_def=new org.jbox2d.dynamics.BodyDef();
-    body_def.type=org.jbox2d.dynamics.BodyType.STATIC;
-    body_def.position=world.To_Phys_Pt(pos);
-    body_def.angle=(float)java.lang.Math.toRadians(a);
-    body_def.userData=this;
-    this.body=world.phys_world.createBody(body_def);
-    
+  
     shape=new org.jbox2d.collision.shapes.PolygonShape();
-    shape.setAsBox(world.To_Phys_Dim(rx), world.To_Phys_Dim(ry), new org.jbox2d.common.Vec2(0, 0), 0);
-    
-    fix_def=new org.jbox2d.dynamics.FixtureDef();
-    fix_def.shape=shape;
-    fix_def.density=1;
-    fix_def.friction=0;
-    fix_def.restitution=2;
-    this.fixture = this.body.createFixture(fix_def);
-    
-    return body;
+    shape.setAsBox(this.world.To_Phys_Dim(rx), this.world.To_Phys_Dim(ry), new org.jbox2d.common.Vec2(0, 0), 0);
+    this.body = this.world.Add_Single_Fixture_Body
+                 (shape, pos.x, pos.y, a_degrees, 2, false, org.jbox2d.dynamics.BodyType.STATIC, this);
   }
   
   public void Init_Canvas(float rx, float ry)
@@ -161,10 +139,7 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
   @Override
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
-    if (this.hint==rs.projecta.world.World.HINT_ES2)
-      this.Draw_OpenGL((rs.projecta.view.OpenGL_View)v);
-    else
-      this.Draw_Canvas(v, c);
+    this.Draw_OpenGL((rs.projecta.view.OpenGL_View)v);
   }
   
   public void Draw_Canvas(rs.projecta.view.Game_View v, android.graphics.Canvas c)
@@ -230,5 +205,17 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
   public void Remove()
   {
     this.world.phys_world.destroyBody(this.body);
+  }
+  
+  public void Contact(org.jbox2d.dynamics.contacts.Contact c)
+  {
+    rs.projecta.object.Player player;
+  
+    player = (Player)rs.projecta.world.World.Get_Contact_Object_If_Type(c, Player.class);
+    if (player != null)
+    {
+      Explosion.Add(this.world, player.Get_X(), player.Get_Y());
+      //android.util.Log.d("Player", "Contact(): instanceof Wall");
+    }
   }
 }

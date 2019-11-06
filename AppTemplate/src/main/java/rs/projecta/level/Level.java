@@ -92,37 +92,37 @@ public class Level
   
   public void Add_Walls_Vertical(float x, float y)
   {
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x+500, y, 20, 500, 0f, this.w.hint));
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x-500, y, 20, 500, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x+500, y, 20, 500, 0f));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x-500, y, 20, 500, 0f));
   }
   
   public void Add_Start_Walls(float x, float y)
   {
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y+500, 500, 20, 0f, this.w.hint));
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x+500, y, 20, 500, 0f, this.w.hint));
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x-500, y, 20, 500, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x, y+500, 500, 20, 0f));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x+500, y, 20, 500, 0f));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x-500, y, 20, 500, 0f));
   }
   
   public void Add_Finish_Walls(float x, float y)
   {
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x+500, y, 20, 500, 0f, this.w.hint));
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x-500, y, 20, 500, 0f, this.w.hint));
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y-500, 500, 20, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x+500, y, 20, 500, 0f));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x-500, y, 20, 500, 0f));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x, y-500, 500, 20, 0f));
   }
   
   public void Add_Walls_Horiz(float x, float y)
   {
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y+500, 500, 20, 0f, this.w.hint));
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y-500, 500, 20, 0f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x, y+500, 500, 20, 0f));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x, y-500, 500, 20, 0f));
   }
   
   public void Add_Walls_Turn_Right_Up(float x, float y)
   {
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y, 20, 707, 45f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x, y, 20, 707, 45f));
   }
   
   public void Add_Walls_Turn_Left_Down(float x, float y)
   {
-    this.w.objs.Add(new rs.projecta.object.Wall(this.w, x, y, 20, 707, -45f, this.w.hint));
+    this.w.objs.Add(new rs.projecta.object.Bouncy_Wall(this.w, x, y, 20, 707, -45f));
   }
 }

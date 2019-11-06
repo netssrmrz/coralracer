@@ -7,7 +7,7 @@ public class Black_Hole
   public rs.projecta.ogl.Swirl swirl;
   public rs.projecta.object.Player player;
   public final float effect_dist = 1000;
-  public final float max_force = 29;
+  public final float max_force = 20;
   
   public Black_Hole(rs.projecta.world.World w, float x, float y, rs.projecta.object.Player player)
   {
@@ -48,7 +48,7 @@ public class Black_Hole
   }
   
   @Override
-  public void Update(long dt)
+  public void Update(float dt)
   {
     org.jbox2d.common.Vec2 f;
     float distance, f_strength;

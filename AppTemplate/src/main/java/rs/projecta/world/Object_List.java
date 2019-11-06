@@ -12,12 +12,12 @@ public class Object_List
     this.del_objs = new java.util.ArrayList<Object>();
   }
 
-  public void Process()
+  public void Process(float sec_step)
   {
     for (Object obj: this.objs)
     {
       if (obj instanceof rs.projecta.object.Has_Auto_Movement)
-        ((rs.projecta.object.Has_Auto_Movement)obj).Update(1);
+        ((rs.projecta.object.Has_Auto_Movement)obj).Update(sec_step);
     }
 
     for (Object obj: this.del_objs)

@@ -16,7 +16,7 @@ implements android.widget.Button.OnClickListener
     
 		super.onCreate(saved_state);
     this.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
-    level = rs.projecta.level.Level.Get(rs.projecta.level.Tutorial_Forward.class);
+    level = rs.projecta.level.Level.Get(rs.projecta.level.Tutorial_Accelerator.class);
     
     list_view = new android.widget.LinearLayout(this);
     list_view.setOrientation(android.widget.LinearLayout.VERTICAL);
@@ -43,6 +43,12 @@ implements android.widget.Button.OnClickListener
     button.setText("Start!");
     button.setId(1);
     list_view.addView(button, layout);
+    
+    if (!rs.projecta.Tilt_Manager.Has_Tilt_Sensors(this))
+    {
+      text_view.setText("Time to get a better mobile!");
+      button.setEnabled(false);
+    }
     
     this.setContentView(list_view,
       new android.widget.LinearLayout.LayoutParams(

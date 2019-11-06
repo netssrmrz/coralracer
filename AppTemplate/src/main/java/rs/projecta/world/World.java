@@ -120,11 +120,17 @@ implements
 
     obj = c.getFixtureA().getBody().getUserData();
     if (obj != null && obj instanceof rs.projecta.object.Can_Collide)
+    {
       ((rs.projecta.object.Can_Collide)obj).Contact(c);
-
+      //android.util.Log.d("World", "beginContact(): body A is " + obj.getClass().getName());
+    }
+    
     obj = c.getFixtureB().getBody().getUserData();
     if (obj != null && obj instanceof rs.projecta.object.Can_Collide)
+    {
       ((rs.projecta.object.Can_Collide)obj).Contact(c);
+      //android.util.Log.d("World", "beginContact(): body B is " + obj.getClass().getName());
+    }
   }
 
   public void endContact(org.jbox2d.dynamics.contacts.Contact p1)
@@ -213,7 +219,7 @@ implements
     if (this.level != null)
       this.level.Update();
   
-    this.objs.Process(); // remove and update
+    this.objs.Process(sec_step); // remove and update
   }
 
   public String Gen_Level_Script()
@@ -284,5 +290,73 @@ implements
   public float To_Phys_Dim(float d)
   {
     return d / this.phys_scale;
+  }
+  
+  public org.jbox2d.dynamics.Body Add_Single_Fixture_Body
+    (org.jbox2d.collision.shapes.Shape shape, float x, float y, float a_degrees, float bounce, boolean is_sensor, Object obj)
+  {
+    return Add_Single_Fixture_Body(shape, x, y, a_degrees, bounce, is_sensor, org.jbox2d.dynamics.BodyType.STATIC, obj);
+  }
+  
+  public org.jbox2d.dynamics.Body Add_Single_Fixture_Body
+    (org.jbox2d.collision.shapes.Shape shape, float x, float y, float a_degrees,
+     float bounce, boolean is_sensor, org.jbox2d.dynamics.BodyType body_type, Object obj)
+  {
+    org.jbox2d.dynamics.Body body;
+    org.jbox2d.dynamics.FixtureDef fix_def;
+  
+    fix_def = Create_Fixture(shape, bounce, is_sensor);
+    body = Create_Body(fix_def, x, y, a_degrees, body_type, obj);
+  
+    return body;
+  }
+  
+  public static org.jbox2d.dynamics.FixtureDef Create_Fixture(org.jbox2d.collision.shapes.Shape shape, float bounce, boolean is_sensor)
+  {
+    org.jbox2d.dynamics.FixtureDef fix_def;
+
+    fix_def=new org.jbox2d.dynamics.FixtureDef();
+    fix_def.shape=shape;
+    fix_def.density=1;
+    fix_def.friction=0;
+    fix_def.restitution=bounce;
+    fix_def.isSensor=is_sensor;
+    
+    return fix_def;
+  }
+  
+  public org.jbox2d.dynamics.Body Create_Body
+    (org.jbox2d.dynamics.FixtureDef fix_def, float x, float y, float a_degrees, org.jbox2d.dynamics.BodyType body_type, Object obj)
+  {
+    org.jbox2d.dynamics.BodyDef body_def;
+    org.jbox2d.dynamics.Body body;
+    org.jbox2d.common.Vec2 pos;
+
+    pos = new org.jbox2d.common.Vec2(x, y);
+  
+    body_def=new org.jbox2d.dynamics.BodyDef();
+    body_def.type=body_type;
+    body_def.position=To_Phys_Pt(pos);
+    body_def.angle=(float) Math.toRadians(a_degrees);
+    body_def.userData=obj;
+    body=phys_world.createBody(body_def);
+    body.createFixture(fix_def);
+    
+    return body;
+  }
+  
+  public static Object Get_Contact_Object_If_Type(org.jbox2d.dynamics.contacts.Contact c, Class<? extends Object> obj_class)
+  {
+    Object a, b, res=null;
+
+    a = c.getFixtureA().getBody().getUserData();
+    b = c.getFixtureB().getBody().getUserData();
+  
+    if (a != null && obj_class.isInstance(a))
+      res=a;
+    else if (b != null && obj_class.isInstance(b))
+      res=b;
+    
+    return res;
   }
 }
