@@ -1,5 +1,6 @@
 package rs.projecta.level;
 
+// introduce player to maneuvering
 public class Tutorial_Turn
 extends Level
 {
@@ -12,7 +13,7 @@ extends Level
   @Override
   public String Get_Title()
   {
-    return "Turn 2";
+    return "Tutorial 2";
   }
   
   @Override

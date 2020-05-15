@@ -1,5 +1,6 @@
 package rs.projecta.level;
 
+// teach player to maneuver through tight spaces
 public class Tutorial_Bouncy_Castle
 extends Level
 {
@@ -12,13 +13,13 @@ extends Level
   @Override
   public String Get_Title()
   {
-    return "Tutorial 1";
+    return "Tutorial 5";
   }
   
   @Override
   public String Get_Description()
   {
-    return "Tilt the device left and right to adjust direction and steer forward to the blue circle.";
+    return "Some walls fight back.";
   }
   
   @Override

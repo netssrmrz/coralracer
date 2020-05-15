@@ -1,5 +1,6 @@
 package rs.projecta.level;
 
+// todo: introduce player to accelerator tile
 public class Tutorial_Accelerator
 extends Level
 {
@@ -18,7 +19,7 @@ extends Level
   @Override
   public String Get_Description()
   {
-    return "Tilt the device left and right to adjust direction and steer forward to the blue circle.";
+    return "Tilt the device left and right to turn. Get to the blue arrows.";
   }
   
   @Override
@@ -26,18 +27,16 @@ extends Level
   {
     rs.projecta.object.Finish finish;
     rs.projecta.object.Player player;
-    //rs.projecta.object.Accelerator acc;
   
     super.Build(w);
 
     player = new rs.projecta.object.Player(0, 300, w);
     finish = new rs.projecta.object.Finish(w, 0, -2200);
-    //acc = new rs.projecta.object.Accelerator(w, 0, -1000, 45);
   
     Add_Wavy_Bkg(w, player);
     w.objs.Add(finish);
     w.objs.Add(player);
-    //w.objs.Add(acc);
+    
     this.Add_Start_Walls(0, 0);
     this.Add_Walls_Vertical(0, -1000);
     this.Add_Finish_Walls(0, -2000);

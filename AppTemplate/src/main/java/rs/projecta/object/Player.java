@@ -4,19 +4,14 @@ public class Player
 implements
   Is_Drawable, Has_Position, Has_Direction, Can_Collide, Has_Auto_Movement
 {
-	public android.graphics.Paint p;
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World w;
-  public android.graphics.Path[] frames;
   public float frame, frame_delta, frame_max;
   public final float size=24f;
   public final float trgt_v=60; // max velocity
   public final float torque_factor=40; // turn rate
   public float suspend_secs;
-  // open gl
-  public java.nio.FloatBuffer b;
-  public int OGL_POINT_COUNT=12;
-  public float red, green, blue, alpha;
+  public rs.projecta.ogl.Fish1 fish1;
   
   public Player(float x, float y, rs.projecta.world.World world)
   {
@@ -49,153 +44,14 @@ implements
     if (this.w.sounds!=null)
       this.w.sounds.play(this.w.soundid_start, 1, 1, 0, 0, 1);
   
-    if (this.w.hint==rs.projecta.world.World.HINT_ES2)
-      Init_OpenGL(0xffffffff);
-    else
-      Init_Canvas(0xffffffff);
-  }
-  
-  public void Init_Canvas(int col)
-  {
-    this.p = new android.graphics.Paint();
-    this.p.setColor(col);
-    this.p.setAntiAlias(false);
-    this.p.setStyle(android.graphics.Paint.Style.STROKE);
-    
-    this.frames=new android.graphics.Path[(int)this.frame_max];
-    
-    this.frames[0]=new android.graphics.Path();
-    this.frames[0].moveTo(0,-15);
-    this.frames[0].lineTo(5,-5);
-    this.frames[0].lineTo(10,0);
-    this.frames[0].lineTo(5,0);
-    this.frames[0].lineTo(0,15);
-    this.frames[0].lineTo(5,20);
-    this.frames[0].lineTo(-5,20);
-    this.frames[0].lineTo(0,15);
-    this.frames[0].lineTo(-5,0);
-    this.frames[0].lineTo(-10,0);
-    this.frames[0].lineTo(-5,-5);
-    this.frames[0].lineTo(0,-15);
-    
-    this.frames[1]=new android.graphics.Path();
-    this.frames[1].moveTo(5,-15);
-    this.frames[1].lineTo(5,-5);
-    this.frames[1].lineTo(10,0);
-    this.frames[1].lineTo(5,0);
-    this.frames[1].lineTo(5,15);
-    this.frames[1].lineTo(10,20);
-    this.frames[1].lineTo(5,25);
-    this.frames[1].lineTo(5,15);
-    this.frames[1].lineTo(-5,0);
-    this.frames[1].lineTo(-10,0);
-    this.frames[1].lineTo(-5,-5);
-    this.frames[1].lineTo(5,-15);
-    
-    this.frames[2]=new android.graphics.Path();
-    this.frames[2].moveTo(0,-15);
-    this.frames[2].lineTo(5,-5);
-    this.frames[2].lineTo(10,0);
-    this.frames[2].lineTo(5,0);
-    this.frames[2].lineTo(0,15);
-    this.frames[2].lineTo(5,20);
-    this.frames[2].lineTo(-5,20);
-    this.frames[2].lineTo(0,15);
-    this.frames[2].lineTo(-5,0);
-    this.frames[2].lineTo(-10,0);
-    this.frames[2].lineTo(-5,-5);
-    this.frames[2].lineTo(0,-15);
-    
-    this.frames[3]=new android.graphics.Path();
-    this.frames[3].moveTo(-5,-15);
-    this.frames[3].lineTo(-5,-5);
-    this.frames[3].lineTo(-10,0);
-    this.frames[3].lineTo(-5,0);
-    this.frames[3].lineTo(-5,15);
-    this.frames[3].lineTo(-10,20);
-    this.frames[3].lineTo(-5,25);
-    this.frames[3].lineTo(-5,15);
-    this.frames[3].lineTo(5,0);
-    this.frames[3].lineTo(10,0);
-    this.frames[3].lineTo(5,-5);
-    this.frames[3].lineTo(-5,-15);
-  }
-  
-  public void Init_OpenGL(int col)
-  {
-    float[] points;
-    
-    points=this.Get_Points();
-    b=java.nio.ByteBuffer.allocateDirect(points.length*4)
-        .order(java.nio.ByteOrder.nativeOrder())
-        .asFloatBuffer();
-    b.put(points);
-    b.position(0);
-    
-    this.red=(float)android.graphics.Color.red(col)/255f;
-    this.green=(float)android.graphics.Color.green(col)/255f;
-    this.blue=(float)android.graphics.Color.blue(col)/255f;
-    this.alpha=(float)android.graphics.Color.alpha(col)/255f;
-  }
-  
-  public float[] Get_Points()
-  {
-    float[] points=
-    {
-      0,-15, 5,-5, 10,0, 5,0, 0,15,
-      5,20, -5,20, 0,15, -5,0, -10,0,
-      -5,-5, 0,-15,
-      
-      5,-15, 5,-5, 10,0, 5,0, 5,15,
-      10,20, 5,25, 5,15, -5,0, -10,0,
-      -5,-5, 5,-15,
-      
-      0,-15, 5,-5, 10,0, 5,0, 0,15,
-      5,20, -5,20, 0,15, -5,0, -10,0,
-      -5,-5, 0,-15,
-      
-      -5,-15, -5,-5, -10,0, -5,0, -5,15,
-      -10,20, -5,25, -5,15, 5,0, 10,0,
-      5,-5, -5,-15
-    };
-    
-    return points;
+    this.fish1 = new rs.projecta.ogl.Fish1(0xffffffff);
   }
   
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
     this.frame=this.frame+this.frame_delta*((float)this.w.lapsed_time/1000000f);
     this.frame=this.frame%this.frame_max;
-  
-    if (this.w.hint==rs.projecta.world.World.HINT_ES2)
-      this.Draw_OpenGL((rs.projecta.view.OpenGL_View)v);
-    else
-      this.Draw_Canvas(v, c);
-  }
-  
-  public void Draw_Canvas(rs.projecta.view.Game_View v, android.graphics.Canvas c)
-  {
-    c.save();
-    c.scale(4f, 4f);
-    c.drawPath(this.frames[(int)this.frame], p);
-    c.restore();
-  }
-  
-  public void Draw_OpenGL(rs.projecta.view.OpenGL_View v)
-  {
-    //android.util.Log.d("Player.Draw_OpenGL()", "Entered");
-    
-    android.opengl.GLES20.glVertexAttribPointer(v.ogl_ctx.att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, b);
-    android.opengl.GLES20.glEnableVertexAttribArray(v.ogl_ctx.att_loc);
-    
-    v.ogl_ctx.proj.Save();
-    android.opengl.Matrix.scaleM(v.ogl_ctx.proj.vals, 0, 4f, 4f, 1f);
-    
-    android.opengl.GLES20.glUniformMatrix4fv(v.ogl_ctx.mat_loc, 1, false, v.ogl_ctx.proj.vals, 0);
-    android.opengl.GLES20.glUniform4f(v.ogl_ctx.col_loc, this.red, this.green, this.blue, this.alpha);
-    android.opengl.GLES20.glDrawArrays(android.opengl.GLES20.GL_LINE_LOOP, (int)this.frame*OGL_POINT_COUNT, OGL_POINT_COUNT);
-    
-    v.ogl_ctx.proj.Restore();
+    this.fish1.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 4, (int)this.frame);
   }
   
 	public float Get_X()

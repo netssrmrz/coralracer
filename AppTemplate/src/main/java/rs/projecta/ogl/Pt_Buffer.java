@@ -4,14 +4,14 @@ public class Pt_Buffer
 {
   public float[] points;
   public java.nio.FloatBuffer b;
-  public int pt_count;
-  public int mode;
+  public rs.projecta.ogl.Buffer_Frame frames[];
   
   public Pt_Buffer(float[] points)
   {
-    this.mode = android.opengl.GLES20.GL_LINE_LOOP;
+    this.frames = new Buffer_Frame[1];
+    this.frames[0] = new Buffer_Frame(android.opengl.GLES20.GL_LINE_LOOP, 0, points.length / 2);
+
     this.points = points;
-    this.pt_count = this.points.length / 2;
     this.b = java.nio.ByteBuffer.allocateDirect(this.points.length * 4)
           .order(java.nio.ByteOrder.nativeOrder())
           .asFloatBuffer();

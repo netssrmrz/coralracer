@@ -1,24 +1,26 @@
 package rs.projecta.level;
 
+// introduce player to blackhole
 public class Tutorial_Black_Hole
 extends rs.projecta.level.Level
 {
   @Override
   public Class<? extends Level> Get_Next_Level()
   {
-    return Tutorial_Bouncy_Castle.class;
+    //return Tutorial_Bouncy_Castle.class;
+    return Tutorial_Black_Hole.class;
   }
   
   @Override
   public String Get_Title()
   {
-    return "Tutorial 1";
+    return "Tutorial 3";
   }
   
   @Override
   public String Get_Description()
   {
-    return "Tilt the device left and right to adjust direction and steer forward to the blue circle.";
+    return "Reach the end but stay away from the black hole.";
   }
   
   @Override

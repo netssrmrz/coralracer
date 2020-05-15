@@ -1,5 +1,6 @@
 package rs.projecta.level;
 
+// introduce player to tilt mechanism
 public class Tutorial_Forward
 extends Level
 {
@@ -18,7 +19,7 @@ extends Level
   @Override
   public String Get_Description()
   {
-    return "Tilt the device left and right to adjust direction and steer forward to the blue circle.";
+    return "Tilt the device left and right to turn. Get to the blue arrows.";
   }
   
   @Override

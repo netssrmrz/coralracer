@@ -10,7 +10,7 @@ public class Swirl
     if (points==null)
     {
       points = new rs.projecta.ogl.Pt_Buffer(this.Get_Points());
-      points.mode = android.opengl.GLES20.GL_LINE_STRIP;
+      points.frames[0].segments[0].mode = android.opengl.GLES20.GL_LINE_STRIP;
     }
     this.color = new rs.projecta.ogl.Color(col);
   }

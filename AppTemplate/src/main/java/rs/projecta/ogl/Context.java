@@ -122,6 +122,14 @@ public class Context
   
   public void Draw(float dx, float dy, float a_degrees, float x, float y, Pt_Buffer pts, Color color)
   {
+    Draw(dx, dy, a_degrees, x, y, pts, color, 0);
+  }
+  
+  public void Draw(float dx, float dy, float a_degrees, float x, float y, Pt_Buffer pts, Color color, int frame_idx)
+  {
+    int i;
+    Buffer_Frame frame;
+    
     android.opengl.GLES20.glVertexAttribPointer(att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, pts.b);
     android.opengl.GLES20.glEnableVertexAttribArray(att_loc);
     
@@ -132,7 +140,13 @@ public class Context
     
     android.opengl.GLES20.glUniformMatrix4fv(mat_loc, 1, false, proj.vals, 0);
     android.opengl.GLES20.glUniform4f(col_loc, color.red, color.green, color.blue, color.alpha);
-    android.opengl.GLES20.glDrawArrays(pts.mode, 0, pts.pt_count);
+    
+    frame = pts.frames[frame_idx];
+    for (Buffer_Segment segment: frame.segments)
+    {
+      android.opengl.GLES20.glDrawArrays(segment.mode, segment.pt_start, segment.pt_count);
+    }
+    
     proj.Restore();
   }
 }
