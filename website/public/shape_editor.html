@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Plantimator - Shape Editor</title>
+    <style>
+      .hp
+      {
+        position: relative;
+        top: -6px;
+        font-style: normal;
+        font-size: 30px;
+      }
+      h1
+      {
+        margin: 10px;
+        font-family: serif;
+        font-style: italic;
+        font-size: 40px;
+        text-transform: uppercase;
+        font-weight: 100;
+        margin: 10px;
+        text-align: center;
+      }
+      html, body
+      {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        color: #fff;
+        width: 100%;
+        min-width: 800px;
+        height: 100%;
+        overflow: hidden;
+        text-align: center;
+        font-family: monospace;
+      }
+      #btn_bar
+      {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        padding: 10px;
+        display: inline-block;
+        z-index: 1;
+      }
+      button
+      {
+        border-radius: 7px;
+        border: 1px solid #0f0;
+        padding: 5px;
+        cursor: pointer;
+        width: 36px;
+        height: 36px;
+        background-color: #666;
+      }
+      button img
+      {
+        padding: 0;
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        xbackground-color: #666;
+      }
+      button:disabled
+      {
+        opacity: 0.25;
+      }
+      .selected
+      {
+        background-color: #0f0;
+      }
+    </style>
+    <script type="module">
+      import * as pl from "./lib/pa.js";
+      import "./lib/Shape_Editor.js";
+      import "./lib/Shape_List.js";
+      import "./lib/Remote_Ctrl.js";
+
+      window.onload = Main;
+      window.onresize = OnResize;
+      let shapes_elem, editor_elem, remote_ctrl;
+
+      function Main()
+      {
+        document.getElementById("new_moveto").onclick=OnClick_Add_MoveTo;
+        document.getElementById("new_lineto").onclick=OnClick_Add_LineTo;
+        document.getElementById("new_bezierto").onclick=OnClick_Add_BezierTo;
+        document.getElementById("new_quadraticto").onclick=OnClick_Add_QuadraticTo;
+        document.getElementById("new_arcto").onclick=OnClick_Add_ArcTo;
+        document.getElementById("new_rect").onclick=OnClick_Add_Rect;
+        document.getElementById("new_arc").onclick=OnClick_Add_Arc;
+        document.getElementById("new_ellipse").onclick=OnClick_Add_Ellipse;
+        document.getElementById("new_closepath").onclick=OnClick_Add_ClosePath;
+        document.getElementById("large_btn").onclick=OnClick_Large_Canvas;
+        document.getElementById("medium_btn").onclick=OnClick_Medium_Canvas;
+        document.getElementById("small_btn").onclick=OnClick_Small_Canvas;
+        document.getElementById("stroke").onclick=OnClick_Stroke;
+        document.getElementById("fill").onclick=OnClick_Fill;
+        document.getElementById("list_btn").onclick=OnClick_List;
+        document.getElementById("prev_btn").onclick=OnClick_Prev;
+        document.getElementById("next_btn").onclick=OnClick_Next;
+        //document.getElementById("remote_btn").onclick = OnClick_Show_Remote;
+        
+        shapes_elem = document.getElementById("shapes");
+        shapes_elem.on_change_fn = Shapes_OnChange;
+        
+        editor_elem = document.getElementById("shape_editor");
+        editor_elem.on_change_fn = Editor_OnChange;
+        editor_elem.Set_Shapes(shapes_elem.shapes);
+                
+        //sprout_list.this_class = editor.this_class;
+
+        //remote_ctrl = document.getElementById("remote_ctrl");
+        //remote_ctrl.objs = sprout_list.plants;
+        //remote_ctrl.on_change_fn = Remote_Change;
+
+        //Set_Canvas_Size(document.getElementById("large_btn"), 1);
+        OnResize();
+        Set_Paint_Style(document.getElementById("stroke"));
+      }
+
+      function OnResize()
+      {
+        let size;
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        if (width<height)
+        {
+          size = width;
+        }
+        else if (height<width)
+        {
+          size = height;
+        }
+
+        editor_elem.Resize(width, height);      
+      }
+
+      // fires when a change is made on the shape list
+      function Shapes_OnChange(shapes)
+      {
+        //console.log("Shapes_OnChange()");
+        shapes_elem.Save();
+        editor_elem.Set_Shapes(shapes);
+        //remote_ctrl.plants = sprout_list.plants;
+      }
+
+      // fires when a change is made via the canvas editor
+      function Editor_OnChange(plant)
+      {
+        //console.log("Editor_OnChange()");
+        shapes_elem.Save();
+        shapes_elem.requestUpdate();
+      }
+
+      // fires when a change is made via the remote control
+      function Remote_Change(plant)
+      {
+        //console.log("Remote_Change()");
+        sprout_list.Save();
+        sprout_list.requestUpdate();
+        editor.Render_Plants();
+      }
+
+      function Set_Canvas_Size(btn_elem, z)
+      {
+        document.getElementById("large_btn").classList.remove("selected");
+        document.getElementById("medium_btn").classList.remove("selected");
+        document.getElementById("small_btn").classList.remove("selected");
+        btn_elem.classList.add("selected");
+        editor_elem.Set_Zoom(z);
+      }
+
+      function Set_Paint_Style(btn_elem)
+      {
+        document.getElementById("stroke").classList.remove("selected");
+        document.getElementById("fill").classList.remove("selected");
+        btn_elem.classList.add("selected");
+        editor_elem.Set_Paint(btn_elem.id);
+      }
+
+      // button bar ===============================================================================
+
+      function OnClick_Prev()
+      {
+        shapes_elem.Select_Prev();
+        editor_elem.Update();
+      }
+
+      function OnClick_Next()
+      {
+        shapes_elem.Select_Next();
+        editor_elem.Update();
+      }
+
+      function OnClick_List(event)
+      {
+        if (shapes_elem.Toggle_Show())
+        {
+          document.getElementById("list_btn").classList.add("selected");
+        }
+        else
+        {
+          document.getElementById("list_btn").classList.remove("selected");
+        }
+      }
+
+      function OnClick_Stroke(event)
+      {
+        Set_Paint_Style(event.currentTarget);
+      }
+
+      function OnClick_Fill(event)
+      {
+        Set_Paint_Style(event.currentTarget);
+      }
+
+      function OnClick_Large_Canvas(event)
+      {
+        Set_Canvas_Size(event.currentTarget, 1);
+      }
+
+      function OnClick_Medium_Canvas()
+      {
+        Set_Canvas_Size(event.currentTarget, 3);
+      }
+
+      function OnClick_Small_Canvas()
+      {
+        Set_Canvas_Size(event.currentTarget, 10);
+      }
+
+      function OnClick_Show_Remote()
+      {
+        remote_ctrl.Show();
+      }
+
+      function Add_Shape(class_name, shape_name)
+      {
+        const shape = new pl[class_name];
+        shape.class_name = class_name;
+        shape.name = shape_name;
+
+        shapes_elem.Add(shape);
+        shapes_elem.Select(shape.id);
+        shapes_elem.Save();
+
+        editor_elem.Set_Shapes(shapes_elem.shapes);
+      }
+
+      function OnClick_Add_MoveTo()
+      {
+        Add_Shape("Shape_MoveTo", "moveTo");
+      }
+
+      function OnClick_Add_LineTo()
+      {
+        Add_Shape("Shape_LineTo", "lineTo");
+      }
+
+      function OnClick_Add_BezierTo()
+      {
+        Add_Shape("Shape_BezierCurveTo", "bezierCurveTo");
+      }
+
+      function OnClick_Add_QuadraticTo()
+      {
+        Add_Shape("Shape_QuadraticCurveTo", "quadraticCurveTo");
+      }
+
+      function OnClick_Add_ArcTo()
+      {
+        Add_Shape("Shape_ArcTo", "arcTo");
+      }
+
+      function OnClick_Add_Rect()
+      {
+        Add_Shape("Shape_Rect", "rect");
+      }
+
+      function OnClick_Add_Arc()
+      {
+        Add_Shape("Shape_Arc", "arc");
+      }
+
+      function OnClick_Add_Ellipse()
+      {
+        Add_Shape("Shape_Ellipse", "ellipse");
+      }
+
+      function OnClick_Add_ClosePath()
+      {
+        Add_Shape("Shape_ClosePath", "closePath");
+      }
+    </script>
+  </head>
+
+  <body>
+    <shape-editor id="shape_editor"></shape-editor>
+
+    <div id="btn_bar">
+      <button id="new_moveto" title="Move To"><img src="images/vector-point.svg"></button>
+      <button id="new_lineto" title="Line To"><img src="images/vector-line.svg"></button>
+      <button id="new_bezierto" title="Bezier To"><img src="images/vector-bezier.svg"></button>
+      <button id="new_quadraticto" title="Quadratic To"><img src="images/vector-curve.svg"></button>
+      <button id="new_arcto" title="Arc To"><img src="images/vector-radius.svg"></button>
+      <button id="new_arc" title="Arc"><img src="images/vector-circle.svg"></button>
+      <button id="new_ellipse" title="Ellipse"><img src="images/vector-ellipse.svg"></button>
+      <button id="new_rect" title="Rect"><img src="images/vector-rectangle.svg"></button>
+      <button id="new_closepath" title="ClosePath"><img src="images/vector-polygon.svg"></button>
+
+      &#183; <button id="remote_btn" title="Show Remote Control"><img src="images/remote.svg"></button>
+      <button id="list_btn" title="Show Shape List"><img src="images/format-list-bulleted-square.svg"></button>
+      <button id="prev_btn" title="Previous Shape"><img src="images/skip-previous.svg"></button>
+      <button id="next_btn" title="Next Shape"><img src="images/skip-next.svg"></button>
+      <button id="undo_btn" title="Undo"><img src="images/undo.svg"></button>
+
+      &#183; <button id="large_btn" title="Zoom x1"><img src="images/image-size-select-actual.svg"></button>
+      <button id="medium_btn" title="Zoom x3"><img src="images/image-size-select-large.svg"></button>
+      <button id="small_btn" title="Zoom x10"><img src="images/image-size-select-small.svg"></button>
+
+      &#183; <button id="stroke" title="Stroke"><img src="images/pentagon-outline.svg"></button>
+      <button id="fill" title="Fill"><img src="images/pentagon.svg"></button>
+    </div>
+
+    <shape-list id="shapes"></shape-list>
+    <remote-ctrl id="remote_ctrl"></remote-ctrl>    
+  </body>
+</html>
