@@ -87,29 +87,31 @@ class Canvas_Code_Gen extends LitElement
         display: none;
         margin-top: 20px;
       }
-      h2
+      #title
       {
-        font-weight: 100;
-        font-family: serif;
-        font-style: italic;
-        font-size: 20px;
-        box-shadow: 
-          rgb(0,0,0) 0px 1px 0px 0px, 
-          rgb(255,255,255) 0px 4px 0px 0px, 
-          rgb(0,0,0) 0px 7px 0px 0px;    
-        display: inline;      
-        margin-right: 20px;  
+        text-align: left;
+        display: inline-block;
+        width: 48%;
+        font-size: 35px;
       }
+      #btn_bar
+      {
+        display: inline-block;
+        width: 48%;
+        text-align: right;
+      }
+
       button
       {
         border-radius: 7px;
-        border: 1px solid #000;
+        border: 1px solid #0f0;
         padding: 5px;
         cursor: pointer;
         width: 36px;
         height: 36px;
-        background-color: inherit;
-        vertical-align: middle;
+        background-color: #666;
+        display: inline-block;
+        box-sizing: border-box;
       }
       button img
       {
@@ -122,21 +124,22 @@ class Canvas_Code_Gen extends LitElement
       {
         opacity: 0.25;
       }
+
       textarea
       {
-        margin-top: 20px;
-        background-color: inherit;
-        border: 1px solid #000;
+        background-color: #222;
+        border: 1px solid #fff;
+        color: #fff;
         padding: 5px;
         font-family: monospace;
         font-size: 11px;
         tab-size: 2;
-        width: 800px;
-        height: 50%;
+        width: 95%;
+        height: 70%;
       }
       #hdr
       {
-        
+        padding-bottom: 10px;
       }
     `;
   }
@@ -145,10 +148,12 @@ class Canvas_Code_Gen extends LitElement
   {
     return html`
       <div id="hdr">
-        <h2>Generated Code</h2>
-        <button @click="${this.OnClick_Run}"><img src="images/play-outline.svg"></button>
-        <button @click="${this.OnClick_Close}"><img src="images/close.svg"></button>
-      </div>
+        <div id="title">Canvas Code</div>
+        <div id="btn_bar">
+          <button @click="${this.OnClick_Run}"><img src="images/play-outline.svg"></button>
+          <button @click="${this.OnClick_Close}"><img src="images/close.svg"></button>
+          </div>
+        </div>
       <textarea id="txt_area"></textarea>
     `;
   }
