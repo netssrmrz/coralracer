@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AppTemplate/AppTemplate.iml" filepath="$PROJECT_DIR$/AppTemplate/AppTemplate.iml" group="coralracer/AppTemplate" />
+      <module fileurl="file://$PROJECT_DIR$/coralracer.iml" filepath="$PROJECT_DIR$/coralracer.iml" group="coralracer" />
+    </modules>
+  </component>
+</project>

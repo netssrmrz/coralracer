@@ -1,0 +1,5 @@
+.gradle
+AppTemplate/build
+build
+.idea/caches
+.idea/libraries
