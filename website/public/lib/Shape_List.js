@@ -20,7 +20,7 @@ class Shape_List extends LitElement
   firstUpdated(changedProperties)
   {
     this.Load();
-    this.Set_Code_Gen_Type("plant_code");
+    this.Set_Code_Gen_Type("android_code");
 
     this.table_elem = this.shadowRoot.getElementById("shapes");
     this.table_elem.style.display = "none";
@@ -29,7 +29,6 @@ class Shape_List extends LitElement
   Set_Code_Gen_Type(code_gen_type)
   {
     this.code_gen_type = code_gen_type;
-    this.shadowRoot.getElementById("plant_code").classList.remove("selected");
     this.shadowRoot.getElementById("canvas_code").classList.remove("selected");
     this.shadowRoot.getElementById("path_code").classList.remove("selected");
     this.shadowRoot.getElementById("android_code").classList.remove("selected");
@@ -533,15 +532,16 @@ class Shape_List extends LitElement
       }
       .code_gen
       {
+        xdisplay: block;
         position: absolute;
         z-index: 2;
-        background-color: rgb(0, 0, 249);
+        background-color: #000;
         bottom: 0px;
         right: 0px;
-        width: 880px;
+        width: 100%;
         height: 40%;
         overflow: auto;
-        border: 10px solid #fffff9;
+        xborder: 10px solid #fffff9;
       }
     `;
   }
