@@ -71,17 +71,17 @@ implements
     android.opengl.Matrix.translateM(this.ogl_ctx.proj.vals, 0, this.w / 2f, this.h / 2f, 0);
     android.opengl.Matrix.scaleM(this.ogl_ctx.proj.vals, 0, this.scale, this.scale, 1f);
   
-    if (this.camera instanceof rs.projecta.object.Has_Direction)
+    if (this.camera instanceof rs.projecta.object.features.Has_Direction)
       android.opengl.Matrix.rotateM(
         this.ogl_ctx.proj.vals, 0,
-        -((rs.projecta.object.Has_Direction) this.camera).Get_Angle_Degrees(),
+        -((rs.projecta.object.features.Has_Direction) this.camera).Get_Angle_Degrees(),
         0, 0, 1);
     
-    if (this.camera instanceof rs.projecta.object.Has_Position)
+    if (this.camera instanceof rs.projecta.object.features.Has_Position)
       android.opengl.Matrix.translateM(
         this.ogl_ctx.proj.vals, 0,
-        -((rs.projecta.object.Has_Position) this.camera).Get_X(),
-        -((rs.projecta.object.Has_Position) this.camera).Get_Y(),
+        -((rs.projecta.object.features.Has_Position) this.camera).Get_X(),
+        -((rs.projecta.object.features.Has_Position) this.camera).Get_Y(),
         0);
   
     android.opengl.GLES20.glClear(android.opengl.GLES20.GL_COLOR_BUFFER_BIT);

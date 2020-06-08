@@ -2,7 +2,7 @@ package rs.projecta.object;
 
 public class Player
 implements
-  Is_Drawable, Has_Position, Has_Direction, Can_Collide, Has_Auto_Movement
+  rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position, rs.projecta.object.features.Has_Direction, rs.projecta.object.features.Can_Collide, rs.projecta.object.features.Has_Auto_Movement
 {
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World w;
@@ -11,7 +11,8 @@ implements
   public final float trgt_v=60; // max velocity
   public final float torque_factor=40; // turn rate
   public float suspend_secs;
-  public rs.projecta.ogl.Fish1 fish1;
+  public rs.projecta.ogl.shapes.Fish1 fish1;
+  public rs.projecta.ogl.Color color;
   
   public Player(float x, float y, rs.projecta.world.World world)
   {
@@ -44,14 +45,17 @@ implements
     if (this.w.sounds!=null)
       this.w.sounds.play(this.w.soundid_start, 1, 1, 0, 0, 1);
   
-    this.fish1 = new rs.projecta.ogl.Fish1(0xffffffff);
+    this.fish1 = new rs.projecta.ogl.shapes.Fish1();
+    this.color = new rs.projecta.ogl.Color(0xffffffff);
   }
   
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
+    rs.projecta.ogl.Context ctx = ((rs.projecta.view.OpenGL_View)v).ogl_ctx;
+  
     this.frame=this.frame+this.frame_delta*((float)this.w.lapsed_time/1000000f);
     this.frame=this.frame%this.frame_max;
-    this.fish1.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 4, (int)this.frame);
+    ctx.Draw(4f, 4f,0, 0, 0, this.color, this.fish1, (int)this.frame);
   }
   
 	public float Get_X()

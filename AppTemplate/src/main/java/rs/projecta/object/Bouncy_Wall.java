@@ -1,13 +1,14 @@
 package rs.projecta.object;
 
 public class Bouncy_Wall
-implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
+implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position, rs.projecta.object.features.Has_Direction, rs.projecta.object.features.Has_Cleanup
 {
   public rs.projecta.world.World world;
   public org.jbox2d.dynamics.Body body;
   public float x, y, a_degrees;
-  public rs.projecta.ogl.Rectangle rect;
+  public rs.projecta.ogl.shapes.Rectangle rect;
   public float dx, dy;
+  public rs.projecta.ogl.Color color;
   
   public Bouncy_Wall(rs.projecta.world.World world, float x, float y, float dx, float dy, float a_degrees)
   {
@@ -23,13 +24,16 @@ implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
     this.body = this.world.Add_Single_Fixture_Body
       (shape, x, y, a_degrees, 5, false, org.jbox2d.dynamics.BodyType.STATIC, this);
   
-    this.rect=new rs.projecta.ogl.Rectangle(0xff00ff00);
+    this.rect=new rs.projecta.ogl.shapes.Rectangle();
+    this.color = new rs.projecta.ogl.Color(0xff00ff00);
   }
   
   @Override
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
-    this.rect.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, dx, dy, 0, 0, 0);
+    rs.projecta.ogl.Context ctx = ((rs.projecta.view.OpenGL_View)v).ogl_ctx;
+  
+    ctx.Draw(dx, dy,0, 0, 0, this.color, this.rect, 0);
   }
   
   public float Get_X()

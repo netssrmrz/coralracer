@@ -1,7 +1,7 @@
 package rs.projecta.object;
 
 public class Wall
-implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup, Can_Collide
+implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position, rs.projecta.object.features.Has_Direction, rs.projecta.object.features.Has_Cleanup, rs.projecta.object.features.Can_Collide
 {
   public org.jbox2d.dynamics.Body body;
   public android.graphics.Paint p;

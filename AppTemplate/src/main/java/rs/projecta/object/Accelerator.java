@@ -1,13 +1,14 @@
 package rs.projecta.object;
 
 public class Accelerator
-implements Has_Position, Is_Drawable, Can_Collide, Has_Direction
+implements rs.projecta.object.features.Has_Position, rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Can_Collide, rs.projecta.object.features.Has_Direction
 {
   public rs.projecta.world.World world;
   public org.jbox2d.dynamics.Body body;
   public float x, y, a_degrees;
-  public rs.projecta.ogl.Arrow arrow;
+  public rs.projecta.ogl.shapes.Arrow arrow;
   public static final float size=50;
+  public rs.projecta.ogl.Color color;
 
   public Accelerator(rs.projecta.world.World world, float x, float y, float a_degrees)
   {
@@ -22,12 +23,15 @@ implements Has_Position, Is_Drawable, Can_Collide, Has_Direction
     shape.setRadius(this.world.To_Phys_Dim(size));
     //this.body = this.world.Add_Single_Fixture_Body(shape, x, y, a_degrees, 1, true, this);
   
-    this.arrow = new rs.projecta.ogl.Arrow(0xff00ff00);
+    this.arrow = new rs.projecta.ogl.shapes.Arrow();
+    this.color = new rs.projecta.ogl.Color(0xff00ff00);
   }
   
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
-    this.arrow.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, size, 0, 0, 0);
+    rs.projecta.ogl.Context ctx = ((rs.projecta.view.OpenGL_View)v).ogl_ctx;
+  
+    ctx.Draw(50f, 50f,0, 0, 0, this.color, this.arrow, 0);
   }
 
   public float Get_X()

@@ -81,12 +81,12 @@ implements
     
     c.translate((float)c.getWidth() / 2f, (float)c.getHeight() / 2f);
     c.scale(this.scale, this.scale);
-    if (this.camera instanceof rs.projecta.object.Has_Direction)
-      c.rotate(-((rs.projecta.object.Has_Direction)this.camera).Get_Angle_Degrees());
-    if (this.camera instanceof rs.projecta.object.Has_Position)
+    if (this.camera instanceof rs.projecta.object.features.Has_Direction)
+      c.rotate(-((rs.projecta.object.features.Has_Direction)this.camera).Get_Angle_Degrees());
+    if (this.camera instanceof rs.projecta.object.features.Has_Position)
       c.translate(
-        -((rs.projecta.object.Has_Position)this.camera).Get_X(),
-        -((rs.projecta.object.Has_Position)this.camera).Get_Y());
+        -((rs.projecta.object.features.Has_Position)this.camera).Get_X(),
+        -((rs.projecta.object.features.Has_Position)this.camera).Get_Y());
     
     c.drawColor(0xff000022);
     
@@ -191,9 +191,9 @@ implements
   {
     float res=0;
     
-    if (this.camera!=null && this.camera instanceof rs.projecta.object.Has_Position)
+    if (this.camera!=null && this.camera instanceof rs.projecta.object.features.Has_Position)
     {
-      res=((rs.projecta.object.Has_Position)this.camera).Get_X();
+      res=((rs.projecta.object.features.Has_Position)this.camera).Get_X();
     }
     return res;
   }
@@ -202,9 +202,9 @@ implements
   {
     float res=0;
     
-    if (this.camera!=null && this.camera instanceof rs.projecta.object.Has_Position)
+    if (this.camera!=null && this.camera instanceof rs.projecta.object.features.Has_Position)
     {
-      res=((rs.projecta.object.Has_Position)this.camera).Get_Y();
+      res=((rs.projecta.object.features.Has_Position)this.camera).Get_Y();
     }
     return res;
   }

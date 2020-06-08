@@ -1,14 +1,14 @@
 package rs.projecta.object;
 
 public class Score
-implements Is_Drawable
+implements rs.projecta.object.features.Is_Drawable
 {
   public rs.projecta.world.World w;
   public android.graphics.Paint p, p1, p2;
   public float size, size_delta, size_max;
   public String text;
   public android.graphics.PointF pos;
-  public Has_Position pos_obj;
+  public rs.projecta.object.features.Has_Position pos_obj;
   public android.graphics.Bitmap bitmap;
   public android.graphics.RectF dst_rect;
   public float digit_size;
@@ -29,7 +29,7 @@ implements Is_Drawable
     68, 8
   };
   
-  public Score(rs.projecta.world.World world, String text, Has_Position pos_obj)
+  public Score(rs.projecta.world.World world, String text, rs.projecta.object.features.Has_Position pos_obj)
   {
     this.w = world;
     this.size=0;

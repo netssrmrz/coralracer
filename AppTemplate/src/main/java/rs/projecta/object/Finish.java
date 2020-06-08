@@ -1,13 +1,14 @@
 package rs.projecta.object;
 
 public class Finish
-implements Has_Position, Is_Drawable, Can_Collide
+implements rs.projecta.object.features.Has_Position, rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Can_Collide
 {
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World world;
-  public rs.projecta.ogl.Circle circle;
-  public rs.projecta.ogl.Arrow arrow;
+  public rs.projecta.ogl.shapes.Circle circle;
+  public rs.projecta.ogl.shapes.Arrow arrow;
   public float x, y;
+  public rs.projecta.ogl.Color color;
 
   public Finish(rs.projecta.world.World world, float x, float y)
   {
@@ -37,16 +38,18 @@ implements Has_Position, Is_Drawable, Can_Collide
     body.createFixture(fix_def);
     //this.body = this.world.Add_Single_Fixture_Body(shape, x, y, 0, 1, true);
   
-    this.circle = new rs.projecta.ogl.Circle(0x00ff00ff);
-    this.arrow = new rs.projecta.ogl.Arrow(0x00ff00ff);
+    this.arrow = new rs.projecta.ogl.shapes.Arrow();
+    this.color = new rs.projecta.ogl.Color(0x00ff00ff);
   }
   
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
-    this.arrow.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50, 0, 70, 0);
-    this.arrow.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50, 90, 0, 70);
-    this.arrow.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50, 180, -70, 0);
-    this.arrow.Draw(((rs.projecta.view.OpenGL_View)v).ogl_ctx, 50, 270, 0, -70);
+    rs.projecta.ogl.Context ctx = ((rs.projecta.view.OpenGL_View)v).ogl_ctx;
+  
+    ctx.Draw(50f, 50f,0, 70, 0, this.color, this.arrow, 0);
+    ctx.Draw(50f, 50f,90, 0, 70, this.color, this.arrow, 0);
+    ctx.Draw(50f, 50f,180, -70, 0, this.color, this.arrow, 0);
+    ctx.Draw(50f, 50f,270, 0, -70, this.color, this.arrow, 0);
   }
 
   public float Get_X()

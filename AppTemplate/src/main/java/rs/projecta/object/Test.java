@@ -1,7 +1,7 @@
 package rs.projecta.object;
 
 public class Test
-implements Is_Drawable ,Has_Position
+implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position
 {
   public org.jbox2d.dynamics.Body body;
   public android.graphics.Paint p;

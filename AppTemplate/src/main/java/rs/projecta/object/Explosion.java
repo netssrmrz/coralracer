@@ -1,14 +1,13 @@
 package rs.projecta.object;
 
 public class Explosion
-implements Is_Drawable, Has_Position
+implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position
 {
   public float cx, cy;
   public float r, r_delta, r_max;
   public rs.projecta.world.World w;
-  public android.graphics.Paint p;
-  // open gl
-  public rs.projecta.ogl.Star star;
+  public rs.projecta.ogl.shapes.Star star;
+  public rs.projecta.ogl.Color color;
   
   public Explosion(rs.projecta.world.World w, float cx, float cy)
   {
@@ -22,29 +21,15 @@ implements Is_Drawable, Has_Position
     if (this.w.sounds!=null)
       this.w.sounds.play(this.w.soundid_whack, 1, 1, 0, 0, 1);
   
-    if (this.w.hint==rs.projecta.world.World.HINT_ES2)
-      Init_OpenGL(0xffff00ff);
-    else
-      Init_Canvas(0xffff00ff);
-  }
-  
-  public void Init_Canvas(int col)
-  {
-    this.p=new android.graphics.Paint();
-    this.p.setColor(col);
-    this.p.setStyle(android.graphics.Paint.Style.STROKE);
-    this.p.setAntiAlias(false);
-    this.p.setPathEffect(new android.graphics.DiscretePathEffect(15, 90));
-  }
-  
-  public void Init_OpenGL(int col)
-  {
-    this.star = new rs.projecta.ogl.Star(col);
+    this.star = new rs.projecta.ogl.shapes.Star();
+    this.color = new rs.projecta.ogl.Color(0xffff00ff);
   }
   
   @Override
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
   {
+    rs.projecta.ogl.Context ctx = ((rs.projecta.view.OpenGL_View)v).ogl_ctx;
+  
     this.r=this.r+this.r_delta*((float)this.w.lapsed_time/1000000f);
     if (this.r>r_max)
     {
@@ -54,21 +39,8 @@ implements Is_Drawable, Has_Position
     }
     else
     {
-      if (this.w.hint==rs.projecta.world.World.HINT_ES2)
-        this.Draw_OpenGL((rs.projecta.view.OpenGL_View)v);
-      else
-        this.Draw_Canvas(c);
+      ctx.Draw(this.r, this.r,0, 0, 0, this.color, this.star, 0);
     }
-  }
-  
-  public void Draw_Canvas(android.graphics.Canvas c)
-  {
-    c.drawCircle(0, 0, this.r, p);
-  }
-  
-  public void Draw_OpenGL(rs.projecta.view.OpenGL_View v)
-  {
-    this.star.Draw(v.ogl_ctx, this.r);
   }
   
   @Override

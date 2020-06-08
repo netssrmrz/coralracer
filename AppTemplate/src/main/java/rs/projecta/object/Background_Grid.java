@@ -1,7 +1,7 @@
 package rs.projecta.object;
 
 public class Background_Grid
-implements Is_Drawable
+implements rs.projecta.object.features.Is_Drawable
 {
 	public static final float TILE_SIZE=160;
 	
@@ -23,10 +23,10 @@ implements Is_Drawable
     r=Distance(0, 0, c.getWidth(), c.getHeight())/2f;
     
     if (v.Get_Camera()!=null &&
-      v.Get_Camera() instanceof rs.projecta.object.Has_Position)
+      v.Get_Camera() instanceof rs.projecta.object.features.Has_Position)
     {
-      x=((rs.projecta.object.Has_Position)v.Get_Camera()).Get_X();
-      y=((rs.projecta.object.Has_Position)v.Get_Camera()).Get_Y();
+      x=((rs.projecta.object.features.Has_Position)v.Get_Camera()).Get_X();
+      y=((rs.projecta.object.features.Has_Position)v.Get_Camera()).Get_Y();
     }
     
     x1=x-r;

@@ -1,7 +1,7 @@
 package rs.projecta.object;
 
 public class Camera
-implements Has_Position
+implements rs.projecta.object.features.Has_Position
 {
   //public rs.projecta.World world;
   public float x, y;

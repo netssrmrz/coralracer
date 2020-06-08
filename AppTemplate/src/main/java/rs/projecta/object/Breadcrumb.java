@@ -2,7 +2,7 @@ package rs.projecta.object;
 import android.graphics.*;
 
 public class Breadcrumb
-implements Is_Drawable, Has_Position, Has_Direction
+implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position, rs.projecta.object.features.Has_Direction
 {
   public void Draw(rs.projecta.view.Game_View v, Canvas c)
   {

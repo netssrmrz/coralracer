@@ -119,16 +119,16 @@ implements
     Object obj;
 
     obj = c.getFixtureA().getBody().getUserData();
-    if (obj != null && obj instanceof rs.projecta.object.Can_Collide)
+    if (obj != null && obj instanceof rs.projecta.object.features.Can_Collide)
     {
-      ((rs.projecta.object.Can_Collide)obj).Contact(c);
+      ((rs.projecta.object.features.Can_Collide)obj).Contact(c);
       //android.util.Log.d("World", "beginContact(): body A is " + obj.getClass().getName());
     }
     
     obj = c.getFixtureB().getBody().getUserData();
-    if (obj != null && obj instanceof rs.projecta.object.Can_Collide)
+    if (obj != null && obj instanceof rs.projecta.object.features.Can_Collide)
     {
-      ((rs.projecta.object.Can_Collide)obj).Contact(c);
+      ((rs.projecta.object.features.Can_Collide)obj).Contact(c);
       //android.util.Log.d("World", "beginContact(): body B is " + obj.getClass().getName());
     }
   }

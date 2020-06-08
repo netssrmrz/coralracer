@@ -125,8 +125,8 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
     {
       this.curr_obj = new rs.projecta.object.Wall(
         this.world, 
-        ((rs.projecta.object.Has_Position)this.camera).Get_X(), 
-        ((rs.projecta.object.Has_Position)this.camera).Get_Y(), 
+        ((rs.projecta.object.features.Has_Position)this.camera).Get_X(),
+        ((rs.projecta.object.features.Has_Position)this.camera).Get_Y(),
         200, 10, 0);
       this.world.objs.Add(this.curr_obj);
       this.world_view.camera = this.curr_obj;
@@ -185,8 +185,8 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
       {
         this.curr_obj = new rs.projecta.object.Wall(
           this.world, 
-          ((rs.projecta.object.Has_Position)this.camera).Get_X(), 
-          ((rs.projecta.object.Has_Position)this.camera).Get_Y(), 
+          ((rs.projecta.object.features.Has_Position)this.camera).Get_X(),
+          ((rs.projecta.object.features.Has_Position)this.camera).Get_Y(),
           200, 10, 0);
         this.world.objs.Add(this.curr_obj);
         this.world_view.camera = this.curr_obj;
@@ -195,8 +195,8 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
       {
         this.curr_obj = new rs.projecta.object.Wall(
           this.world, 
-          ((rs.projecta.object.Has_Position)this.camera).Get_X(), 
-          ((rs.projecta.object.Has_Position)this.camera).Get_Y(), 
+          ((rs.projecta.object.features.Has_Position)this.camera).Get_X(),
+          ((rs.projecta.object.features.Has_Position)this.camera).Get_Y(),
           100, 10, 0);
         this.world.objs.Add(this.curr_obj);
         this.world_view.camera = this.curr_obj;
@@ -204,8 +204,8 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
       else if (selected.equals("Player"))
       {
         this.curr_obj = new rs.projecta.object.Player(
-          ((rs.projecta.object.Has_Position)this.camera).Get_X(), 
-          ((rs.projecta.object.Has_Position)this.camera).Get_Y(), 
+          ((rs.projecta.object.features.Has_Position)this.camera).Get_X(),
+          ((rs.projecta.object.features.Has_Position)this.camera).Get_Y(),
           this.world);
         this.world.objs.Add(this.curr_obj);
         this.world_view.camera = this.curr_obj;
@@ -214,8 +214,8 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
       {
         this.curr_obj = new rs.projecta.object.Finish(
           this.world,
-          ((rs.projecta.object.Has_Position)this.camera).Get_X(), 
-          ((rs.projecta.object.Has_Position)this.camera).Get_Y());
+          ((rs.projecta.object.features.Has_Position)this.camera).Get_X(),
+          ((rs.projecta.object.features.Has_Position)this.camera).Get_Y());
         this.world.objs.Add(this.curr_obj);
         this.world_view.camera = this.curr_obj;
       }
@@ -231,34 +231,34 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
     org.jbox2d.common.Mat22 mr;
     float a=0;
 
-    if (this.curr_obj instanceof rs.projecta.object.Has_Direction)
+    if (this.curr_obj instanceof rs.projecta.object.features.Has_Direction)
     {
-      a = ((rs.projecta.object.Has_Direction)this.curr_obj).Get_Angle_Degrees();
+      a = ((rs.projecta.object.features.Has_Direction)this.curr_obj).Get_Angle_Degrees();
       a = (float)java.lang.Math.toRadians(a);
     }
 
-    if (this.curr_obj instanceof rs.projecta.object.Has_Position)
+    if (this.curr_obj instanceof rs.projecta.object.features.Has_Position)
     {
       po = new org.jbox2d.common.Vec2(
-        ((rs.projecta.object.Has_Position)this.curr_obj).Get_X(),
-        ((rs.projecta.object.Has_Position)this.curr_obj).Get_Y());
+        ((rs.projecta.object.features.Has_Position)this.curr_obj).Get_X(),
+        ((rs.projecta.object.features.Has_Position)this.curr_obj).Get_Y());
 
       pt = new org.jbox2d.common.Vec2(x, y); // forward point
       mr = org.jbox2d.common.Mat22.createRotationalTransform(a);
       pr = mr.mul(pt); // forward point rotated
       pf = new org.jbox2d.common.Vec2(po.x + pr.x, po.y + pr.y);
 
-      ((rs.projecta.object.Has_Position)this.curr_obj).Set_X(pf.x);
-      ((rs.projecta.object.Has_Position)this.curr_obj).Set_Y(pf.y);
+      ((rs.projecta.object.features.Has_Position)this.curr_obj).Set_X(pf.x);
+      ((rs.projecta.object.features.Has_Position)this.curr_obj).Set_Y(pf.y);
     }
   }
 
   public void Turn(float d)
   {
-    if (this.curr_obj instanceof rs.projecta.object.Has_Direction)
+    if (this.curr_obj instanceof rs.projecta.object.features.Has_Direction)
     {
-      ((rs.projecta.object.Has_Direction)this.curr_obj).Set_Angle_Degrees
-      (((rs.projecta.object.Has_Direction)this.curr_obj).Get_Angle_Degrees() + d);
+      ((rs.projecta.object.features.Has_Direction)this.curr_obj).Set_Angle_Degrees
+      (((rs.projecta.object.features.Has_Direction)this.curr_obj).Get_Angle_Degrees() + d);
     }
   } 
 }

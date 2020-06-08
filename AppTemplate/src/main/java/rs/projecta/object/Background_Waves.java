@@ -1,10 +1,10 @@
 package rs.projecta.object;
 
 public class Background_Waves
-implements Is_Drawable
+implements rs.projecta.object.features.Is_Drawable
 {
   public static final int PTS=20;
-  public Has_Position cam;
+  public rs.projecta.object.features.Has_Position cam;
   public android.graphics.Paint paint;
   public int tile_span, hint;
   public float tile_size, size_z, tile_z;
@@ -17,7 +17,7 @@ implements Is_Drawable
   public int OGL_POINT_COUNT;
   public float red, green, blue, alpha;
   
-  public Background_Waves(Has_Position cam, float height, int col, int hint)
+  public Background_Waves(rs.projecta.object.features.Has_Position cam, float height, int col, int hint)
   {
     this.cam=cam;
     this.tile_span=3;
@@ -124,7 +124,7 @@ implements Is_Drawable
   }
   
   public static void Select_Tile_To_Render(
-    Has_Position cam, android.graphics.Point curr_tile_index,
+    rs.projecta.object.features.Has_Position cam, android.graphics.Point curr_tile_index,
     float tile_width, int tile_span,
     android.graphics.Point curr_paint_index)
   {

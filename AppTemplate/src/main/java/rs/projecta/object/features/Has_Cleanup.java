@@ -1,4 +1,4 @@
-package rs.projecta.object;
+package rs.projecta.object.features;
 
 public interface Has_Cleanup
 {

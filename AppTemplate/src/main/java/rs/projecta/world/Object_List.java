@@ -16,15 +16,15 @@ public class Object_List
   {
     for (Object obj: this.objs)
     {
-      if (obj instanceof rs.projecta.object.Has_Auto_Movement)
-        ((rs.projecta.object.Has_Auto_Movement)obj).Update(sec_step);
+      if (obj instanceof rs.projecta.object.features.Has_Auto_Movement)
+        ((rs.projecta.object.features.Has_Auto_Movement)obj).Update(sec_step);
     }
 
     for (Object obj: this.del_objs)
     {
       this.objs.remove(obj);
-      if (obj instanceof rs.projecta.object.Has_Cleanup)
-        ((rs.projecta.object.Has_Cleanup)obj).Remove();
+      if (obj instanceof rs.projecta.object.features.Has_Cleanup)
+        ((rs.projecta.object.features.Has_Cleanup)obj).Remove();
     }
     this.del_objs.clear();
   }
@@ -80,19 +80,19 @@ public class Object_List
   {
     for (Object o: this.objs)
     {
-      if (o instanceof rs.projecta.object.Is_Drawable)
+      if (o instanceof rs.projecta.object.features.Is_Drawable)
       {
         c.save();
 
-        if (o instanceof rs.projecta.object.Has_Position)
+        if (o instanceof rs.projecta.object.features.Has_Position)
           c.translate(
-            ((rs.projecta.object.Has_Position)o).Get_X(), 
-            ((rs.projecta.object.Has_Position)o).Get_Y());
+            ((rs.projecta.object.features.Has_Position)o).Get_X(),
+            ((rs.projecta.object.features.Has_Position)o).Get_Y());
 
-        if (o instanceof rs.projecta.object.Has_Direction)
-          c.rotate(((rs.projecta.object.Has_Direction)o).Get_Angle_Degrees());
+        if (o instanceof rs.projecta.object.features.Has_Direction)
+          c.rotate(((rs.projecta.object.features.Has_Direction)o).Get_Angle_Degrees());
 
-        ((rs.projecta.object.Is_Drawable)o).Draw(v, c);
+        ((rs.projecta.object.features.Is_Drawable)o).Draw(v, c);
 
         c.restore();
       }
@@ -105,24 +105,24 @@ public class Object_List
   
     for (Object o: this.objs)
     {
-      if (o instanceof rs.projecta.object.Is_Drawable)
+      if (o instanceof rs.projecta.object.features.Is_Drawable)
       {
         v.ogl_ctx.proj.Save();
   
-        if (o instanceof rs.projecta.object.Has_Position)
+        if (o instanceof rs.projecta.object.features.Has_Position)
         {
-          x = ((rs.projecta.object.Has_Position) o).Get_X();
-          y = ((rs.projecta.object.Has_Position) o).Get_Y();
+          x = ((rs.projecta.object.features.Has_Position) o).Get_X();
+          y = ((rs.projecta.object.features.Has_Position) o).Get_Y();
           android.opengl.Matrix.translateM(v.ogl_ctx.proj.vals, 0, x, y, 0);
         }
   
-        if (o instanceof rs.projecta.object.Has_Direction)
+        if (o instanceof rs.projecta.object.features.Has_Direction)
         {
-          a = ((rs.projecta.object.Has_Direction) o).Get_Angle_Degrees();
+          a = ((rs.projecta.object.features.Has_Direction) o).Get_Angle_Degrees();
           android.opengl.Matrix.rotateM(v.ogl_ctx.proj.vals, 0, a, 0, 0, 1);
         }
   
-        ((rs.projecta.object.Is_Drawable)o).Draw(v, null);
+        ((rs.projecta.object.features.Is_Drawable)o).Draw(v, null);
   
         v.ogl_ctx.proj.Restore();
       }

@@ -1,7 +1,7 @@
 package rs.projecta.object;
 
 public class Flappy_Wall
-implements Is_Drawable, Has_Position, Has_Direction, Has_Cleanup
+implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position, rs.projecta.object.features.Has_Direction, rs.projecta.object.features.Has_Cleanup
 {
   public float x, y, a;
   public Wall w1, w2, door;

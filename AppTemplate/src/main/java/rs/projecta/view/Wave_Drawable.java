@@ -2,7 +2,7 @@ package rs.projecta.view;
 
 public class Wave_Drawable
 extends android.graphics.drawable.Drawable
-implements rs.projecta.object.Has_Position
+implements rs.projecta.object.features.Has_Position
 {
   public static final int WAVES=30;
   public rs.projecta.object.Background_Waves[] bks;

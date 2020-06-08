@@ -115,22 +115,22 @@ public class Context
     return prog_id;
   }
   
-  public void Draw(float r, float a_degrees, float x, float y, Pt_Buffer pts, Color color)
+  public static java.nio.FloatBuffer New_Buffer(float[] points)
   {
-    Draw(r, r, a_degrees, x, y, pts, color);
-  }
-  
-  public void Draw(float dx, float dy, float a_degrees, float x, float y, Pt_Buffer pts, Color color)
-  {
-    Draw(dx, dy, a_degrees, x, y, pts, color, 0);
-  }
-  
-  public void Draw(float dx, float dy, float a_degrees, float x, float y, Pt_Buffer pts, Color color, int frame_idx)
-  {
-    int i;
-    Buffer_Frame frame;
+    java.nio.FloatBuffer b;
     
-    android.opengl.GLES20.glVertexAttribPointer(att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, pts.b);
+    b = java.nio.ByteBuffer.allocateDirect(points.length * 4)
+               .order(java.nio.ByteOrder.nativeOrder())
+               .asFloatBuffer();
+    b.put(points);
+    b.position(0);
+    
+    return b;
+  }
+  
+  public void Draw(float dx, float dy, float a_degrees, float x, float y, Color color, Is_Drawable shape, int frame_idx)
+  {
+    android.opengl.GLES20.glVertexAttribPointer(att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, shape.Get_Points_Buffer());
     android.opengl.GLES20.glEnableVertexAttribArray(att_loc);
     
     proj.Save();
@@ -141,11 +141,7 @@ public class Context
     android.opengl.GLES20.glUniformMatrix4fv(mat_loc, 1, false, proj.vals, 0);
     android.opengl.GLES20.glUniform4f(col_loc, color.red, color.green, color.blue, color.alpha);
     
-    frame = pts.frames[frame_idx];
-    for (Buffer_Segment segment: frame.segments)
-    {
-      android.opengl.GLES20.glDrawArrays(segment.mode, segment.pt_start, segment.pt_count);
-    }
+    shape.Draw(this, frame_idx);
     
     proj.Restore();
   }

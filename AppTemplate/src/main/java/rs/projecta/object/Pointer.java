@@ -1,14 +1,14 @@
 package rs.projecta.object;
 
 public class Pointer
-implements Is_Drawable, Has_Position, Has_Direction
+implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position, rs.projecta.object.features.Has_Direction
 {
-  public rs.projecta.object.Has_Position src, trg;
+  public rs.projecta.object.features.Has_Position src, trg;
   public android.graphics.Paint p;
   public rs.projecta.world.World world;
 
-  public Pointer(rs.projecta.world.World world, 
-    rs.projecta.object.Has_Position src, rs.projecta.object.Has_Position target)
+  public Pointer(rs.projecta.world.World world,
+                 rs.projecta.object.features.Has_Position src, rs.projecta.object.features.Has_Position target)
   {
     this.world = world;
     this.src = src;
