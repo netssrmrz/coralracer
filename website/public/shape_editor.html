@@ -84,24 +84,11 @@
 
       function Main()
       {
-        document.getElementById("new_moveto").onclick=OnClick_Add_MoveTo;
-        document.getElementById("new_lineto").onclick=OnClick_Add_LineTo;
-        document.getElementById("new_bezierto").onclick=OnClick_Add_BezierTo;
-        document.getElementById("new_quadraticto").onclick=OnClick_Add_QuadraticTo;
-        document.getElementById("new_arcto").onclick=OnClick_Add_ArcTo;
-        document.getElementById("new_rect").onclick=OnClick_Add_Rect;
-        document.getElementById("new_arc").onclick=OnClick_Add_Arc;
-        document.getElementById("new_ellipse").onclick=OnClick_Add_Ellipse;
-        document.getElementById("new_closepath").onclick=OnClick_Add_ClosePath;
         document.getElementById("large_btn").onclick=OnClick_Large_Canvas;
         document.getElementById("medium_btn").onclick=OnClick_Medium_Canvas;
         document.getElementById("small_btn").onclick=OnClick_Small_Canvas;
         document.getElementById("stroke").onclick=OnClick_Stroke;
         document.getElementById("fill").onclick=OnClick_Fill;
-        document.getElementById("list_btn").onclick=OnClick_List;
-        document.getElementById("prev_btn").onclick=OnClick_Prev;
-        document.getElementById("next_btn").onclick=OnClick_Next;
-        //document.getElementById("remote_btn").onclick = OnClick_Show_Remote;
         
         shapes_elem = document.getElementById("shapes");
         shapes_elem.on_change_fn = Shapes_OnChange;
@@ -183,30 +170,6 @@
 
       // button bar ===============================================================================
 
-      function OnClick_Prev()
-      {
-        shapes_elem.Select_Prev();
-        editor_elem.Update();
-      }
-
-      function OnClick_Next()
-      {
-        shapes_elem.Select_Next();
-        editor_elem.Update();
-      }
-
-      function OnClick_List(event)
-      {
-        if (shapes_elem.Toggle_Show())
-        {
-          document.getElementById("list_btn").classList.add("selected");
-        }
-        else
-        {
-          document.getElementById("list_btn").classList.remove("selected");
-        }
-      }
-
       function OnClick_Stroke(event)
       {
         Set_Paint_Style(event.currentTarget);
@@ -236,64 +199,6 @@
       {
         remote_ctrl.Show();
       }
-
-      function Add_Shape(class_name, shape_name)
-      {
-        const shape = new pl[class_name];
-        shape.class_name = class_name;
-        shape.name = shape_name;
-
-        shapes_elem.Add(shape);
-        shapes_elem.Select(shape.id);
-        shapes_elem.Save();
-
-        editor_elem.Set_Shapes(shapes_elem.shapes);
-      }
-
-      function OnClick_Add_MoveTo()
-      {
-        Add_Shape("Shape_MoveTo", "moveTo");
-      }
-
-      function OnClick_Add_LineTo()
-      {
-        Add_Shape("Shape_LineTo", "lineTo");
-      }
-
-      function OnClick_Add_BezierTo()
-      {
-        Add_Shape("Shape_BezierCurveTo", "bezierCurveTo");
-      }
-
-      function OnClick_Add_QuadraticTo()
-      {
-        Add_Shape("Shape_QuadraticCurveTo", "quadraticCurveTo");
-      }
-
-      function OnClick_Add_ArcTo()
-      {
-        Add_Shape("Shape_ArcTo", "arcTo");
-      }
-
-      function OnClick_Add_Rect()
-      {
-        Add_Shape("Shape_Rect", "rect");
-      }
-
-      function OnClick_Add_Arc()
-      {
-        Add_Shape("Shape_Arc", "arc");
-      }
-
-      function OnClick_Add_Ellipse()
-      {
-        Add_Shape("Shape_Ellipse", "ellipse");
-      }
-
-      function OnClick_Add_ClosePath()
-      {
-        Add_Shape("Shape_ClosePath", "closePath");
-      }
     </script>
   </head>
 
@@ -301,21 +206,7 @@
     <shape-editor id="shape_editor"></shape-editor>
 
     <div id="btn_bar">
-      <button id="new_moveto" title="Move To"><img src="images/vector-point.svg"></button>
-      <button id="new_lineto" title="Line To"><img src="images/vector-line.svg"></button>
-      <button id="new_bezierto" title="Bezier To"><img src="images/vector-bezier.svg"></button>
-      <button id="new_quadraticto" title="Quadratic To"><img src="images/vector-curve.svg"></button>
-      <button id="new_arcto" title="Arc To"><img src="images/vector-radius.svg"></button>
-      <button id="new_arc" title="Arc"><img src="images/vector-circle.svg"></button>
-      <button id="new_ellipse" title="Ellipse"><img src="images/vector-ellipse.svg"></button>
-      <button id="new_rect" title="Rect"><img src="images/vector-rectangle.svg"></button>
-      <button id="new_closepath" title="ClosePath"><img src="images/vector-polygon.svg"></button>
-
-      &#183; <button id="remote_btn" title="Show Remote Control"><img src="images/remote.svg"></button>
-      <button id="list_btn" title="Show Shape List"><img src="images/format-list-bulleted-square.svg"></button>
-      <button id="prev_btn" title="Previous Shape"><img src="images/skip-previous.svg"></button>
-      <button id="next_btn" title="Next Shape"><img src="images/skip-next.svg"></button>
-      <button id="undo_btn" title="Undo"><img src="images/undo.svg"></button>
+      <button id="remote_btn" title="Show Remote Control"><img src="images/remote.svg"></button>
 
       &#183; <button id="large_btn" title="Zoom x1"><img src="images/image-size-select-actual.svg"></button>
       <button id="medium_btn" title="Zoom x3"><img src="images/image-size-select-large.svg"></button>

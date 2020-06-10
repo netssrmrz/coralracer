@@ -21,9 +21,6 @@ class Shape_List extends LitElement
   {
     this.Load();
     this.Set_Code_Gen_Type("android_code");
-
-    this.table_elem = this.shadowRoot.getElementById("shapes");
-    this.table_elem.style.display = "none";
   }
   
   Set_Code_Gen_Type(code_gen_type)
@@ -117,34 +114,6 @@ class Shape_List extends LitElement
     }
   }
 
-  Hide()
-  {
-    this.table_elem.style.display = "none";
-  }
-
-  Show()
-  {
-    this.table_elem.style.display = "initial";
-  }
-
-  Toggle_Show()
-  {
-    let res;
-
-    if (this.table_elem.style.display == "none")
-    {
-      this.Show();
-      res = true;
-    }
-    else
-    {
-      this.Hide();
-      res = false;
-    }
-
-    return res;
-  }
-
   // Utils ========================================================================================
 
   Get_Last_Idx()
@@ -206,6 +175,47 @@ class Shape_List extends LitElement
   }
 
   // API ==========================================================================================
+
+  Hide()
+  {
+    const panel_elem = this.shadowRoot.getElementById("shapes");
+    const panel_height = 56;
+    panel_elem.style.height = panel_height + "px";
+
+    panel_elem.visible = false;
+  }
+
+  Show()
+  {
+    const panel_elem = this.shadowRoot.getElementById("shapes");
+    const panel_height = window.innerHeight * 0.4;
+    panel_elem.style.height = panel_height + "px";
+
+    const table_elem = this.shadowRoot.getElementById("table");
+    const table_height = panel_height - 56;
+    table_elem.style.height = table_height + "px";
+
+    panel_elem.visible = true;
+  }
+
+  Toggle_Show()
+  {
+    let res;
+    const panel_elem = this.shadowRoot.getElementById("shapes");
+
+    if (!panel_elem.visible)
+    {
+      this.Show();
+      res = true;
+    }
+    else
+    {
+      this.Hide();
+      res = false;
+    }
+
+    return res;
+  }
 
   Add(shape)
   {
@@ -297,6 +307,22 @@ class Shape_List extends LitElement
       this.shapes[last_i].selected = true;
     }
     this.requestUpdate();
+  }
+
+  Add_Shape(class_name, shape_name)
+  {
+    const shape = new pl[class_name];
+    shape.class_name = class_name;
+    shape.name = shape_name;
+
+    this.Add(shape);
+    this.Select(shape.id);
+    this.Save();
+
+    if (this.on_change_fn)
+    {
+      this.on_change_fn(this.shapes);
+    }
   }
 
   // Events =======================================================================================
@@ -417,6 +443,86 @@ class Shape_List extends LitElement
     this.shadowRoot.getElementById("download").setAttribute("href", href);
   }
 
+  OnClick_Undo()
+  {
+
+  }
+
+  OnClick_Prev()
+  {
+    this.Select_Prev();
+    if (this.on_change_fn)
+    {
+      this.on_change_fn(this.shapes);
+    }
+  }
+
+  OnClick_Next()
+  {
+    this.Select_Next();
+    if (this.on_change_fn)
+    {
+      this.on_change_fn(this.shapes);
+    }
+  }
+
+  OnClick_List(event)
+  {
+    if (this.Toggle_Show())
+    {
+      this.shadowRoot.getElementById("list_btn").classList.add("selected");
+    }
+    else
+    {
+      this.shadowRoot.getElementById("list_btn").classList.remove("selected");
+    }
+  }
+
+  OnClick_Add_MoveTo()
+  {
+    this.Add_Shape("Shape_MoveTo", "moveTo");
+  }
+
+  OnClick_Add_LineTo()
+  {
+    this.Add_Shape("Shape_LineTo", "lineTo");
+  }
+
+  OnClick_Add_BezierTo()
+  {
+    this.Add_Shape("Shape_BezierCurveTo", "bezierCurveTo");
+  }
+
+  OnClick_Add_QuadraticTo()
+  {
+    this.Add_Shape("Shape_QuadraticCurveTo", "quadraticCurveTo");
+  }
+
+  OnClick_Add_ArcTo()
+  {
+    this.Add_Shape("Shape_ArcTo", "arcTo");
+  }
+
+  OnClick_Add_Rect()
+  {
+    this.Add_Shape("Shape_Rect", "rect");
+  }
+
+  OnClick_Add_Arc()
+  {
+    this.Add_Shape("Shape_Arc", "arc");
+  }
+
+  OnClick_Add_Ellipse()
+  {
+    this.Add_Shape("Shape_Ellipse", "ellipse");
+  }
+
+  OnClick_Add_ClosePath()
+  {
+    this.Add_Shape("Shape_ClosePath", "closePath");
+  }
+
   // Rendering ====================================================================================
 
   static get styles()
@@ -462,24 +568,6 @@ class Shape_List extends LitElement
         font-size: 16px;
       }
 
-      #hdr
-      {
-        padding-bottom: 10px;
-      }
-      #title
-      {
-        text-align: left;
-        display: inline-block;
-        width: 48%;
-        font-size: 35px;
-      }
-      #btn_bar
-      {
-        display: inline-block;
-        width: 48%;
-        text-align: right;
-      }
-
       .button
       {
         border-radius: 7px;
@@ -517,8 +605,7 @@ class Shape_List extends LitElement
         bottom: 0px;
         right: 0px;
         width: 100%;
-        height: 40%;
-        overflow: auto;
+        height: 56px;
       }
       #summary
       {
@@ -540,8 +627,17 @@ class Shape_List extends LitElement
         right: 0px;
         width: 100%;
         height: 40%;
-        overflow: auto;
         xborder: 10px solid #fffff9;
+      }
+
+      #table
+      {
+        overflow: auto;
+      }
+      #btn_bar
+      {
+        text-align: right;
+        padding: 10px;
       }
     `;
   }
@@ -550,31 +646,48 @@ class Shape_List extends LitElement
   {
     return html`
       <div id="shapes">
-        <div id="hdr">
-          <div id="title">Shape Commands</div>
-          <div id="btn_bar">
-            <button class="button" id="gen_btn" @click="${this.OnClick_Gen_Code}" title="Generate Code"><img src="images/code-json.svg"></button>
-            <button class="button" id="canvas_code" @click="${this.OnClick_Code_Type}" title="Canvas Code"><img src="images/image.svg"></button>
-            <button class="button" id="path_code" @click="${this.OnClick_Code_Type}" title="Path Code"><img src="images/vector-polyline.svg"></button>
-            <button class="button" id="android_code" @click="${this.OnClick_Code_Type}" title="Android Code"><img src="images/android.svg"></button>
-            &#183; <button class="button" id="reset" @click="${this.OnClick_Reset}" title="Reset"><img src="images/nuke.svg"></button>
-            <button class="button" id="upload" @click="${this.OnClick_Upload}" title="Upload"><img src="images/upload.svg"></button>
-            <a class="button" id="download" href="" download="shape.json" @click="${this.OnClick_Download}" title="Download"><img src="images/download.svg"></a>
-          </div>
+
+        <div id="btn_bar">
+          <button class="button" id="new_moveto" @click="${this.OnClick_Add_MoveTo}" title="Move To"><img src="images/vector-point.svg"></button>
+          <button class="button" id="new_lineto" @click="${this.OnClick_Add_LineTo}" title="Line To"><img src="images/vector-line.svg"></button>
+          <button class="button" id="new_bezierto" @click="${this.OnClick_Add_BezierTo}" title="Bezier To"><img src="images/vector-bezier.svg"></button>
+          <button class="button" id="new_quadraticto" @click="${this.OnClick_Add_QuadraticTo}" title="Quadratic To"><img src="images/vector-curve.svg"></button>
+          <button class="button" id="new_arcto" @click="${this.OnClick_Add_ArcTo}" title="Arc To"><img src="images/vector-radius.svg"></button>
+          <button class="button" id="new_arc" @click="${this.OnClick_Add_Arc}" title="Arc"><img src="images/vector-circle.svg"></button>
+          <button class="button" id="new_ellipse" @click="${this.OnClick_Add_Ellipse}" title="Ellipse"><img src="images/vector-ellipse.svg"></button>
+          <button class="button" id="new_rect" @click="${this.OnClick_Add_Rect}" title="Rect"><img src="images/vector-rectangle.svg"></button>
+          <button class="button" id="new_closepath" @click="${this.OnClick_Add_ClosePath}" title="ClosePath"><img src="images/vector-polygon.svg"></button>
+  
+          &#183; <button class="button" id="list_btn" @click="${this.OnClick_List}" title="Show Shape List"><img src="images/format-list-bulleted-square.svg"></button>
+          <button class="button" id="prev_btn" @click="${this.OnClick_Prev}" title="Previous Shape"><img src="images/skip-previous.svg"></button>
+          <button class="button" id="next_btn" @click="${this.OnClick_Next}" title="Next Shape"><img src="images/skip-next.svg"></button>
+          <button class="button" id="undo_btn" @click="${this.OnClick_Undo}" title="Undo"><img src="images/undo.svg"></button>
+          
+          &#183; <button class="button" id="gen_btn" @click="${this.OnClick_Gen_Code}" title="Generate Code"><img src="images/code-json.svg"></button>
+          <button class="button" id="canvas_code" @click="${this.OnClick_Code_Type}" title="Canvas Code"><img src="images/image.svg"></button>
+          <button class="button" id="path_code" @click="${this.OnClick_Code_Type}" title="Path Code"><img src="images/vector-polyline.svg"></button>
+          <button class="button" id="android_code" @click="${this.OnClick_Code_Type}" title="Android Code"><img src="images/android.svg"></button>
+          
+          &#183; <button class="button" id="reset" @click="${this.OnClick_Reset}" title="Reset"><img src="images/nuke.svg"></button>
+          <button class="button" id="upload" @click="${this.OnClick_Upload}" title="Upload"><img src="images/upload.svg"></button>
+          <a class="button" id="download" href="" download="shape.json" @click="${this.OnClick_Download}" title="Download"><img src="images/download.svg"></a>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Actions</th>
-              <th>#</th>
-              <th>Function</th>
-              <th>Parameters</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${this.Render_Items()}
-          </tbody>
-        </table>
+
+        <div id="table">
+          <table>
+            <thead>
+              <tr>
+                <th>Actions</th>
+                <th>#</th>
+                <th>Function</th>
+                <th>Parameters</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${this.Render_Items()}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div id="summary"></div>
