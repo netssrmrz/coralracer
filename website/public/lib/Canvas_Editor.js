@@ -21,6 +21,8 @@ class Canvas_Editor extends LitElement
     this.ctx = this.canvas.getContext("2d");
     this.Init_Canvas(1, 1000, 1000);
     this.Enable_Events();
+    this.Set_Zoom(1);
+    this.Set_Paint("stroke");
   }
 
   Init_Canvas(zoom, width, height)
@@ -61,12 +63,29 @@ class Canvas_Editor extends LitElement
 
   Set_Zoom(zoom)
   {
+    const large_btn = this.shadowRoot.getElementById("large_btn");
+    const medium_btn = this.shadowRoot.getElementById("medium_btn");
+    const small_btn = this.shadowRoot.getElementById("small_btn");
+    large_btn.classList.remove("selected");
+    medium_btn.classList.remove("selected");
+    small_btn.classList.remove("selected");
+    if (zoom==1) large_btn.classList.add("selected");
+    else if (zoom==3) medium_btn.classList.add("selected");
+    else if (zoom==10) small_btn.classList.add("selected");
+
     this.Init_Canvas(zoom, this.canvas.width, this.canvas.height);
     this.Render(this.ctx, this.shapes);
   }
 
   Set_Paint(paint_style)
   {
+    const stroke = this.shadowRoot.getElementById("stroke");
+    const fill = this.shadowRoot.getElementById("fill");
+    stroke.classList.remove("selected");
+    fill.classList.remove("selected");
+    if (paint_style=="stroke") stroke.classList.add("selected");
+    else if (paint_style=="fill") fill.classList.add("selected");
+
     this.paint_style = paint_style;
     this.Render(this.ctx, this.shapes);
   }
@@ -84,7 +103,7 @@ class Canvas_Editor extends LitElement
   {
     this.Render(this.ctx, this.shapes);
   }
-  
+
   // Events =======================================================================================
 
   OnMouseMove_Canvas(event)
@@ -145,6 +164,36 @@ class Canvas_Editor extends LitElement
     }
   }
 
+  OnClick_Stroke(event)
+  {
+    this.Set_Paint("stroke");
+  }
+
+  OnClick_Fill(event)
+  {
+    this.Set_Paint("fill");
+  }
+
+  OnClick_Large_Canvas(event)
+  {
+    this.Set_Zoom(1);
+  }
+
+  OnClick_Medium_Canvas(event)
+  {
+    this.Set_Zoom(3);
+  }
+
+  OnClick_Small_Canvas(event)
+  {
+    this.Set_Zoom(10);
+  }
+
+  OnClick_Show_Remote()
+  {
+    //remote_ctrl.Show();
+  }
+
   // Gfx ==========================================================================================
   
   Clr(ctx)
@@ -189,6 +238,41 @@ class Canvas_Editor extends LitElement
         bottom: 0px;
         z-index: 0;
       }
+      #btn_bar
+      {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        padding: 10px;
+        display: inline-block;
+        z-index: 1;
+      }
+      button
+      {
+        border-radius: 7px;
+        border: 1px solid #0f0;
+        padding: 5px;
+        cursor: pointer;
+        width: 36px;
+        height: 36px;
+        background-color: #666;
+      }
+      button img
+      {
+        padding: 0;
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        xbackground-color: #666;
+      }
+      button:disabled
+      {
+        opacity: 0.25;
+      }
+      .selected
+      {
+        background-color: #0f0;
+      }
       canvas
       {
         border: 0;
@@ -200,7 +284,20 @@ class Canvas_Editor extends LitElement
 
   render()
   {
-    return html`<canvas id="main_canvas" width="1000" height="1000"></canvas><div id="debug"></div>`;
+    return html`
+      <div id="btn_bar">
+        <button id="remote_btn" @click="${this.OnClick_Show_Remote}" title="Show Remote Control"><img src="images/remote.svg"></button>
+
+        &#183; <button id="large_btn" @click="${this.OnClick_Large_Canvas}" title="Zoom x1"><img src="images/image-size-select-actual.svg"></button>
+        <button id="medium_btn" @click="${this.OnClick_Medium_Canvas}" title="Zoom x3"><img src="images/image-size-select-large.svg"></button>
+        <button id="small_btn" @click="${this.OnClick_Small_Canvas}" title="Zoom x10"><img src="images/image-size-select-small.svg"></button>
+
+        &#183; <button id="stroke" @click="${this.OnClick_Stroke}" title="Stroke"><img src="images/pentagon-outline.svg"></button>
+        <button id="fill" @click="${this.OnClick_Fill}" title="Fill"><img src="images/pentagon.svg"></button>
+      </div>
+
+      <canvas id="main_canvas" width="1000" height="1000"></canvas><div id="debug"></div>
+    `;
   }
 }
 
