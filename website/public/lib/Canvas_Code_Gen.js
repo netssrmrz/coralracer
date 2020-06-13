@@ -26,7 +26,7 @@ class Canvas_Code_Gen extends LitElement
         "\t<head>\n" +
         "\t\t<title>Plantinator - Sample Page</title>\n" +
         "\t\t<script type=\"module\">\n" +
-        "\t\t\timport * as pl from \"./lib/pa.js\";\n" +
+        "\t\t\timport * as pl from \"./lib/Coral_Racer.js\";\n" +
 
         "\t\t\tconst canvas = document.getElementById(\"canvas\");\n" +
         "\t\t\tconst ctx = canvas.getContext(\"2d\");\n" +

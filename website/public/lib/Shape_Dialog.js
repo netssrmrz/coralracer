@@ -1,5 +1,5 @@
 import {LitElement, html, css} from "./lit-element/lit-element.js";
-import * as pl from "./pa.js";
+import * as pl from "./Coral_Racer.js";
 
 class Shape_Dialog extends LitElement 
 {

@@ -1,4 +1,5 @@
 import {LitElement, html, css} from "./lit-element/lit-element.js";
+import "./Remote_Ctrl.js";
 
 // Editor Def ======================================================================================
 
@@ -7,17 +8,21 @@ class Canvas_Editor extends LitElement
   constructor()
   {
     super();
+    this.on_change_fn = null;
     this.paint_style = "stroke";
     this.shapes = null;
     this.OnMouseMove_Canvas = this.OnMouseMove_Canvas.bind(this);
     this.OnMouseDown_Canvas = this.OnMouseDown_Canvas.bind(this);
     this.OnMouseUp_Canvas = this.OnMouseUp_Canvas.bind(this);
     this.Render = this.Render.bind(this);
+    this.OnRemote_Click = this.OnRemote_Click.bind(this);
   }
   
   firstUpdated(changedProperties)
   {
     this.canvas = this.shadowRoot.getElementById("main_canvas");
+    this.remote_ctrl = this.shadowRoot.getElementById("remote_ctrl");
+    this.remote_ctrl.on_change_fn = this.OnRemote_Click;
     this.ctx = this.canvas.getContext("2d");
     this.Init_Canvas(1, 1000, 1000);
     this.Enable_Events();
@@ -58,6 +63,8 @@ class Canvas_Editor extends LitElement
   Set_Shapes(shapes)
   {
     this.shapes = shapes;
+    this.remote_ctrl.Set_Shapes(shapes);
+
     this.Render(this.ctx, shapes);
   }
 
@@ -105,6 +112,11 @@ class Canvas_Editor extends LitElement
   }
 
   // Events =======================================================================================
+
+  OnRemote_Click()
+  {
+    this.Update();
+  }
 
   OnMouseMove_Canvas(event)
   {
@@ -191,7 +203,7 @@ class Canvas_Editor extends LitElement
 
   OnClick_Show_Remote()
   {
-    //remote_ctrl.Show();
+    this.remote_ctrl.Show();
   }
 
   // Gfx ==========================================================================================
@@ -296,7 +308,9 @@ class Canvas_Editor extends LitElement
         <button id="fill" @click="${this.OnClick_Fill}" title="Fill"><img src="images/pentagon.svg"></button>
       </div>
 
-      <canvas id="main_canvas" width="1000" height="1000"></canvas><div id="debug"></div>
+      <canvas id="main_canvas" width="1000" height="1000"></canvas>
+
+      <remote-ctrl id="remote_ctrl"></remote-ctrl>
     `;
   }
 }

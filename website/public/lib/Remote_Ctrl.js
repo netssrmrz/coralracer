@@ -14,6 +14,11 @@ class Remote_Ctrl extends LitElement
     this.Set_Cmd(null);
   }
 
+  Set_Shapes(objs)
+  {
+    this.objs = objs; 
+  }
+
   Change_Obj(change_fn)
   {
     let has_change = false, obj;
@@ -78,8 +83,10 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x -= 1;
-        obj.y += 1;
+        const pos = obj.Get_Pos();
+        pos.x -= 1;
+        pos.y += 1;
+        obj.Set_Pos(pos);
       }
     }
     else if (this.cmd == "scale")
@@ -87,8 +94,8 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x_scale -= 0.01;
-        obj.y_scale += 0.01;
+        //obj.x_scale -= 0.01;
+        //obj.y_scale += 0.01;
       }
     }
   }
@@ -100,7 +107,9 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.y += 1;
+        const pos = obj.Get_Pos();
+        pos.y += 1;
+        obj.Set_Pos(pos);
       }
     }
     else if (this.cmd == "scale")
@@ -108,7 +117,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.y_scale += 0.01;
+        //obj.y_scale += 0.01;
       }
     }
   }
@@ -120,8 +129,10 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x += 1;
-        obj.y += 1;
+        const pos = obj.Get_Pos();
+        pos.x += 1;
+        pos.y += 1;
+        obj.Set_Pos(pos);
       }
     }
     else if (this.cmd == "scale")
@@ -129,8 +140,8 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x_scale += 0.01;
-        obj.y_scale += 0.01;
+        //obj.x_scale += 0.01;
+        //obj.y_scale += 0.01;
       }
     }
   }
@@ -142,7 +153,9 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x -= 1;
+        const pos = obj.Get_Pos();
+        pos.x -= 1;
+        obj.Set_Pos(pos);
       }
     }
     else if (this.cmd == "scale")
@@ -150,7 +163,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x_scale -= 0.01;
+        //obj.x_scale -= 0.01;
       }
     }
     else if (this.cmd == "rotate")
@@ -158,7 +171,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.angle += 0.01;
+        //obj.angle += 0.01;
       }
     }
   }
@@ -170,7 +183,9 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x += 1;
+        const pos = obj.Get_Pos();
+        pos.x += 1;
+        obj.Set_Pos(pos);
       }
     }
     else if (this.cmd == "scale")
@@ -178,7 +193,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x_scale += 0.01;
+        //obj.x_scale += 0.01;
       }
     }
     else if (this.cmd == "rotate")
@@ -186,7 +201,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.angle -= 0.01;
+        //obj.angle -= 0.01;
       }
     }
   }
@@ -198,8 +213,10 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x -= 1;
-        obj.y -= 1;
+        const pos = obj.Get_Pos();
+        pos.x -= 1;
+        pos.y -= 1;
+        obj.Set_Pos(pos);
       }
     }
     else if (this.cmd == "scale")
@@ -207,8 +224,8 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x_scale -= 0.01;
-        obj.y_scale -= 0.01;
+        //obj.x_scale -= 0.01;
+        //obj.y_scale -= 0.01;
       }
     }
   }
@@ -220,7 +237,9 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.y -= 1;
+        const pos = obj.Get_Pos();
+        pos.y -= 1;
+        obj.Set_Pos(pos);
       }
     }
     else if (this.cmd == "scale")
@@ -228,7 +247,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.y_scale -= 0.01;
+        //obj.y_scale -= 0.01;
       }
     }
   }
@@ -240,8 +259,10 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x += 1;
-        obj.y -= 1;
+        const pos = obj.Get_Pos();
+        pos.x += 1;
+        pos.y -= 1;
+        obj.Set_Pos(pos);
       }
     }
     else if (this.cmd == "scale")
@@ -249,8 +270,8 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        obj.x_scale += 0.01;
-        obj.y_scale -= 0.01;
+        //obj.x_scale += 0.01;
+        //obj.y_scale -= 0.01;
       }
     }
   }
@@ -306,6 +327,12 @@ class Remote_Ctrl extends LitElement
       {
         display: none;
         text-align: center;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        padding: 10px;
+        xdisplay: inline-block;
+        z-index: 1;
       }
       .grid
       {
@@ -320,16 +347,12 @@ class Remote_Ctrl extends LitElement
       button
       {
         border-radius: 7px;
-        border: 1px solid #000;
+        border: 1px solid #0f0;
         padding: 5px;
         cursor: pointer;
         width: 36px;
         height: 36px;
-        background-color: inherit;
-      }
-      button:disabled
-      {
-        opacity: 0.25;
+        background-color: #666;
       }
       button img
       {
@@ -337,6 +360,11 @@ class Remote_Ctrl extends LitElement
         margin: 0;
         width: 24px;
         height: 24px;
+        xbackground-color: #666;
+      }
+      button:disabled
+      {
+        opacity: 0.25;
       }
       .selected
       {
@@ -361,8 +389,6 @@ class Remote_Ctrl extends LitElement
   render()
   {
     return html`
-      <h2 class="title">Fine Control</h2>
-
       <div class="grid">
         <button id="lu" @click="${this.OnClick_Left_Up}"><img src="images/arrow-top-left-bold-outline.svg"></button>
         <button id="u" @click="${this.OnClick_Up}"><img src="images/arrow-up-bold-outline.svg"></button>
