@@ -1,5 +1,72 @@
 ﻿// Game Objects ===================================================================================
 
+export class Game_Object
+{
+  constructor()
+  {
+    this.name = "Game Object";
+    this.pt = { x: 0, y: 0 };
+    this.scale = { x: 0, y: 0 };
+    this.angle = 0;
+    this.selected = false;
+  }
+
+  Params_Str()
+  {
+    let res = "";
+
+    if (this.pt)
+    {
+      res = 
+        "x = "+Round(this.pt.x)+
+        ", y = "+Round(this.pt.y);
+    }
+
+    return res;
+  }
+
+  Render(ctx)
+  {
+  }
+}
+
+export class Player
+extends Game_Object
+{
+  constructor()
+  {
+    super();
+    this.name = "Player";
+  }
+}
+
+export class Finish
+extends Game_Object
+{
+  constructor()
+  {
+    super();
+    this.name = "Finish";
+  }
+}
+
+export class Wall
+extends Game_Object
+{
+  constructor()
+  {
+    super();
+    this.name = "Wall";
+    this.scale = { x: 100, y: 100 };
+  }
+
+  Render(ctx)
+  {
+    ctx.rect(this.pt.x, this.pt.y, 1, 1);
+    ctx.stroke();
+  }
+}
+
 // Shapes =========================================================================================
 
 export class Shape
