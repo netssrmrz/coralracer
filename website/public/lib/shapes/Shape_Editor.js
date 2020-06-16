@@ -1,4 +1,4 @@
-import Canvas_Editor from "./Canvas_Editor.js";
+import Canvas_Editor from "../Canvas_Editor.js";
 
 // Editor Def ======================================================================================
 

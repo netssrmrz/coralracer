@@ -73,9 +73,8 @@
       }
     </style>
     <script type="module">
-      import * as pl from "./lib/Coral_Racer.js";
-      import "./lib/Shape_Editor.js";
-      import "./lib/Shape_List.js";
+      import "./lib/game_objs/Game_Obj_Editor.js";
+      import "./lib/game_objs/Game_Obj_List.js";
 
       window.onload = Main;
       window.onresize = OnResize;
@@ -129,7 +128,7 @@
   </head>
 
   <body>
-    <shape-editor id="shape_editor"></shape-editor>
-    <shape-list id="shapes"></shape-list>
+    <game-obj-editor id="shape_editor"></game-obj-editor>
+    <game-obj-list id="shapes"></game-obj-list>
   </body>
 </html>

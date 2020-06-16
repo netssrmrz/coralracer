@@ -1,4 +1,4 @@
-import {LitElement, html, css} from "./lit-element/lit-element.js";
+import {LitElement, html, css} from "../lit-element/lit-element.js";
 
 class Canvas_Code_Gen extends LitElement 
 {

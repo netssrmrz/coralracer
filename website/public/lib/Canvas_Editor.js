@@ -24,6 +24,7 @@ class Canvas_Editor extends LitElement
     this.remote_ctrl = this.shadowRoot.getElementById("remote_ctrl");
     this.remote_ctrl.on_change_fn = this.OnRemote_Click;
     this.ctx = this.canvas.getContext("2d");
+    this.ctx.globalCompositeOperation = "lighter";
     this.Init_Canvas(1, 1000, 1000);
     this.Enable_Events();
     this.Set_Zoom(1);
@@ -113,9 +114,13 @@ class Canvas_Editor extends LitElement
 
   // Events =======================================================================================
 
-  OnRemote_Click()
+  OnRemote_Click(shape)
   {
     this.Update();
+    if (this.on_change_fn)
+    {
+      this.on_change_fn(shape);
+    }
   }
 
   OnMouseMove_Canvas(event)

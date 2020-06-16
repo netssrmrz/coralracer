@@ -1,11 +1,12 @@
-import {LitElement, html, css} from "./lit-element/lit-element.js";
-import {unsafeHTML} from './lit-html/directives/unsafe-html.js';
-import "./Canvas_Code_Gen.js";
-import "./Path_Code_Gen.js";
-import "./Android_Code_Gen.js";
-import * as pl from "./Coral_Racer.js";
+import {LitElement, html, css} from "../lit-element/lit-element.js";
+import {unsafeHTML} from '../lit-html/directives/unsafe-html.js';
+import "../code_gen/Canvas_Code_Gen.js";
+import "../code_gen/Path_Code_Gen.js";
+import "../code_gen/Android_Code_Gen.js";
+import * as pl from "../Coral_Racer.js";
 
-class Shape_List extends LitElement
+class Shape_List 
+extends LitElement
 {
   constructor()
   {

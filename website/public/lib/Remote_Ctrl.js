@@ -7,6 +7,10 @@ class Remote_Ctrl extends LitElement
     super();
     this.objs = null;
     this.on_change_fn = null;
+    this.Change_Obj = this.Change_Obj.bind(this);
+    this.pos_d = 10;
+    this.scale_d = 10;
+    this.rot_d = 10;
   }
 
   firstUpdated(changedProperties)
@@ -21,7 +25,7 @@ class Remote_Ctrl extends LitElement
 
   Change_Obj(change_fn)
   {
-    let has_change = false, obj;
+    let obj;
 
     if (this.objs && this.objs.length>0)
     {
@@ -30,15 +34,14 @@ class Remote_Ctrl extends LitElement
         obj = this.objs[i];
         if (obj.selected)
         {
+          change_fn = change_fn.bind(this);
           change_fn(obj);
-          has_change = true;
+          if (this.on_change_fn)
+          {
+            this.on_change_fn(obj);
+          }
         }
       }
-    }
-
-    if (has_change && this.on_change_fn)
-    {
-      this.on_change_fn();
     }
   }
 
@@ -94,8 +97,8 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.x_scale -= 0.01;
-        //obj.y_scale += 0.01;
+        obj.scale.x -= this.scale_d;
+        obj.scale.y += this.scale_d;
       }
     }
   }
@@ -117,7 +120,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.y_scale += 0.01;
+        obj.scale.y += this.scale_d;
       }
     }
   }
@@ -140,8 +143,8 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.x_scale += 0.01;
-        //obj.y_scale += 0.01;
+        obj.scale.x += this.scale_d;
+        obj.scale.y += this.scale_d;
       }
     }
   }
@@ -163,7 +166,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.x_scale -= 0.01;
+        obj.scale.x -= this.scale_d;
       }
     }
     else if (this.cmd == "rotate")
@@ -193,7 +196,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.x_scale += 0.01;
+        obj.scale.x += this.scale_d;
       }
     }
     else if (this.cmd == "rotate")
@@ -224,8 +227,8 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.x_scale -= 0.01;
-        //obj.y_scale -= 0.01;
+        obj.scale.x -= this.scale_d;
+        obj.scale.y -= this.scale_d;
       }
     }
   }
@@ -247,7 +250,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.y_scale -= 0.01;
+        obj.scale.y -= this.scale_d;
       }
     }
   }
@@ -270,8 +273,8 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.x_scale += 0.01;
-        //obj.y_scale -= 0.01;
+        obj.scale.x += this.scale_d;
+        obj.scale.y -= this.scale_d;
       }
     }
   }

@@ -4,11 +4,49 @@ export class Game_Object
 {
   constructor()
   {
+    this.class_name = "Game_Object";
     this.name = "Game Object";
     this.pt = { x: 0, y: 0 };
-    this.scale = { x: 0, y: 0 };
+    this.scale = { x: 1, y: 1 };
     this.angle = 0;
     this.selected = false;
+    this.btns = [];
+    this.New_Btn_Path("pos_btn", 0, 0);
+    this.New_Btn_Path("scl_btn", 100, 100);
+    this.New_Btn_Path("rot_btn", 0, 100);
+    this.cmd = null;
+    this.design_r = 100;
+  }
+
+  New_Btn_Path(id, x, y)
+  {
+    const r = 5;
+    const p = new Path2D();
+    p.moveTo(-r, -r);
+    p.lineTo(-r, r);
+    p.lineTo(r, r);
+    p.lineTo(r, -r);
+    p.closePath();
+    p.hover = false;
+    p.id = id;
+    p.x = x;
+    p.y = y;
+    p.colour_hover = "#f0f";
+    p.colour = "#0f0";
+    this.btns.push(p);
+    this[p.id] = p;
+
+    return p;
+  }
+
+  Get_Pos()
+  {
+    return this.pt;
+  }
+
+  Set_Pos(pt)
+  {
+    this.pt = pt;
   }
 
   Params_Str()
@@ -18,11 +56,171 @@ export class Game_Object
     if (this.pt)
     {
       res = 
-        "x = "+Round(this.pt.x)+
-        ", y = "+Round(this.pt.y);
+        "x = "+Round(this.pt.x)+", y = "+Round(this.pt.y) + ", " +
+        "x scale = "+Round(this.scale.x)+", y scale = "+Round(this.scale.y) + ", " +
+        "angle = "+Round(this.angle);
     }
 
     return res;
+  }
+
+  // Events =======================================================================================
+
+  On_Mouse_Move(event, ctx)
+  {
+    let res = false;
+
+    if (this.cmd)
+    {
+      const c_pt = this.To_Canvas_Pt(ctx, event.offsetX, event.offsetY);
+      if (this.cmd.id == "pos_btn")
+      {
+        this.pt.x = c_pt.x;
+        this.pt.y = c_pt.y;
+      }
+      if (this.cmd.id == "scl_btn")
+      {
+        const m = new DOMMatrix();
+        m.translateSelf(this.pt.x, this.pt.y);
+        m.rotateSelf(this.To_Degrees(this.angle));
+        m.invertSelf();
+        const p = new DOMPoint(c_pt.x, c_pt.y);
+        const tp = p.matrixTransform(m);
+        this.scale.x = tp.x / this.design_r;
+        this.scale.y = tp.y / this.design_r;
+      }
+      if (this.cmd.id == "rot_btn")
+      {
+        const x_sign = Math.sign(this.scale.x);
+        const y_sign = Math.sign(this.scale.y);
+        const m = new DOMMatrix();
+        m.translateSelf(this.pt.x, this.pt.y);
+        m.scaleSelf(x_sign, y_sign);
+        m.invertSelf();
+        const p = new DOMPoint(c_pt.x, c_pt.y);
+        const tp = p.matrixTransform(m);
+        this.angle = Math.atan2(tp.y, tp.x) - (Math.PI/2);
+        this.angle = this.angle * (x_sign*y_sign);
+      }
+    }
+    else if (this.selected)
+    {
+      for (let i=0; i<this.btns.length; i++)
+      {
+        res = res || this.On_Mouse_Move_Btn(ctx, event, this.btns[i]);
+      }
+    }
+
+    return res;
+  }
+
+  To_Degrees(r)
+  {
+    return r*(180/Math.PI);
+  }
+
+  On_Mouse_Move_Btn(ctx, event, path)
+  {
+    let res = false;
+
+    ctx.save();
+    ctx.translate(this.pt.x, this.pt.y);
+    ctx.rotate(this.angle);
+    ctx.scale(this.scale.x, this.scale.y);
+
+    ctx.translate(path.x, path.y);
+    ctx.scale(1/this.scale.x, 1/this.scale.y);
+
+    const is_in_path = ctx.isPointInPath(path, event.offsetX, event.offsetY);
+    if (path.hover != is_in_path)
+    {
+      path.hover = is_in_path;
+      res = true;
+    }
+    ctx.restore();
+
+    return res;
+  }
+
+  On_Mouse_Down(event, ctx)
+  {
+    if (this.selected)
+    {
+      for (let i=0; i<this.btns.length; i++)
+      {
+        if (this.btns[i].hover)
+        {
+          this.cmd = this.btns[i];
+          break;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  On_Mouse_Move_Cmd(ctx, c_pt, cmd)
+  {
+    cmd.x = c_pt.x*(1/ctx.x_scale);
+    cmd.y = c_pt.y*(1/ctx.y_scale);
+  }
+
+  To_Canvas_Pt(ctx, sx, sy)
+  {
+    return {x: sx-ctx.canvas.width/2, y: -(sy-ctx.canvas.height/2)};
+  }
+
+  On_Mouse_Up(event, ctx)
+  {
+    let res = false;
+
+    if (this.cmd)
+    {
+      this.cmd = null;
+      res = true;
+    }
+
+    return res;
+  }
+
+  // Rendering ====================================================================================
+
+  Render_Design(ctx)
+  {
+    if (this.selected)
+    {
+      ctx.strokeStyle = "#fff";
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.rect(-this.design_r, -this.design_r, this.design_r*2, this.design_r*2);
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, this.design_r*2);
+      ctx.stroke();
+
+      this.Render_Btn(ctx, this.pos_btn);
+      this.Render_Btn(ctx, this.scl_btn);
+      this.Render_Btn(ctx, this.rot_btn);
+    }
+  }
+
+  Render_Btn(ctx, path)
+  {
+    ctx.save();
+    ctx.translate(path.x, path.y);
+    ctx.scale(1/this.scale.x, 1/this.scale.y);
+
+    if (path.hover)
+    {
+      ctx.fillStyle = path.colour_hover;
+    }
+    else
+    {
+      ctx.fillStyle = path.colour;
+    }
+    ctx.fill(path);
+
+    ctx.restore();
   }
 
   Render(ctx)
@@ -57,13 +255,23 @@ extends Game_Object
   {
     super();
     this.name = "Wall";
-    this.scale = { x: 100, y: 100 };
+    this.class_name = Wall;
   }
 
   Render(ctx)
   {
-    ctx.rect(this.pt.x, this.pt.y, 1, 1);
-    ctx.stroke();
+    if (this.selected)
+    {
+      this.Render_Design(ctx);
+    }
+    else
+    {
+      ctx.beginPath();
+      ctx.strokeStyle = "#666";
+      ctx.lineWidth = 1;
+      ctx.rect(-100, -100, 200, 200);
+      ctx.stroke();
+    }
   }
 }
 

@@ -1,11 +1,11 @@
 import {LitElement, html, css} from "./lit-element/lit-element.js";
 import {unsafeHTML} from './lit-html/directives/unsafe-html.js';
-import "./Canvas_Code_Gen.js";
-import "./Path_Code_Gen.js";
-import "./Android_Code_Gen.js";
+import "./code_gen/Canvas_Code_Gen.js";
+import "./code_gen/Path_Code_Gen.js";
+import "./code_gen/Android_Code_Gen.js";
 import * as pl from "./Coral_Racer.js";
 
-class Shape_List extends LitElement
+class Object_List extends LitElement
 {
   constructor()
   {
@@ -15,6 +15,7 @@ class Shape_List extends LitElement
     this.OnChange_File = this.OnChange_File.bind(this);
     this.shapes = [];
     this.code_gen_type = null;
+    this.save_name = "shapes";
   }
   
   firstUpdated(changedProperties)
@@ -35,12 +36,12 @@ class Shape_List extends LitElement
   Save()
   {
     const json = JSON.stringify(this.shapes, this.JSON_Replacer);
-    localStorage.setItem("shapes", json);
+    localStorage.setItem(this.save_name, json);
   }
 
   Load()
   {
-    const json = localStorage.getItem("shapes");
+    const json = localStorage.getItem(this.save_name);
     const res = this.Load_JSON(json);
 
     return res;
@@ -72,29 +73,12 @@ class Shape_List extends LitElement
   {
     const shape = new pl[obj.class_name];
     Object.assign(shape, obj);
-    if (obj.btns && obj.btns.length>0)
-    {
-      shape.btns = [];
-      for (let i=0; i<obj.btns.length; ++i)
-      {
-        const obj_btn = obj.btns[i];
-        const btn = shape.New_Btn_Path(obj_btn.id, obj_btn.x, obj_btn.y);
-        shape[btn.id] = btn;
-      }
-    }
+
     return shape;
   }
 
   JSON_Replacer(key, value)
   {
-    if (key == "prev_shape" || key == "pt" || 
-      key == "cp" || key == "sa" ||
-      key == "ea" || key == "rp" ||
-      key == "cp1" || key == "cp2")
-    {
-      value = "dynamic";
-    }
-
     return value;
   }
 
@@ -644,19 +628,16 @@ class Shape_List extends LitElement
 
   render()
   {
+
+  }
+
+  Render(btns)
+  {
     return html`
       <div id="shapes">
 
         <div id="btn_bar">
-          <button class="button" id="new_moveto" @click="${this.OnClick_Add_MoveTo}" title="Move To"><img src="images/vector-point.svg"></button>
-          <button class="button" id="new_lineto" @click="${this.OnClick_Add_LineTo}" title="Line To"><img src="images/vector-line.svg"></button>
-          <button class="button" id="new_bezierto" @click="${this.OnClick_Add_BezierTo}" title="Bezier To"><img src="images/vector-bezier.svg"></button>
-          <button class="button" id="new_quadraticto" @click="${this.OnClick_Add_QuadraticTo}" title="Quadratic To"><img src="images/vector-curve.svg"></button>
-          <button class="button" id="new_arcto" @click="${this.OnClick_Add_ArcTo}" title="Arc To"><img src="images/vector-radius.svg"></button>
-          <button class="button" id="new_arc" @click="${this.OnClick_Add_Arc}" title="Arc"><img src="images/vector-circle.svg"></button>
-          <button class="button" id="new_ellipse" @click="${this.OnClick_Add_Ellipse}" title="Ellipse"><img src="images/vector-ellipse.svg"></button>
-          <button class="button" id="new_rect" @click="${this.OnClick_Add_Rect}" title="Rect"><img src="images/vector-rectangle.svg"></button>
-          <button class="button" id="new_closepath" @click="${this.OnClick_Add_ClosePath}" title="ClosePath"><img src="images/vector-polygon.svg"></button>
+          ${btns}
   
           &#183; <button class="button" id="list_btn" @click="${this.OnClick_List}" title="Show Shape List"><img src="images/format-list-bulleted-square.svg"></button>
           <button class="button" id="prev_btn" @click="${this.OnClick_Prev}" title="Previous Shape"><img src="images/skip-previous.svg"></button>
@@ -763,4 +744,5 @@ class Shape_List extends LitElement
   }
 }
 
-customElements.define('shape-list', Shape_List);
+customElements.define('object-list', Object_List);
+export default Object_List;
