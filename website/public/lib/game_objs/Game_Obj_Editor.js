@@ -23,8 +23,16 @@ extends Canvas_Editor
         ctx.translate(obj.pt.x, obj.pt.y);
         ctx.rotate(obj.angle);
         ctx.scale(obj.scale.x, obj.scale.y);
-        if (obj.Render)
+
+        if (obj.selected && obj.Render_Design)
+        {
+          obj.Render_Design(ctx);
+        }
+        else if (obj.Render)
+        {
           obj.Render(ctx);
+        }
+
         ctx.restore();
       }
     }

@@ -8,9 +8,9 @@ class Remote_Ctrl extends LitElement
     this.objs = null;
     this.on_change_fn = null;
     this.Change_Obj = this.Change_Obj.bind(this);
-    this.pos_d = 10;
-    this.scale_d = 10;
-    this.rot_d = 10;
+    this.pos_d = 1;
+    this.scale_d = 0.01;
+    this.rot_d = 0.01;
   }
 
   firstUpdated(changedProperties)
@@ -174,7 +174,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.angle += 0.01;
+        obj.angle += this.rot_d;
       }
     }
   }
@@ -204,7 +204,7 @@ class Remote_Ctrl extends LitElement
       this.Change_Obj(Change);
       function Change(obj)
       {
-        //obj.angle -= 0.01;
+        obj.angle -= this.rot_d;
       }
     }
   }

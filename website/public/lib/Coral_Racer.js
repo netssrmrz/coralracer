@@ -255,23 +255,16 @@ extends Game_Object
   {
     super();
     this.name = "Wall";
-    this.class_name = Wall;
+    this.class_name = "Wall";
   }
 
   Render(ctx)
   {
-    if (this.selected)
-    {
-      this.Render_Design(ctx);
-    }
-    else
-    {
-      ctx.beginPath();
-      ctx.strokeStyle = "#666";
-      ctx.lineWidth = 1;
-      ctx.rect(-100, -100, 200, 200);
-      ctx.stroke();
-    }
+    ctx.beginPath();
+    ctx.strokeStyle = "#666";
+    ctx.lineWidth = 1;
+    ctx.rect(-100, -100, 200, 200);
+    ctx.stroke();
   }
 }
 
