@@ -16,6 +16,7 @@ class Canvas_Editor extends LitElement
     this.OnMouseUp_Canvas = this.OnMouseUp_Canvas.bind(this);
     this.Render = this.Render.bind(this);
     this.OnRemote_Click = this.OnRemote_Click.bind(this);
+    this.zoom = { large_btn: 0.1, medium_btn: 0.5, small_btn: 2 };
   }
   
   firstUpdated(changedProperties)
@@ -25,23 +26,27 @@ class Canvas_Editor extends LitElement
     this.remote_ctrl.on_change_fn = this.OnRemote_Click;
     this.ctx = this.canvas.getContext("2d");
     this.ctx.globalCompositeOperation = "lighter";
-    this.Init_Canvas(1, 1000, 1000);
-    this.Enable_Events();
-    this.Set_Zoom(1);
+    this.Set_Zoom("large_btn");
     this.Set_Paint("stroke");
+    this.Enable_Events();
   }
 
-  Init_Canvas(zoom, width, height)
+  Init_Canvas(zoom_id, width, height)
   {
+    const zoom = this.zoom[zoom_id];
+
     this.canvas.width = width;
     this.canvas.height = height;        
-    this.ctx.x_scale = zoom;
-    this.ctx.y_scale = zoom;
+    this.ctx.zoom_id = zoom_id;
 
     this.ctx.globalCompositeOperation = "difference";
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-    this.ctx.translate(this.canvas.width/2, this.canvas.height/2);
-    this.ctx.scale(zoom, -zoom);
+
+    this.ctx.trn = { x: this.canvas.width/2, y: this.canvas.height/2};
+    this.ctx.translate(this.ctx.trn.x, this.ctx.trn.y);
+    this.ctx.scl = { x: zoom, y: zoom};
+    this.ctx.scale(this.ctx.scl.x, this.ctx.scl.y);
+
     this.ctx.strokeStyle="#fff";
     this.ctx.fillStyle="#fff";
     this.ctx.lineWidth = 1;
@@ -69,19 +74,19 @@ class Canvas_Editor extends LitElement
     this.Render(this.ctx, shapes);
   }
 
-  Set_Zoom(zoom)
+  Set_Zoom(zoom_id)
   {
     const large_btn = this.shadowRoot.getElementById("large_btn");
     const medium_btn = this.shadowRoot.getElementById("medium_btn");
     const small_btn = this.shadowRoot.getElementById("small_btn");
+
     large_btn.classList.remove("selected");
     medium_btn.classList.remove("selected");
     small_btn.classList.remove("selected");
-    if (zoom==1) large_btn.classList.add("selected");
-    else if (zoom==3) medium_btn.classList.add("selected");
-    else if (zoom==10) small_btn.classList.add("selected");
 
-    this.Init_Canvas(zoom, this.canvas.width, this.canvas.height);
+    this.shadowRoot.getElementById(zoom_id).classList.add("selected");
+
+    this.Init_Canvas(zoom_id, this.canvas.width, this.canvas.height);
     this.Render(this.ctx, this.shapes);
   }
 
@@ -102,8 +107,7 @@ class Canvas_Editor extends LitElement
   {
     this.style.width = width + "px";
     this.style.height = height + "px";
-    //this.Init_Canvas(this.ctx.x_scale, width-40, height-40);
-    this.Init_Canvas(this.ctx.x_scale, width, height);
+    this.Init_Canvas(this.ctx.zoom_id, width, height);
     this.Render(this.ctx, this.shapes);
   }
 
@@ -193,17 +197,17 @@ class Canvas_Editor extends LitElement
 
   OnClick_Large_Canvas(event)
   {
-    this.Set_Zoom(1);
+    this.Set_Zoom("large_btn");
   }
 
   OnClick_Medium_Canvas(event)
   {
-    this.Set_Zoom(3);
+    this.Set_Zoom("medium_btn");
   }
 
   OnClick_Small_Canvas(event)
   {
-    this.Set_Zoom(10);
+    this.Set_Zoom("small_btn");
   }
 
   OnClick_Show_Remote()
@@ -215,7 +219,8 @@ class Canvas_Editor extends LitElement
   
   Clr(ctx)
   {
-    ctx.clearRect(-ctx.canvas.width/2, -ctx.canvas.height/2, ctx.canvas.width, ctx.canvas.height);
+    ctx.clearRect(-ctx.trn.x/ctx.scl.x, -ctx.trn.y/ctx.scl.y, 
+      ctx.canvas.width/ctx.scl.x, ctx.canvas.height/ctx.scl.y);
   }
 
   Render(ctx, shapes)
@@ -227,10 +232,9 @@ class Canvas_Editor extends LitElement
     ctx.save();
     ctx.strokeStyle = "#111";
     ctx.lineWidth = 1;
-    //ctx.setLineDash([5, 5]);
 
-    const rx = this.canvas.width/2;
-    const ry = this.canvas.height/2;
+    const rx = ctx.trn.x/ctx.scl.x;
+    const ry = ctx.trn.y/ctx.scl.y;
     ctx.beginPath();
     ctx.moveTo(-rx, 0);
     ctx.lineTo(rx, 0);
@@ -238,7 +242,6 @@ class Canvas_Editor extends LitElement
     ctx.lineTo(0, ry);
     ctx.stroke();
 
-    //ctx.setLineDash([]);
     ctx.restore();
   }
 

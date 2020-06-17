@@ -161,13 +161,17 @@ export class Game_Object
 
   On_Mouse_Move_Cmd(ctx, c_pt, cmd)
   {
-    cmd.x = c_pt.x*(1/ctx.x_scale);
-    cmd.y = c_pt.y*(1/ctx.y_scale);
+    cmd.x = c_pt.x*(1/ctx.scl.x);
+    cmd.y = c_pt.y*(1/ctx.scl.y);
   }
 
   To_Canvas_Pt(ctx, sx, sy)
   {
-    return {x: sx-ctx.canvas.width/2, y: -(sy-ctx.canvas.height/2)};
+    const pt = {x: sx-ctx.trn.x, y: sy-ctx.trn.y};
+    pt.x = pt.x/ctx.scl.x;
+    pt.y = pt.y/ctx.scl.y;
+
+    return pt;
   }
 
   On_Mouse_Up(event, ctx)
@@ -391,8 +395,8 @@ export class Shape
 
   On_Mouse_Move_Cmd(ctx, c_pt, cmd)
   {
-    cmd.x = c_pt.x*(1/ctx.x_scale);
-    cmd.y = c_pt.y*(1/ctx.y_scale);
+    cmd.x = c_pt.x*(1/ctx.scl.x);
+    cmd.y = c_pt.y*(1/ctx.scl.y);
   }
 
   On_Mouse_Move_Btn(ctx, event, path)
@@ -575,7 +579,7 @@ export class Shape_Arc extends Shape
   {
     if (cmd.id == "pt")
     {
-      const pts = {x: 1/ctx.x_scale, y: 1/ctx.y_scale};
+      const pts = {x: 1/ctx.scl.x, y: 1/ctx.scl.y};
       const c_pt_s = {x: c_pt.x, y: c_pt.y};
       this.Pt_Scale(c_pt_s, pts);
       const ptd = this.Pt_Difference(c_pt_s, cmd);
@@ -695,7 +699,7 @@ export class Shape_Ellipse extends Shape
   {
     if (cmd.id == "pt")
     {
-      const pts = {x: 1/ctx.x_scale, y: 1/ctx.y_scale};
+      const pts = {x: 1/ctx.scl.x, y: 1/ctx.scl.y};
       const c_pt_s = {x: c_pt.x, y: c_pt.y};
       this.Pt_Scale(c_pt_s, pts);
       const ptd = this.Pt_Difference(c_pt_s, cmd);

@@ -23,171 +23,73 @@ class Android_Code_Gen extends LitElement
   {
     let code;
 
-    const data = this.Gen_Cmds(shapes);
     code = 
-      "public class Shape implements Is_Drawable\n" +
-      "{\n" +
-        "\tpublic static java.nio.FloatBuffer points = Context.New_Buffer(Get_Points());\n" +
-        "\n" +
-    
-        "\tpublic static float[] Get_Points()\n" +
-        "\t{\n" +
-          "\t\tfloat[] points=\n" +
-          "\t\t{\n" +
-          this.Gen_Points(data.points) +
-          "\t\t};\n" +
-          "\n" +
-          "\t\treturn points;\n" +
-        "\t};\n" +
-        "\n" +
-    
-        "\tpublic java.nio.FloatBuffer Get_Points_Buffer()\n" +
-        "\t{\n" +
-          "\t\treturn this.points;\n" +
-        "\t};\n" +
-        "\n" +
+      "package rs.projecta.level;\n\n" +
 
-        "\tpublic void Draw(Context ctx)\n" +
+      "public class Some_Level\n" +
+      "extends Level\n" +
+      "{\n" +
+        "\t@Override\n" +
+        "\tpublic Class<? extends Level> Get_Next_Level()\n" +
         "\t{\n" +
-          this.Gen_Segments(data.segments) +
+          "\t\treturn rs.projecta.level.Some_Level.class;\n" +
+        "\t}\n" +
+        "\n" +
+  
+        "\t@Override\n" +
+        "\tpublic String Get_Title()\n" +
+        "\t{\n" +
+          "\t\treturn \"Some Tile\";\n" +
+        "\t}\n" +
+        "\n" +
+    
+        "\t@Override\n" +
+        "\tpublic String Get_Description()\n" +
+        "\t{\n" +
+          "\t\treturn \"Some Description\";\n" +
+        "\t}\n" +
+        "\n" +
+    
+        "\t@Override\n" +
+        "\tpublic void Build(rs.projecta.world.World w)\n" +
+        "\t{\n" +
+          "\t\tsuper.Build(w);\n" +
+          "\t\trs.projecta.object.Player player = new rs.projecta.object.Player(0, 0, w);\n" +
+          "\t\tAdd_Wavy_Bkg(w, player);\n" +
+          "\t\tw.objs.Add(player);\n" +
+          "\t\tw.objs.Add(new rs.projecta.object.Finish(w, 0, -4200));\n" +
+          this.Gen_Game_Objs(shapes) +
         "\t}\n" +
       "}\n";
 
     this.shadowRoot.getElementById("txt_area").value = code;
   }
 
-  Gen_Segments(segments)
+  Gen_Game_Objs(shapes)
   {
-    let res = "", segment, i;
-
-    if (segments && segments.length>0)
-    {
-      for (i=0; i<segments.length; i++)
-      {
-        segment = segments[i];
-        res += "\t\tandroid.opengl.GLES20.glDrawArrays(" + 
-          segment.mode + ", " + segment.pt_start + ", " + segment.pt_count + ");\n";
-      }
-    }
-
-    return res;
-  }
-
-  Gen_Points(points)
-  {
-    let res = "", i;
-
-    if (points && points.length>0)
-    {
-      for (i=0; i<points.length; i++)
-      {
-        res = pl.Append_Str(res, points[i] + "f", ", ");
-        if ((i+1)%10 == 0)
-        {
-          res+= "\n\t\t\t";
-        }
-      }
-      res = "\t\t\t" + res + "\n";
-    }
-
-    return res;
-  }
-
-  Gen_Cmds(shapes)
-  {
-    let res = null;
-    let segment = null;
-    const segments = [], points = [];
+    let res = "";
 
     if (shapes && shapes.length>0)
     {
       for (let i=0; i<shapes.length; i++)
       {
         const s = shapes[i];
-        if (s.class_name == "Shape_MoveTo")
+        if (s.class_name == "Wall")
         {
-          segment = this.New_Segment(segments, points, segment);
-          this.Add_Pt(segment, points, s.pt);
-        }
-        else if (s.class_name == "Shape_LineTo")
-        {
-          this.Add_Pt(segment, points, s.pt);
-        }
-        else if (s.class_name == "Shape_ClosePath")
-        {
-          segment.mode = "android.opengl.GLES20.GL_LINE_LOOP";
-        }
-        else if (s.class_name == "Shape_BezierCurveTo")
-        {
-          const m = this.Get_Lats_Pt(points);
-          const curve = new Bezier(m.x, m.y, s.cp1.x, s.cp1.y, 
-            s.cp2.x, s.cp2.y, s.pt.x, s.pt.y);
-          const pts = curve.getLUT(20);
-          this.Add_Pts(segment, points, pts);
-        }
-        else if (s.class_name == "Shape_QuadraticCurveTo")
-        {
-          const m = this.Get_Lats_Pt(points);
-          const curve = new Bezier(m.x, m.y, s.cp.x, s.cp.y, s.pt.x, s.pt.y);
-          const pts = curve.getLUT(20);
-          this.Add_Pts(segment, points, pts);
-        }
-        else if (s.class_name == "Shape_Rect")
-        {
-          segment = this.New_Segment(segments, points, segment);
-          this.Add_Pt(segment, points, s.pt);
-          this.Add_Pt(segment, points, {x: s.cp.x, y: s.pt.y});
-          this.Add_Pt(segment, points, s.cp);
-          this.Add_Pt(segment, points, {x: s.pt.x, y: s.cp.y});
-          this.Add_Pt(segment, points, s.pt);
-        }
-        else if (s.class_name == "Shape_Ellipse")
-        {
-          const pts = this.Get_Ellipse(
-            s.pt.x, s.pt.y, 
-            s.Calc_Radius_X(), s.Calc_Radius_Y(), 
-            s.Calc_Start_Angle(), s.Calc_End_Angle());
-          this.Add_Pts(segment, points, pts);
-        }
-        else if (s.class_name == "Shape_Arc")
-        {
-          const pts = this.Get_Ellipse(
-            s.pt.x, s.pt.y, 
-            s.Calc_Radius(), s.Calc_Radius(), 
-            s.Calc_Start_Angle(), s.Calc_End_Angle());
-          this.Add_Pts(segment, points, pts);
+          const x = s.pt.x;
+          const y = s.pt.y;
+          const rx = s.scale.x*100;
+          const ry = s.scale.y*100
+          const a = s.To_Degrees(s.angle);
+          const params = "" +
+            x + "f, " +
+            y + "f, " +
+            rx + "f, " +
+            ry + "f, " +
+            a + "f";
+          res += "\t\tw.objs.Add(new rs.projecta.object.Wall(w, " + params + "));\n";
         }
       }
-      segments.push(segment);
-      res = {segments, points};
-    }
-
-    return res;
-  }
-
-  Get_Ellipse(cx, cy, radius_x, radius_y, start_angle, end_angle)
-  {
-    const angle = 0;
-    const res = [];
-    const dx = 1;
-    const a1 = this.Normalise_Angle(start_angle);
-    let a2 = this.Normalise_Angle(end_angle);
-    if (a1>a2)
-    {
-      a2 = a2 + 2*Math.PI;
-    }
-    const dy = a2 - a1;
-
-    for (let xt = 0; xt < dx; xt += 0.05) 
-    {
-      const a = (dy/dx)*xt+a1;
-
-      //const x = cx - (radius_x * Math.sin(a)) * Math.sin(angle) + (radius_y * Math.cos(a)) * Math.cos(angle);
-      //const y = cy + (radius_y * Math.cos(a)) * Math.sin(angle) + (radius_x * Math.sin(a)) * Math.cos(angle);
-      const x = cx + (radius_x * Math.cos(a));
-      const y = cy + (radius_y * Math.sin(a));
-      
-      res.push({x, y});
     }
 
     return res;
@@ -203,47 +105,6 @@ class Android_Code_Gen extends LitElement
     }
 
     return na;
-  }
-
-  Add_Pts(segment, points, pts)
-  {
-    for (const pt of pts)
-    {
-      this.Add_Pt(segment, points, pt);
-    }
-  }
-
-  Add_Pt(segment, points, pt)
-  {
-    segment.pt_count++;
-    points.push(pt.x);
-    points.push(pt.y);
-  }
-
-  New_Segment(segments, points, prev_segment)
-  {
-    if (prev_segment)
-    {
-      segments.push(prev_segment);
-    }
-    const segment = 
-      {mode: "android.opengl.GLES20.GL_LINE_STRIP", pt_start: points.length/2, pt_count: 0};
-
-    return segment;
-  }
-
-  Get_Lats_Pt(points)
-  {
-    const res = {x: 0, y: 0};
-
-    if (points != null && points.length >= 2)
-    {
-      const last_idx = points.length - 1;
-      res.y = points[last_idx];
-      res.x = points[last_idx - 1];
-    }
-
-    return res;
   }
 
   OnClick_Close()
