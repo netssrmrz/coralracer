@@ -19,10 +19,12 @@ extends Canvas_Editor
         obj = objs[i];
 
         ctx.save();
-        ctx.lineWidth = 0.01;
         ctx.translate(obj.pt.x, obj.pt.y);
         ctx.rotate(obj.angle);
         ctx.scale(obj.scale.x, obj.scale.y);
+        const avg_scale = (Math.abs(obj.scale.x) + Math.abs(obj.scale.y)) / 2;
+        const lineWidth = this.zoom[this.ctx.zoom_id].lineWidth;
+        ctx.lineWidth = lineWidth / avg_scale;
 
         if (obj.selected && obj.Render_Design)
         {

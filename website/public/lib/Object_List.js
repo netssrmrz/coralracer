@@ -139,6 +139,21 @@ class Object_List extends LitElement
     return res;
   }
 
+  Get_Selected_Or_Pick_Idx()
+  {
+    let i = -1;
+    if (this.shapes && this.shapes.length>0)
+    {
+      i = this.Get_Selected_Idx();
+      if (i==-1 )
+      {
+        i=0;
+      }
+    }
+
+    return i;
+  }
+
   Get_Shape_Idx(shape_id)
   {
     let res = null;
@@ -263,34 +278,40 @@ class Object_List extends LitElement
 
   Select_Next()
   {
-    const i = this.Get_Selected_Idx();
-    const last_i = this.Get_Last_Idx();
-    this.shapes[i].selected = false;
-    if (i >= 0 && i < last_i)
+    const i = this.Get_Selected_Or_Pick_Idx();
+    if (i!=-1)
     {
-      this.shapes[i+1].selected = true;
+      const last_i = this.Get_Last_Idx();
+      this.shapes[i].selected = false;
+      if (i >= 0 && i < last_i)
+      {
+        this.shapes[i+1].selected = true;
+      }
+      else
+      {
+        this.shapes[0].selected = true;
+      }
+      this.requestUpdate();
     }
-    else
-    {
-      this.shapes[0].selected = true;
-    }
-    this.requestUpdate();
   }
 
   Select_Prev()
   {
-    const i = this.Get_Selected_Idx();
-    const last_i = this.Get_Last_Idx();
-    this.shapes[i].selected = false;
-    if (i > 0 && i <= last_i)
+    const i = this.Get_Selected_Or_Pick_Idx();
+    if (i!=-1)
     {
-      this.shapes[i-1].selected = true;
+      const last_i = this.Get_Last_Idx();
+      this.shapes[i].selected = false;
+      if (i > 0 && i <= last_i)
+      {
+        this.shapes[i-1].selected = true;
+      }
+      else
+      {
+        this.shapes[last_i].selected = true;
+      }
+      this.requestUpdate();
     }
-    else
-    {
-      this.shapes[last_i].selected = true;
-    }
-    this.requestUpdate();
   }
 
   Add_Shape(class_name, shape_name)

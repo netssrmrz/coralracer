@@ -131,6 +131,9 @@ export class Game_Object
     ctx.translate(path.x, path.y);
     ctx.scale(1/this.scale.x, 1/this.scale.y);
 
+    // undo ctx scale
+    ctx.scale(1/ctx.scl.x, 1/ctx.scl.y);
+
     const is_in_path = ctx.isPointInPath(path, event.offsetX, event.offsetY);
     if (path.hover != is_in_path)
     {
@@ -144,6 +147,8 @@ export class Game_Object
 
   On_Mouse_Down(event, ctx)
   {
+    let res = false;
+
     if (this.selected)
     {
       for (let i=0; i<this.btns.length; i++)
@@ -151,12 +156,13 @@ export class Game_Object
         if (this.btns[i].hover)
         {
           this.cmd = this.btns[i];
+          res = true;
           break;
         }
       }
     }
 
-    return false;
+    return res;
   }
 
   On_Mouse_Move_Cmd(ctx, c_pt, cmd)
@@ -194,7 +200,6 @@ export class Game_Object
     if (this.selected)
     {
       ctx.strokeStyle = "#fff";
-      ctx.lineWidth = 2;
 
       ctx.beginPath();
       ctx.rect(-this.design_r, -this.design_r, this.design_r*2, this.design_r*2);
@@ -213,6 +218,9 @@ export class Game_Object
     ctx.save();
     ctx.translate(path.x, path.y);
     ctx.scale(1/this.scale.x, 1/this.scale.y);
+
+    // undo ctx scale
+    ctx.scale(1/ctx.scl.x, 1/ctx.scl.y);
 
     if (path.hover)
     {
@@ -266,7 +274,6 @@ extends Game_Object
   {
     ctx.beginPath();
     ctx.strokeStyle = "#666";
-    ctx.lineWidth = 1;
     ctx.rect(-100, -100, 200, 200);
     ctx.stroke();
   }

@@ -8,6 +8,7 @@ class Canvas_Editor extends LitElement
   constructor()
   {
     super();
+    this.cmd = null;
     this.on_change_fn = null;
     this.paint_style = "stroke";
     this.shapes = null;
@@ -16,7 +17,12 @@ class Canvas_Editor extends LitElement
     this.OnMouseUp_Canvas = this.OnMouseUp_Canvas.bind(this);
     this.Render = this.Render.bind(this);
     this.OnRemote_Click = this.OnRemote_Click.bind(this);
-    this.zoom = { large_btn: 0.1, medium_btn: 0.5, small_btn: 2 };
+    this.zoom = 
+    {
+      large_btn: { scl: 0.1, lineWidth: 16 }, 
+      medium_btn: { scl: 0.5, lineWidth: 4 }, 
+      small_btn: { scl: 2, lineWidth: 1 }
+    };
   }
   
   firstUpdated(changedProperties)
@@ -26,14 +32,14 @@ class Canvas_Editor extends LitElement
     this.remote_ctrl.on_change_fn = this.OnRemote_Click;
     this.ctx = this.canvas.getContext("2d");
     this.ctx.globalCompositeOperation = "lighter";
-    this.Set_Zoom("large_btn");
+    this.Set_Zoom("medium_btn");
     this.Set_Paint("stroke");
     this.Enable_Events();
   }
 
   Init_Canvas(zoom_id, width, height)
   {
-    const zoom = this.zoom[zoom_id];
+    const zoom = this.zoom[zoom_id].scl;
 
     this.canvas.width = width;
     this.canvas.height = height;        
@@ -49,7 +55,23 @@ class Canvas_Editor extends LitElement
 
     this.ctx.strokeStyle="#fff";
     this.ctx.fillStyle="#fff";
-    this.ctx.lineWidth = 1;
+    this.ctx.lineWidth = this.zoom[this.ctx.zoom_id].lineWidth;
+  }
+
+  Set_Transform(trn, scl)
+  {
+    if (trn)
+    {
+      this.ctx.trn = trn;
+    }
+    if (scl)
+    {
+      this.ctx.scl = scl;
+    }
+
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.translate(this.ctx.trn.x, this.ctx.trn.y);
+    this.ctx.scale(this.ctx.scl.x, this.ctx.scl.y);
   }
 
   Disable_Events()
@@ -131,7 +153,16 @@ class Canvas_Editor extends LitElement
   {
     let shape;
 
-    if (this.shapes && this.shapes.length>0)
+    if (this.cmd && this.cmd.id == "pan")
+    {
+      const dx = event.offsetX - this.cmd.x;
+      const dy = event.offsetY - this.cmd.y;
+
+      const c_pt = { x: this.cmd.o.x + dx, y: this.cmd.o.y + dy };
+      this.Set_Transform(c_pt, null);
+      this.Update();
+    }
+    else if (this.shapes && this.shapes.length>0)
     {
       for (let i=0; i<this.shapes.length; i++)
       {
@@ -147,7 +178,7 @@ class Canvas_Editor extends LitElement
 
   OnMouseDown_Canvas(event)
   {
-    let shape;
+    let shape, hit = false;
 
     if (this.shapes && this.shapes.length>0)
     {
@@ -156,9 +187,18 @@ class Canvas_Editor extends LitElement
         shape = this.shapes[i];
         if (shape.On_Mouse_Down)
         {
-          shape.On_Mouse_Down(event, this.ctx);
+          hit = hit || shape.On_Mouse_Down(event, this.ctx);
         }
       }
+    }
+
+    if (!hit)
+    {
+      this.cmd = { id: "pan", x: event.offsetX, y: event.offsetY, o: this.ctx.trn };
+    }
+
+    if (hit)
+    {
       this.Update();
     }
   }
@@ -167,7 +207,11 @@ class Canvas_Editor extends LitElement
   {
     let shape, has_change;
 
-    if (this.shapes && this.shapes.length>0)
+    if (this.cmd)
+    {
+      this.cmd = null;
+    }
+    else if (this.shapes && this.shapes.length>0)
     {
       for (let i=0; i<this.shapes.length; i++)
       {
@@ -231,15 +275,17 @@ class Canvas_Editor extends LitElement
   {
     ctx.save();
     ctx.strokeStyle = "#111";
-    ctx.lineWidth = 1;
 
-    const rx = ctx.trn.x/ctx.scl.x;
-    const ry = ctx.trn.y/ctx.scl.y;
+    const x1 = -ctx.trn.x/ctx.scl.x;
+    const y1 = -ctx.trn.y/ctx.scl.y;
+    const x2 = x1 + (this.canvas.width/ctx.scl.x);
+    const y2 = y1 + (this.canvas.height/ctx.scl.x);
+    
     ctx.beginPath();
-    ctx.moveTo(-rx, 0);
-    ctx.lineTo(rx, 0);
-    ctx.moveTo(0, -ry);
-    ctx.lineTo(0, ry);
+    ctx.moveTo(x1, 0);
+    ctx.lineTo(x2, 0);
+    ctx.moveTo(0, y1);
+    ctx.lineTo(0, y2);
     ctx.stroke();
 
     ctx.restore();
