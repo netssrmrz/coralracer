@@ -30,8 +30,8 @@ extends Level
   
     super.Build(w);
   
-    player = new rs.projecta.object.Player(0, 300, w);
-    finish = new rs.projecta.object.Finish(w, 2000, -4200);
+    player = new rs.projecta.object.Player(w, 0, 300, 0, 0, 0);
+    finish = new rs.projecta.object.Finish(w, 2000, -4200, 0, 0, 0);
   
     Add_Wavy_Bkg(w, player);
     w.objs.Add(finish);

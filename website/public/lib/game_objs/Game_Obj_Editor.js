@@ -26,13 +26,10 @@ extends Canvas_Editor
         const lineWidth = this.zoom[this.ctx.zoom_id].lineWidth;
         ctx.lineWidth = lineWidth / avg_scale;
 
+        obj.Render(ctx);
         if (obj.selected && obj.Render_Design)
         {
           obj.Render_Design(ctx);
-        }
-        else if (obj.Render)
-        {
-          obj.Render(ctx);
         }
 
         ctx.restore();

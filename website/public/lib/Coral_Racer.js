@@ -237,6 +237,13 @@ export class Game_Object
 
   Render(ctx)
   {
+    ctx.beginPath();
+    ctx.strokeStyle = "#666";
+    ctx.rect(-100, -100, 200, 200);
+    ctx.lineTo(100, 100);
+    ctx.moveTo(100, -100);
+    ctx.lineTo(-100, 100);
+    ctx.stroke();
   }
 }
 
@@ -247,6 +254,7 @@ extends Game_Object
   {
     super();
     this.name = "Player";
+    this.class_name = "Player";
   }
 }
 
@@ -257,6 +265,7 @@ extends Game_Object
   {
     super();
     this.name = "Finish";
+    this.class_name = "Finish";
   }
 }
 

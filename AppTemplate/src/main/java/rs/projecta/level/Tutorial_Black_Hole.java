@@ -32,8 +32,8 @@ extends rs.projecta.level.Level
   
     super.Build(w);
 
-    player = new rs.projecta.object.Player(0, 300, w);
-    finish = new rs.projecta.object.Finish(w, 0, -2200);
+    player = new rs.projecta.object.Player(w, 0, 300, 0, 0, 0);
+    finish = new rs.projecta.object.Finish(w, 0, -2200, 0, 0, 0);
     black_hole = new rs.projecta.object.Black_Hole(w, 400, -1000, player);
   
     Add_Wavy_Bkg(w, player);

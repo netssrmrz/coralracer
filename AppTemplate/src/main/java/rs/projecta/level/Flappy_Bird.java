@@ -34,7 +34,7 @@ extends Level
     //this.w = w;
     this.score = 0;
 
-    player = new rs.projecta.object.Player(0, -100, w);
+    player = new rs.projecta.object.Player(w, 0, -100, 0, 0, 0);
   
     Add_Wavy_Bkg(w, this.player);
     w.objs.Add(player);

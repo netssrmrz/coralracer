@@ -14,7 +14,7 @@ implements
   public rs.projecta.ogl.shapes.Fish1 fish1;
   public rs.projecta.ogl.Color color;
   
-  public Player(float x, float y, rs.projecta.world.World world)
+  public Player(rs.projecta.world.World world, float x, float y, float sx, float sy, float a_degrees)
   {
     org.jbox2d.dynamics.BodyDef body_def;
     org.jbox2d.dynamics.FixtureDef fix_def;

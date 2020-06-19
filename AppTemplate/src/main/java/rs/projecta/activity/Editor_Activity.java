@@ -204,9 +204,11 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
       else if (selected.equals("Player"))
       {
         this.curr_obj = new rs.projecta.object.Player(
+          this.world,
           ((rs.projecta.object.features.Has_Position)this.camera).Get_X(),
           ((rs.projecta.object.features.Has_Position)this.camera).Get_Y(),
-          this.world);
+          0, 0, 0
+          );
         this.world.objs.Add(this.curr_obj);
         this.world_view.camera = this.curr_obj;
       }
@@ -215,7 +217,9 @@ rs.projecta.dialog.Editor_Objs.OnDialogSelectListener
         this.curr_obj = new rs.projecta.object.Finish(
           this.world,
           ((rs.projecta.object.features.Has_Position)this.camera).Get_X(),
-          ((rs.projecta.object.features.Has_Position)this.camera).Get_Y());
+          ((rs.projecta.object.features.Has_Position)this.camera).Get_Y(),
+          0, 0, 0
+        );
         this.world.objs.Add(this.curr_obj);
         this.world_view.camera = this.curr_obj;
       }

@@ -1,6 +1,4 @@
 import {LitElement, html, css} from "../lit-element/lit-element.js";
-import * as pl from "../Coral_Racer.js";
-import { Bezier } from "../bezierjs/bezier.js";
 
 class Android_Code_Gen extends LitElement 
 {
@@ -23,6 +21,7 @@ class Android_Code_Gen extends LitElement
   {
     let code;
 
+    const code_objs = this.Gen_Game_Objs(shapes);
     code = 
       "package rs.projecta.level;\n\n" +
 
@@ -54,11 +53,9 @@ class Android_Code_Gen extends LitElement
         "\tpublic void Build(rs.projecta.world.World w)\n" +
         "\t{\n" +
           "\t\tsuper.Build(w);\n" +
-          "\t\trs.projecta.object.Player player = new rs.projecta.object.Player(0, 0, w);\n" +
+          code_objs.player +
           "\t\tAdd_Wavy_Bkg(w, player);\n" +
-          "\t\tw.objs.Add(player);\n" +
-          "\t\tw.objs.Add(new rs.projecta.object.Finish(w, 0, -4200));\n" +
-          this.Gen_Game_Objs(shapes) +
+          code_objs.objs +
         "\t}\n" +
       "}\n";
 
@@ -67,7 +64,7 @@ class Android_Code_Gen extends LitElement
 
   Gen_Game_Objs(shapes)
   {
-    let res = "";
+    let res = { objs: "", player: ""};
 
     if (shapes && shapes.length>0)
     {
@@ -87,7 +84,38 @@ class Android_Code_Gen extends LitElement
             rx + "f, " +
             ry + "f, " +
             a + "f";
-          res += "\t\tw.objs.Add(new rs.projecta.object.Wall(w, " + params + "));\n";
+          res.objs += "\t\tw.objs.Add(new rs.projecta.object.Wall(w, " + params + "));\n";
+        }
+        else if (s.class_name == "Player")
+        {
+          const x = s.pt.x;
+          const y = s.pt.y;
+          const rx = s.scale.x*100;
+          const ry = s.scale.y*100
+          const a = s.To_Degrees(s.angle);
+          const params = "" +
+            x + "f, " +
+            y + "f, " +
+            rx + "f, " +
+            ry + "f, " +
+            a + "f";
+          res.player = "\t\trs.projecta.object.Player player = new rs.projecta.object.Player(w, " + params + ");\n"
+          res.objs += "\t\tw.objs.Add(player);\n";
+        }
+        else if (s.class_name == "Finish")
+        {
+          const x = s.pt.x;
+          const y = s.pt.y;
+          const rx = s.scale.x*100;
+          const ry = s.scale.y*100
+          const a = s.To_Degrees(s.angle);
+          const params = "" +
+            x + "f, " +
+            y + "f, " +
+            rx + "f, " +
+            ry + "f, " +
+            a + "f";
+          res.objs += "\t\tw.objs.Add(new rs.projecta.object.Finish(w, " + params + "));\n";
         }
       }
     }

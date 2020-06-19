@@ -10,7 +10,7 @@ implements rs.projecta.object.features.Has_Position, rs.projecta.object.features
   public float x, y;
   public rs.projecta.ogl.Color color;
 
-  public Finish(rs.projecta.world.World world, float x, float y)
+  public Finish(rs.projecta.world.World world, float x, float y, float sx, float sy, float a_degrees)
   {
     org.jbox2d.dynamics.BodyDef body_def;
     org.jbox2d.dynamics.FixtureDef fix_def;
