@@ -30,7 +30,10 @@ class Object_List extends LitElement
     this.shadowRoot.getElementById("canvas_code").classList.remove("selected");
     this.shadowRoot.getElementById("path_code").classList.remove("selected");
     this.shadowRoot.getElementById("android_code").classList.remove("selected");
-    this.shadowRoot.getElementById(code_gen_type).classList.add("selected");
+    if (code_gen_type)
+    {
+      this.shadowRoot.getElementById(code_gen_type).classList.add("selected");
+    }
   }
 
   Save()
@@ -55,13 +58,6 @@ class Object_List extends LitElement
     {
       this.shapes = JSON.parse(json);
       this.shapes = this.shapes.map((p) => this.Revive_Shape(p));
-      if (this.shapes && this.shapes.length>1)
-      {
-        for (let i = 1; i<this.shapes.length; i++)
-        {
-          this.shapes[i].prev_shape = this.shapes[i-1];
-        }
-      }
       this.requestUpdate();
       res = true;
     }
@@ -219,11 +215,6 @@ class Object_List extends LitElement
   Add(shape)
   {
     shape.id = Date.now();
-    if (this.shapes.length>0)
-    {
-      shape.prev_shape = this.shapes[this.shapes.length-1];
-    }
-
     this.shapes.push(shape);
     this.requestUpdate();
   }
@@ -244,12 +235,6 @@ class Object_List extends LitElement
     if (do_delete)
     {
       i = this.Get_Shape_Idx(shape_id);
-      if (i != this.Get_Last_Idx())
-      {
-        const this_shape = this.shapes[i];
-        const next_shape = this.shapes[i+1];
-        next_shape.prev_shape = this_shape.prev_shape;
-      }
       this.shapes.splice(i, 1);
       this.requestUpdate();
     }

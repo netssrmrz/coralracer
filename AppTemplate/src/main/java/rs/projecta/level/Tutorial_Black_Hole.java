@@ -7,8 +7,7 @@ extends rs.projecta.level.Level
   @Override
   public Class<? extends Level> Get_Next_Level()
   {
-    //return Tutorial_Bouncy_Castle.class;
-    return Tutorial_Black_Hole.class;
+    return Tutorial_Bouncy_Castle.class;
   }
   
   @Override

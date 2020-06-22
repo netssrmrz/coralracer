@@ -59,7 +59,7 @@ extends Object_List
 
   OnClick_Add_Wall()
   {
-    this.Add_Shape("Wall", "Wall");
+    this.Add_Shape("Bouncy_Wall", "Wall");
   }
 
   OnClick_Add_Player()

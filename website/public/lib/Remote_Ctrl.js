@@ -10,7 +10,7 @@ class Remote_Ctrl extends LitElement
     this.Change_Obj = this.Change_Obj.bind(this);
     this.pos_d = 1;
     this.scale_d = 0.01;
-    this.rot_d = 0.01;
+    this.rot_d = 0.005;
   }
 
   firstUpdated(changedProperties)
@@ -88,7 +88,7 @@ class Remote_Ctrl extends LitElement
       {
         const pos = obj.Get_Pos();
         pos.x -= 1;
-        pos.y += 1;
+        pos.y -= 1;
         obj.Set_Pos(pos);
       }
     }
@@ -111,7 +111,7 @@ class Remote_Ctrl extends LitElement
       function Change(obj)
       {
         const pos = obj.Get_Pos();
-        pos.y += 1;
+        pos.y -= 1;
         obj.Set_Pos(pos);
       }
     }
@@ -121,6 +121,14 @@ class Remote_Ctrl extends LitElement
       function Change(obj)
       {
         obj.scale.y += this.scale_d;
+      }
+    }
+    else if (this.cmd == "rotate")
+    {
+      this.Change_Obj(Change);
+      function Change(obj)
+      {
+        obj.angle += Math.PI/4;
       }
     }
   }
@@ -134,7 +142,7 @@ class Remote_Ctrl extends LitElement
       {
         const pos = obj.Get_Pos();
         pos.x += 1;
-        pos.y += 1;
+        pos.y -= 1;
         obj.Set_Pos(pos);
       }
     }
@@ -218,7 +226,7 @@ class Remote_Ctrl extends LitElement
       {
         const pos = obj.Get_Pos();
         pos.x -= 1;
-        pos.y -= 1;
+        pos.y += 1;
         obj.Set_Pos(pos);
       }
     }
@@ -241,7 +249,7 @@ class Remote_Ctrl extends LitElement
       function Change(obj)
       {
         const pos = obj.Get_Pos();
-        pos.y -= 1;
+        pos.y += 1;
         obj.Set_Pos(pos);
       }
     }
@@ -251,6 +259,14 @@ class Remote_Ctrl extends LitElement
       function Change(obj)
       {
         obj.scale.y -= this.scale_d;
+      }
+    }
+    else if (this.cmd == "rotate")
+    {
+      this.Change_Obj(Change);
+      function Change(obj)
+      {
+        obj.angle -= Math.PI/4;
       }
     }
   }
@@ -264,7 +280,7 @@ class Remote_Ctrl extends LitElement
       {
         const pos = obj.Get_Pos();
         pos.x += 1;
-        pos.y -= 1;
+        pos.y += 1;
         obj.Set_Pos(pos);
       }
     }
@@ -307,7 +323,9 @@ class Remote_Ctrl extends LitElement
     this.shadowRoot.getElementById("scale").disabled = false;
     if (this.cmd == "rotate")
     {
+      this.shadowRoot.getElementById("u").disabled = false;
       this.shadowRoot.getElementById("r").disabled = false;
+      this.shadowRoot.getElementById("d").disabled = false;
       this.shadowRoot.getElementById("l").disabled = false;
     }
     else if (this.cmd == "move" || this.cmd == "scale")

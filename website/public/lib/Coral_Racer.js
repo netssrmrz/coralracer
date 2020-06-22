@@ -255,6 +255,8 @@ extends Game_Object
     super();
     this.name = "Player";
     this.class_name = "Player";
+    this.scale = { x: 0.25, y: 0.25 };
+    this.angle = Math.PI;
   }
 }
 
@@ -266,17 +268,19 @@ extends Game_Object
     super();
     this.name = "Finish";
     this.class_name = "Finish";
+    this.scale = { x: 0.5, y: 0.5 };
   }
 }
 
-export class Wall
+export class Bouncy_Wall
 extends Game_Object
 {
   constructor()
   {
     super();
     this.name = "Wall";
-    this.class_name = "Wall";
+    this.class_name = "Bouncy_Wall";
+    this.scale = { x: 5, y: 0.2 };
   }
 
   Render(ctx)

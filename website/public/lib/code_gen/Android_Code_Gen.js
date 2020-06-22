@@ -71,7 +71,7 @@ class Android_Code_Gen extends LitElement
       for (let i=0; i<shapes.length; i++)
       {
         const s = shapes[i];
-        if (s.class_name == "Wall")
+        if (s.class_name == "Bouncy_Wall")
         {
           const x = s.pt.x;
           const y = s.pt.y;
@@ -84,7 +84,7 @@ class Android_Code_Gen extends LitElement
             rx + "f, " +
             ry + "f, " +
             a + "f";
-          res.objs += "\t\tw.objs.Add(new rs.projecta.object.Wall(w, " + params + "));\n";
+          res.objs += "\t\tw.objs.Add(new rs.projecta.object.Bouncy_Wall(w, " + params + "));\n";
         }
         else if (s.class_name == "Player")
         {
