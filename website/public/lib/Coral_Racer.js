@@ -165,12 +165,6 @@ export class Game_Object
     return res;
   }
 
-  On_Mouse_Move_Cmd(ctx, c_pt, cmd)
-  {
-    cmd.x = c_pt.x*(1/ctx.scl.x);
-    cmd.y = c_pt.y*(1/ctx.scl.y);
-  }
-
   To_Canvas_Pt(ctx, sx, sy)
   {
     const pt = {x: sx-ctx.trn.x, y: sy-ctx.trn.y};
@@ -333,7 +327,11 @@ export class Shape
 
   To_Canvas_Pt(ctx, sx, sy)
   {
-    return {x: sx-ctx.canvas.width/2-4, y: -(sy-ctx.canvas.height/2-4)};
+    const pt = {x: sx-ctx.trn.x, y: sy-ctx.trn.y};
+    pt.x = pt.x/ctx.scl.x;
+    pt.y = pt.y/ctx.scl.y;
+
+    return pt;
   }
 
   Pt_Translate(pt, ptd)
@@ -415,9 +413,9 @@ export class Shape
 
   On_Mouse_Move_Cmd(ctx, c_pt, cmd)
   {
-    cmd.x = c_pt.x*(1/ctx.scl.x);
-    cmd.y = c_pt.y*(1/ctx.scl.y);
-  }
+    cmd.x = c_pt.x;
+    cmd.y = c_pt.y;
+}
 
   On_Mouse_Move_Btn(ctx, event, path)
   {
@@ -425,6 +423,10 @@ export class Shape
 
     ctx.save();
     ctx.translate(path.x, path.y);
+    
+    // undo ctx scale
+    ctx.scale(1/ctx.scl.x, 1/ctx.scl.y);
+
     const is_in_path = ctx.isPointInPath(path, event.offsetX, event.offsetY);
     if (path.hover != is_in_path)
     {
@@ -438,6 +440,8 @@ export class Shape
 
   On_Mouse_Down(event, ctx)
   {
+    let res = false;
+
     if (this.selected)
     {
       for (let i=0; i<this.btns.length; i++)
@@ -445,12 +449,13 @@ export class Shape
         if (this.btns[i].hover)
         {
           this.cmd = this.btns[i];
+          res = true;
           break;
         }
       }
     }
 
-    return false;
+    return res;
   }
 
   Render(ctx)
@@ -466,10 +471,12 @@ export class Shape
 
   Render_Btn(ctx, path)
   {
-    const r = 5;
-
     ctx.save();
     ctx.translate(path.x, path.y);
+    //ctx.scale(1/this.scale.x, 1/this.scale.y);
+
+    // undo ctx scale
+    ctx.scale(1/ctx.scl.x, 1/ctx.scl.y);
 
     if (path.hover)
     {

@@ -2,7 +2,7 @@ import {LitElement, html, css} from "../lit-element/lit-element.js";
 import {unsafeHTML} from '../lit-html/directives/unsafe-html.js';
 import "../code_gen/Canvas_Code_Gen.js";
 import "../code_gen/Path_Code_Gen.js";
-import "../code_gen/Android_Code_Gen.js";
+import "../code_gen/Android_Shape_Code_Gen.js";
 import * as pl from "../Coral_Racer.js";
 
 class Shape_List 
@@ -697,7 +697,7 @@ extends LitElement
 
       <canvas-code-gen id="canvas_code_gen" class="code_gen"></canvas-code-gen>
       <path-code-gen id="path_code_gen" class="code_gen"></path-code-gen>
-      <android-code-gen id="android_code_gen" class="code_gen"></android-code-gen>
+      <android-shape-code-gen id="android_code_gen" class="code_gen"></android-code-gen>
     `;
   }
 
