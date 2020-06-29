@@ -1,5 +1,5 @@
-import {LitElement, html, css} from "./lit-element/lit-element.js";
-import * as pl from "./Coral_Racer.js";
+import {LitElement, html, css} from "../lit-element/lit-element.js";
+import * as pl from "../Coral_Racer.js";
 
 class Shape_Dialog extends LitElement 
 {
@@ -12,27 +12,25 @@ class Shape_Dialog extends LitElement
 
   firstUpdated(changedProperties)
   {
-    this.name_elem = this.shadowRoot.getElementById("name");
-    this.class_elem = this.shadowRoot.getElementById("class");
-    //this.x_elem = this.shadowRoot.getElementById("x");
-    //this.y_elem = this.shadowRoot.getElementById("y");
-    //this.x_scale_elem = this.shadowRoot.getElementById("x_scale");
-    //this.y_scale_elem = this.shadowRoot.getElementById("y_scale");
-    //this.angle_elem = this.shadowRoot.getElementById("angle");
+    this.type_elem = this.shadowRoot.getElementById("type");
+    this.x_elem = this.shadowRoot.getElementById("x");
+    this.y_elem = this.shadowRoot.getElementById("y");
+    this.x2_elem = this.shadowRoot.getElementById("x2");
+    this.y2_elem = this.shadowRoot.getElementById("y2");
+    this.radius_elem = this.shadowRoot.getElementById("r");
+    this.radius_x_elem = this.shadowRoot.getElementById("rx");
+    this.radius_y_elem = this.shadowRoot.getElementById("ry");
+    this.start_angle_elem = this.shadowRoot.getElementById("sa");
+    this.end_angle_elem = this.shadowRoot.getElementById("en");
+    this.width_elem = this.shadowRoot.getElementById("w");
+    this.height_elem = this.shadowRoot.getElementById("h");
+    this.ctrl_pt_x_elem = this.shadowRoot.getElementById("cpx");
+    this.ctrl_pt_y_elem = this.shadowRoot.getElementById("cpy");
+    this.ctrl_pt_x2_elem = this.shadowRoot.getElementById("cpx2");
+    this.ctrl_pt_y2_elem = this.shadowRoot.getElementById("cpy2");
+
     this.new_ok_btn = this.shadowRoot.getElementById("new_ok");
     this.edit_ok_btn = this.shadowRoot.getElementById("edit_ok");
-  }
-
-  Get_User_Input(plant)
-  {
-    plant.class_name = this.plant_class_elem.value;
-    plant.name = this.plant_name_elem.value;
-    plant.sprout_time = Number.parseInt(this.sprout_time_elem.value);
-    plant.x = Number.parseFloat(this.plant_x_elem.value);
-    plant.y = Number.parseFloat(this.plant_y_elem.value);
-    plant.x_scale = Number.parseFloat(this.plant_x_scale_elem.value);
-    plant.y_scale = Number.parseFloat(this.plant_y_scale_elem.value);
-    plant.angle = Number.parseFloat(this.plant_angle_elem.value);
   }
 
   OnClick_New_Ok()
@@ -50,27 +48,22 @@ class Shape_Dialog extends LitElement
 
   OnClick_Edit_Ok()
   {
-    var plant;
+    let shape = this.shape;
     
-    if (this.plant_class_elem.value == "This")
+    switch (shape.class_name)
     {
-      plant = new this.this_class();
+      case "Shape_LineTo":
+        shape.pt.x = Number.parseFloat(this.x_elem.value);
+        shape.pt.y = Number.parseFloat(this.y_elem.value);
+        break;
+      case "Shape_MoveTo":
+        shape.pt.x = Number.parseFloat(this.x_elem.value);
+        shape.pt.y = Number.parseFloat(this.y_elem.value);
+        break;
     }
-    else
-    {
-      plant = new pl[this.plant_class_elem.value];
-    }
-    plant.stem_plant = this.plant.stem_plant;
-    plant.id = this.plant.id;
-    plant.maturity_rate = this.plant.maturity_rate;
-    plant.maturity = this.plant.maturity;
-    plant.max_depth = this.plant.max_depth;
-    plant.level = this.plant.level;
-    plant.selected = this.plant.selected;
-    this.Get_User_Input(plant);
-    
+
     this.Hide();
-    this.onclick_edit_ok(plant);
+    this.onclick_edit_ok(shape);
   }
 
   OnClick_Cancel()
@@ -92,21 +85,41 @@ class Shape_Dialog extends LitElement
     this.edit_ok_btn.hidden = true;
   }
 
-  Edit(plant)
+  Edit(shape)
   {
-    this.plant = plant;
+    this.shape = shape;
 
-    this.plant_name_elem.value = plant.name;
-    this.plant_class_elem.value = plant.class_name;
-    this.sprout_time_elem.value = plant.sprout_time;
-    this.plant_x_elem.value = plant.x;
-    this.plant_y_elem.value = plant.y;
-    this.plant_x_scale_elem.value = plant.x_scale;
-    this.plant_y_scale_elem.value = plant.y_scale;
-    this.plant_angle_elem.value = plant.angle;
+    this.type_elem.innerText = shape.name;
+    switch (shape.class_name)
+    {
+      case "Shape_LineTo":
+        this.Show_Field("x", shape.pt.x);
+        this.Show_Field("y", shape.pt.y);
+        break;
+      case "Shape_MoveTo":
+        this.Show_Field("x", shape.pt.x);
+        this.Show_Field("y", shape.pt.y);
+        break;
+    }
 
-    this.new_ok_btn.hidden = true;
-    this.edit_ok_btn.hidden = false;
+    this.new_ok_btn.style.display = "none";
+    this.edit_ok_btn.style.display = "inline-block";
+  }
+
+  Show_Field(field_id, value)
+  {
+    const value_elem = this.shadowRoot.getElementById(field_id);
+    if (value_elem)
+    {
+      value_elem.value = value;
+      value_elem.style.display = "initial";
+    }
+
+    const label_elem = this.shadowRoot.querySelector("label[for=\"" + field_id +"\"]");
+    if (label_elem)
+    {
+      label_elem.style.display = "initial";
+    }
   }
 
   Hide()
@@ -128,6 +141,8 @@ class Shape_Dialog extends LitElement
         grid-template-columns: 1fr 1fr;
         grid-row-gap: 10px;
         grid-column-gap: 10px;
+        overflow: auto;
+        align-content: start;
       }
       input
       {
@@ -135,10 +150,12 @@ class Shape_Dialog extends LitElement
         background-color: inherit;
         padding: 0;
         margin: 0;
-        border-bottom: 1px solid #000;
+        border-bottom: 1px solid #fff;
         font-family: monospace;
         font-size: 16px;
         width: 200px;
+        color: #fff;
+        display: none;
       }
       select
       {
@@ -146,7 +163,7 @@ class Shape_Dialog extends LitElement
         background-color: inherit;
         padding: 0;
         margin: 0;
-        border-bottom: 1px solid #000;
+        border-bottom: 1px solid #fff;
         font-family: monospace;
         font-size: 16px;
       }
@@ -156,15 +173,15 @@ class Shape_Dialog extends LitElement
         padding: 0;
         margin: 0;
         font-weight: 100;
-        font-family: serif;
-        font-style: italic;
-        font-size: 20px;
+        font-size: 16px;
         text-align: right;
+        display: none;
       }
       span
       {
         text-align: left;
       }
+
       #btns
       {
         grid-column-start: 2;
@@ -173,12 +190,14 @@ class Shape_Dialog extends LitElement
       button
       {
         border-radius: 7px;
-        border: 1px solid #000;
+        border: 1px solid #0f0;
         padding: 5px;
         cursor: pointer;
         width: 36px;
         height: 36px;
-        background-color: inherit;
+        background-color: #666;
+        display: inline-block;
+        box-sizing: border-box;
       }
       button img
       {
@@ -191,9 +210,16 @@ class Shape_Dialog extends LitElement
       {
         opacity: 0.25;
       }
-      #plant_x_pos, #plant_y_pos, #plant_x_scale, #plant_y_scale, #plant_angle
+
+      .title
       {
-        width: 100px;
+        grid-column-start: 1;
+        grid-column-end: 3;
+        padding: 10px 20px 5px 20px;
+        text-align: center;
+        font-weight: 100;
+        font-size: 20px;
+        border-bottom: 1px solid #202020;
       }
     `;
   }
@@ -201,31 +227,23 @@ class Shape_Dialog extends LitElement
   render() 
   {
     return html`
-      <label>Name</label>
-      <span><input id="name" type="text"></span>
-      <label>Class</label>
-      <span>
-        <select id="class">
-        <option>Move To</option>
-        <option>Line To</option>
-        <option>Bezier Curve To</option>
-        <option>Quadratic Curve To</option>
-        <option>Arc</option>
-        <option>Arc To</option>
-        <option>Ellipse</option>
-        <option>Rect</option>
-        </select>
-      </span>
-      <!--label>X</label>
-      <span><input id="x" type="number"></span>
-      <label>Y</label>
-      <span><input id="y" type="number"></span>
-      <label>X Scale</label>
-      <span><input id="x_scale" type="number"></span>
-      <label>Y Scale</label>
-      <span><input id="y_scale" type="number"></span>
-      <label>Angle</label>
-      <span><input id="angle" type="number"></span-->
+      <span class="title" id="type" class="title"></span>
+      <label for="x">X</label><input id="x" type="number">
+      <label for="y">Y</label><input id="y" type="number">
+      <label for="x2">X2</label><input id="x2" type="number">
+      <label for="y2">Y2</label><input id="y2" type="number">
+      <label for="r">Radius</label><input id="r" type="number">
+      <label for="rx">Radius X</label><input id="rx" type="number">
+      <label for="ry">Radius Y</label><input id="ry" type="number">
+      <label for="sa">Start Angle</label><input id="sa" type="number">
+      <label for="ea">End Angle</label><input id="ea" type="number">
+      <label for="w">Width</label><input id="w" type="number">
+      <label for="h">Height</label><input id="h" type="number">
+      <label for="cpx">Control Point X</label><input id="cpx" type="number">
+      <label for="cpy">Control Point Y</label><input id="cpy" type="number">
+      <label for="cpx2">Control Point X2</label><input id="cpx2" type="number">
+      <label for="cpy2">Control Point Y2</label><input id="cpy2" type="number">
+
       <div id="btns">
         <button id="new_ok" @click="${this.OnClick_New_Ok}"><img src="images/check.svg"></button>
         <button id="edit_ok" @click="${this.OnClick_Edit_Ok}"><img src="images/check.svg"></button>
@@ -235,4 +253,4 @@ class Shape_Dialog extends LitElement
   }
 }
 
-customElements.define('plant-dlg', Shape_Dialog);
+customElements.define('shape-dlg', Shape_Dialog);

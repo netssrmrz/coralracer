@@ -292,6 +292,7 @@ export class Shape
 {
   constructor()
   {
+    this.class_name = "Shape";
     this.Init_Shape();
     this.pt = this.New_Btn_Path("pt", 0, 0);
   }
@@ -535,6 +536,7 @@ export class Shape_Arc extends Shape
   constructor()
   {
     super();
+    this.class_name = "Shape_Arc";
     this.cp = this.New_Btn_Path("cp", 100, 100);
     this.sa = this.New_Btn_Path("sa", 100, 0);
     this.ea = this.New_Btn_Path("ea", -120, 0);
@@ -548,7 +550,7 @@ export class Shape_Arc extends Shape
     res = Append_Str(res, "x = "+Round(this.pt.x), s);
     res = Append_Str(res, "y = "+Round(this.pt.y), s);
     res = Append_Str(res, "radius = "+Round(this.Calc_Radius()), s);
-    res = Append_Str(res, "<br>startAngle = "+Round(this.Calc_Start_Angle()), s);
+    res = Append_Str(res, "startAngle = "+Round(this.Calc_Start_Angle()), s);
     res = Append_Str(res, "endAngle = "+Round(this.Calc_End_Angle()), s);
 
     return res;
@@ -657,6 +659,7 @@ export class Shape_Ellipse extends Shape
   constructor()
   {
     super();
+    this.class_name = "Shape_Ellipse";
     this.cp = this.New_Btn_Path("cp", 100, 100);
     this.sa = this.New_Btn_Path("sa", 100, 0);
     this.ea = this.New_Btn_Path("ea", -120, 0);
@@ -671,7 +674,7 @@ export class Shape_Ellipse extends Shape
     res = Append_Str(res, "y = "+Round(this.pt.y), s);
     res = Append_Str(res, "radiusx = "+Round(this.Calc_Radius_X()), s);
     res = Append_Str(res, "radiusy = "+Round(this.Calc_Radius_Y()), s);
-    res = Append_Str(res, "<br>startAngle = "+Round(this.Calc_Start_Angle()), s);
+    res = Append_Str(res, "startAngle = "+Round(this.Calc_Start_Angle()), s);
     res = Append_Str(res, "endAngle = "+Round(this.Calc_End_Angle()), s);
 
     return res;
@@ -776,6 +779,7 @@ export class Shape_Rect extends Shape
   constructor()
   {
     super();
+    this.class_name = "Shape_Rect";
     this.cp = this.New_Btn_Path("cp", 100, 100);
   }
 
@@ -827,6 +831,7 @@ export class Shape_ClosePath extends Shape
   constructor()
   {
     super();
+    this.class_name = "Shape_ClosePath";
     this.Init_Shape();
   }
 
@@ -851,6 +856,7 @@ export class Shape_ArcTo extends Shape
   constructor()
   {
     super();
+    this.class_name = "Shape_ArcTo";
     this.cp = this.New_Btn_Path("cp", 100, 100);
     this.rp = this.New_Btn_Path("rp", 100, 0);
   }
@@ -864,7 +870,7 @@ export class Shape_ArcTo extends Shape
     res = Append_Str(res, "y1 = "+Round(this.pt.y), s);
     res = Append_Str(res, "x2 = "+Round(this.cp.x), s);
     res = Append_Str(res, "y2 = "+Round(this.cp.y), s);
-    res = Append_Str(res, "r = "+Round(this.Calc_Radius()), s);
+    res = Append_Str(res, "radius = "+Round(this.Calc_Radius()), s);
 
     return res;
   }
@@ -918,6 +924,7 @@ export class Shape_QuadraticCurveTo extends Shape
   constructor()
   {
     super();
+    this.class_name = "Shape_QuadraticCurveTo";
     this.cp = this.New_Btn_Path("cp", 100, 100);
   }
 
@@ -972,6 +979,7 @@ export class Shape_BezierCurveTo extends Shape
   constructor()
   {
     super();
+    this.class_name = "Shape_BezierCurveTo";
     this.cp1 = this.New_Btn_Path("cp1", -100, -100);
     this.cp2 = this.New_Btn_Path("cp2", 100, 100);
   }
@@ -985,7 +993,7 @@ export class Shape_BezierCurveTo extends Shape
     res = Append_Str(res, "cp1y = "+Round(this.cp1.y), s);
     res = Append_Str(res, "cp2x = "+Round(this.cp2.x), s);
     res = Append_Str(res, "cp2y = "+Round(this.cp2.y), s);
-    res = Append_Str(res, "<br>x = "+Round(this.pt.x), s);
+    res = Append_Str(res, "x = "+Round(this.pt.x), s);
     res = Append_Str(res, "y = "+Round(this.pt.x), s);
 
     return res;
@@ -1029,6 +1037,11 @@ export class Shape_BezierCurveTo extends Shape
 
 export class Shape_LineTo extends Shape
 {
+  constructor()
+  {
+    super();
+    this.class_name = "Shape_LineTo";
+  }
 
   To_Cmd_Str()
   {
@@ -1040,6 +1053,7 @@ export class Shape_LineTo extends Shape
 
     return "lineTo("+params+")";
   }
+
   Render(ctx)
   {
     super.Render(ctx);
@@ -1049,6 +1063,12 @@ export class Shape_LineTo extends Shape
 
 export class Shape_MoveTo extends Shape
 {
+  constructor()
+  {
+    super();
+    this.class_name = "Shape_MoveTo";
+  }
+
   Render(ctx)
   {
     super.Render(ctx);

@@ -3,6 +3,7 @@ import {unsafeHTML} from '../lit-html/directives/unsafe-html.js';
 import "../code_gen/Canvas_Code_Gen.js";
 import "../code_gen/Path_Code_Gen.js";
 import "../code_gen/Android_Shape_Code_Gen.js";
+import "./Shape_Dialog.js";
 import * as pl from "../Coral_Racer.js";
 
 class Shape_List 
@@ -22,6 +23,7 @@ extends LitElement
   {
     this.Load();
     this.Set_Code_Gen_Type("android_code");
+    this.shadowRoot.getElementById("dlg").onclick_edit_ok = this.OnClick_Edit_Ok;
   }
   
   Set_Code_Gen_Type(code_gen_type)
@@ -366,7 +368,7 @@ extends LitElement
     this.shapes[i] = shape;
     this.requestUpdate();
     if (this.on_change_fn)
-      this.on_change_fn();
+      this.on_change_fn(this.shapes);
   }
 
   OnClick_Gen_Code()
@@ -640,6 +642,17 @@ extends LitElement
         text-align: right;
         padding: 10px;
       }
+
+      #dlg
+      {
+        position: absolute;
+        z-index: 2;
+        background-color: #000;
+        bottom: 0px;
+        right: 0px;
+        width: 100%;
+        height: 40%;
+      }
     `;
   }
 
@@ -693,7 +706,7 @@ extends LitElement
 
       <div id="summary"></div>
 
-      <!--plant-dlg id="dlg"></plant-dlg-->
+      <shape-dlg id="dlg"></shape-dlg>
 
       <canvas-code-gen id="canvas_code_gen" class="code_gen"></canvas-code-gen>
       <path-code-gen id="path_code_gen" class="code_gen"></path-code-gen>
