@@ -1,8 +1,7 @@
 package rs.projecta.level;
 
-// todo: introduce player to accelerator tile
 public class Tutorial_Accelerator
-extends Level
+  extends Level
 {
   @Override
   public Class<? extends Level> Get_Next_Level()
@@ -13,32 +12,35 @@ extends Level
   @Override
   public String Get_Title()
   {
-    return "Tutorial 1";
+    return "Tutorial 5";
   }
   
   @Override
   public String Get_Description()
   {
-    return "Tilt the device left and right to turn. Get to the blue arrows.";
+    return "Learn to fly.";
   }
   
   @Override
   public void Build(rs.projecta.world.World w)
   {
-    rs.projecta.object.Finish finish;
-    rs.projecta.object.Player player;
-  
     super.Build(w);
-
-    player = new rs.projecta.object.Player(w, 0, 300, 0, 0, 0);
-    finish = new rs.projecta.object.Finish(w, 0, -2200, 0, 0, 0);
-  
+    rs.projecta.object.Player player = new rs.projecta.object.Player(w, 0f, 250f, 25f, 25f, 180f);
     Add_Wavy_Bkg(w, player);
-    w.objs.Add(finish);
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 0f, 500f, 500f, 20f, 0f));
     w.objs.Add(player);
-    
-    this.Add_Start_Walls(0, 0);
-    this.Add_Walls_Vertical(0, -1000);
-    this.Add_Finish_Walls(0, -2000);
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, -500f, 0f, 500f, 20f, 90f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 500f, 0f, 500f, 20f, -90f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 1000f, 500f, 500f, 20f, 0f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, -1000f, 500f, 500f, 20f, 0f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 1500f, 0f, 500f, 20f, 90f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 1500f, -1000f, 500f, 20f, 90f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 1000f, -1500f, 500f, 20f, 0f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 0f, -1500f, 500f, 20f, 0f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, -1000f, -1500f, 500f, 20f, 0f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, -1500f, 0f, 500f, 20f, 90f));
+    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, -1500f, -1000f, 500f, 20f, 90f));
+    w.objs.Add(new rs.projecta.object.Finish(w, 1000f, 0f, 50f, 50f, 0f));
+    w.objs.Add(new rs.projecta.object.Accelerator(w, 0f, -1000f, 1f, 1f, -63.758650347842234f));
   }
 }

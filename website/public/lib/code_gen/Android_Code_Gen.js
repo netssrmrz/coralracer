@@ -117,6 +117,36 @@ class Android_Code_Gen extends LitElement
             a + "f";
           res.objs += "\t\tw.objs.Add(new rs.projecta.object.Finish(w, " + params + "));\n";
         }
+        else if (s.class_name == "Marker")
+        {
+          const x = s.pt.x;
+          const y = s.pt.y;
+          const rx = s.scale.x*100;
+          const ry = s.scale.y*100
+          const a = s.To_Degrees(s.angle);
+          const params = "" +
+            x + "f, " +
+            y + "f, " +
+            rx + "f, " +
+            ry + "f, " +
+            a + "f";
+          res.objs += "\t\tw.objs.Add(new rs.projecta.object.xxx(w, " + params + "));\n";
+        }
+        else if (s.class_name == "Game_Object")
+        {
+          const x = s.pt.x;
+          const y = s.pt.y;
+          const rx = s.scale.x;
+          const ry = s.scale.y
+          const a = s.To_Degrees(s.angle);
+          const params = "" +
+            x + "f, " +
+            y + "f, " +
+            rx + "f, " +
+            ry + "f, " +
+            a + "f";
+          res.objs += "\t\tw.objs.Add(new rs.projecta.object.xxx(w, " + params + "));\n";
+        }
       }
     }
 

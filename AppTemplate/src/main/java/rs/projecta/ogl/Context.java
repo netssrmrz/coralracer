@@ -128,6 +128,11 @@ public class Context
     return b;
   }
   
+  public void Draw(Color color, Is_Drawable shape)
+  {
+    this.Draw(1f, 1f, 0, 0, 0, color, shape, 0);
+  }
+  
   public void Draw(float dx, float dy, float a_degrees, float x, float y, Color color, Is_Drawable shape, int frame_idx)
   {
     android.opengl.GLES20.glVertexAttribPointer(att_loc, 2, android.opengl.GLES20.GL_FLOAT, false, 0, shape.Get_Points_Buffer());

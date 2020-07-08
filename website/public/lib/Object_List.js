@@ -22,6 +22,7 @@ class Object_List extends LitElement
   {
     this.Load();
     this.Set_Code_Gen_Type("android_code");
+    this.shadowRoot.getElementById("dlg").onclick_edit_ok = this.OnClick_Edit_Ok;
   }
   
   Set_Code_Gen_Type(code_gen_type)
@@ -344,7 +345,6 @@ class Object_List extends LitElement
     const i = this.Get_Shape_Idx(id);
     const shape = this.shapes[i];
 
-    //dlg.this_class = this.this_class;
     dlg.Show();
     dlg.Edit(shape);
   }
@@ -355,7 +355,7 @@ class Object_List extends LitElement
     this.shapes[i] = shape;
     this.requestUpdate();
     if (this.on_change_fn)
-      this.on_change_fn();
+      this.on_change_fn(this.shapes);
   }
 
   OnClick_Gen_Code()
@@ -629,6 +629,17 @@ class Object_List extends LitElement
         text-align: right;
         padding: 10px;
       }
+
+      #dlg
+      {
+        position: absolute;
+        z-index: 2;
+        background-color: #000;
+        bottom: 0px;
+        right: 0px;
+        width: 100%;
+        height: 40%;
+      }
     `;
   }
 
@@ -637,7 +648,7 @@ class Object_List extends LitElement
 
   }
 
-  Render(btns)
+  Render(btns, edit_dlg)
   {
     return html`
       <div id="shapes">
@@ -679,7 +690,7 @@ class Object_List extends LitElement
 
       <div id="summary"></div>
 
-      <!--plant-dlg id="dlg"></plant-dlg-->
+      ${edit_dlg}
 
       <canvas-code-gen id="canvas_code_gen" class="code_gen"></canvas-code-gen>
       <path-code-gen id="path_code_gen" class="code_gen"></path-code-gen>

@@ -2,7 +2,11 @@ package rs.projecta.object;
 
 public class Player
 implements
-  rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position, rs.projecta.object.features.Has_Direction, rs.projecta.object.features.Can_Collide, rs.projecta.object.features.Has_Auto_Movement
+  rs.projecta.object.features.Is_Drawable,
+  rs.projecta.object.features.Has_Position,
+  rs.projecta.object.features.Has_Direction,
+  rs.projecta.object.features.Can_Collide,
+  rs.projecta.object.features.Has_Auto_Movement
 {
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World w;
@@ -13,19 +17,21 @@ implements
   public float suspend_secs;
   public rs.projecta.ogl.shapes.Fish1 fish1;
   public rs.projecta.ogl.Color color;
+  public java.util.ArrayList<rs.projecta.object.cmds.Cmd> cmds;
   
   public Player(rs.projecta.world.World world, float x, float y, float sx, float sy, float a_degrees)
   {
     org.jbox2d.dynamics.BodyDef body_def;
     org.jbox2d.dynamics.FixtureDef fix_def;
     
+    this.cmds = new java.util.ArrayList<rs.projecta.object.cmds.Cmd>();
     this.w = world;
     this.suspend_secs = 0;
   
     body_def = new org.jbox2d.dynamics.BodyDef();
     body_def.type = org.jbox2d.dynamics.BodyType.DYNAMIC;
     body_def.position = new org.jbox2d.common.Vec2(x / this.w.phys_scale, y / this.w.phys_scale);
-    body_def.angle = 0;
+    body_def.angle = (float)java.lang.Math.toRadians(a_degrees);
     body_def.userData = this;
     body = world.phys_world.createBody(body_def);
     
@@ -55,7 +61,7 @@ implements
   
     this.frame=this.frame+this.frame_delta*((float)this.w.lapsed_time/1000000f);
     this.frame=this.frame%this.frame_max;
-    ctx.Draw(4f, 4f,0, 0, 0, this.color, this.fish1, (int)this.frame);
+    ctx.Draw(4f, -4f,0, 0, 0, this.color, this.fish1, (int)this.frame);
   }
   
 	public float Get_X()
@@ -88,7 +94,7 @@ implements
     rs.projecta.Util.Set_Transform(this.w, this.body, null, null, a);
   }
 
-  public void User_Action(float f, float t)
+  public void xUser_Action(float f, float t)
   {
   }
 
@@ -102,7 +108,7 @@ implements
     this.body.applyTorque(f);
 	}
 
-  public void Accelerate(float tilt)
+  public void xAccelerate(float tilt)
   {
     /*String str;
     float curr_v, trgt_v, f=0;
@@ -128,7 +134,7 @@ implements
     }*/
   }
   
-  public void Apply_Force(org.jbox2d.common.Vec2 f)
+  public void xApply_Force(org.jbox2d.common.Vec2 f)
   {
     body.applyForceToCenter(f);
   }
@@ -137,12 +143,12 @@ implements
   {
     org.jbox2d.common.Vec2 frwd_vec, body_frwd_vec;
     
-    frwd_vec = new org.jbox2d.common.Vec2(0, -f);
+    frwd_vec = new org.jbox2d.common.Vec2(0, f);
     body_frwd_vec = this.body.getWorldVector(frwd_vec);
     body.applyForceToCenter(body_frwd_vec);
   }
   
-  public void Remove_Lat_Vel(org.jbox2d.dynamics.Body body)
+  public void xRemove_Lat_Vel(org.jbox2d.dynamics.Body body)
   {
     org.jbox2d.common.Vec2 lat_vel, lat_impulse;
     
@@ -177,16 +183,56 @@ implements
     if (this.suspend_secs <= 0)
     {
       curr_abs_vel = this.body.getLinearVelocity();
-  
-      req_rel_vel = new org.jbox2d.common.Vec2(0, -trgt_v);
+      req_rel_vel = new org.jbox2d.common.Vec2(0, trgt_v);
       req_abs_vel = this.body.getWorldVector(req_rel_vel);
-  
       diff_abs_vel = req_abs_vel.sub(curr_abs_vel);
-      impulse = diff_abs_vel.mul(this.body.getMass());
+      
+      //impulse = diff_abs_vel.mul(this.body.getMass());
+      //this.body.applyLinearImpulse(impulse, this.body.getWorldCenter());
   
-      this.body.applyLinearImpulse(impulse, this.body.getWorldCenter());
+      diff_abs_vel = diff_abs_vel.mul(2f);
+      this.body.applyForceToCenter(diff_abs_vel);
     }
     else
       this.suspend_secs -= sec_step;
+    
+    this.Process_Cmds();
+  }
+  
+  public void Force_To(float x, float y)
+  {
+    org.jbox2d.common.Vec2 force;
+    
+    force = new org.jbox2d.common.Vec2(x, y);
+    this.body.applyForceToCenter(force);
+  }
+  
+  public void Add_Cmd(int type, float val)
+  {
+    rs.projecta.object.cmds.Cmd cmd;
+    
+    cmd = new rs.projecta.object.cmds.Cmd(type, val);
+    this.cmds.add(cmd);
+  }
+  
+  public void Process_Cmds()
+  {
+    if (this.cmds != null && this.cmds.size() > 0)
+    {
+      for (rs.projecta.object.cmds.Cmd cmd: this.cmds)
+      {
+        if (cmd.type == rs.projecta.object.cmds.Cmd.TYPE_TURN_TO)
+        {
+          body.setAngularVelocity(0);
+          body.setTransform(body.getPosition(), (float)cmd.val);
+        }
+        else if (cmd.type == rs.projecta.object.cmds.Cmd.TYPE_PUSH)
+        {
+          this.body.setLinearVelocity(new org.jbox2d.common.Vec2(0, 0));
+          this.Apply_Frwd_Force(cmd.val);
+        }
+      }
+      this.cmds.clear();
+    }
   }
 }

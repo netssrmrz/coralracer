@@ -51,7 +51,7 @@ implements
     android.opengl.GLES20.glViewport(0, 0, w, h);
     this.w = w;
     this.h = h;
-    this.scale = 0.0003f * (this.w + this.h) + 0.0928f;
+    this.scale = -(0.0003f * (this.w + this.h) + 0.0928f);
     this.ogl_ctx.proj.Init(w, h);
   }
   

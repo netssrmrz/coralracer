@@ -286,6 +286,33 @@ extends Game_Object
   }
 }
 
+export class Accelerator
+extends Game_Object
+{
+  constructor()
+  {
+    super();
+    this.name = "Accelerator";
+    this.class_name = "Accelerator";
+    this.scale = { x: 1, y: 1 };
+  }
+
+  Render(ctx)
+  {
+    ctx.strokeStyle = "#666";
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-100, -100);
+    ctx.lineTo(100, -100);
+    ctx.lineTo(0, 0);
+    ctx.lineTo(100, 0);
+    ctx.lineTo(0, 100);
+    ctx.lineTo(-100, 0);
+    ctx.closePath();
+    ctx.stroke();  
+  }
+}
+
 // Shapes =========================================================================================
 
 export class Shape

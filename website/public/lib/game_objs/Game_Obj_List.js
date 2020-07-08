@@ -1,6 +1,7 @@
 import {LitElement, html, css} from "../lit-element/lit-element.js";
 import * as pl from "../Coral_Racer.js";
 import Object_List from "../Object_List.js";
+import "./Game_Obj_Dialog.js";
 
 class Game_Obj_List 
 extends Object_List
@@ -82,12 +83,15 @@ extends Object_List
   render()
   {
     const btns = html`
-    <button class="button" id="new_player" @click="${this.OnClick_Add_Player}" title="Player Character"><img src="images/gamepad-variant-outline.svg"></button>
-    <button class="button" id="new_finish" @click="${this.OnClick_Add_Finish}" title="Finish Point"><img src="images/flag-checkered.svg"></button>
-    <button class="button" id="new_wall" @click="${this.OnClick_Add_Wall}" title="Wall"><img src="images/wall.svg"></button>
-    <button class="button" id="new_marker" @click="${this.OnClick_Add_Marker}" title="Marker"><img src="images/crosshairs-question.svg"></button>
+      <button class="button" id="new_player" @click="${this.OnClick_Add_Player}" title="Player Character"><img src="images/gamepad-variant-outline.svg"></button>
+      <button class="button" id="new_finish" @click="${this.OnClick_Add_Finish}" title="Finish Point"><img src="images/flag-checkered.svg"></button>
+      <button class="button" id="new_wall" @click="${this.OnClick_Add_Wall}" title="Wall"><img src="images/wall.svg"></button>
+      <button class="button" id="new_marker" @click="${this.OnClick_Add_Marker}" title="Marker"><img src="images/crosshairs-question.svg"></button>
     `;
-    return this.Render(btns);
+    const edit_dlg = html`
+      <game-obj-dlg id="dlg"></game-obj-dlg>
+    `;
+    return this.Render(btns, edit_dlg);
   }
 }
 

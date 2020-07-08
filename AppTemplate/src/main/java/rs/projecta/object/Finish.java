@@ -1,11 +1,13 @@
 package rs.projecta.object;
 
 public class Finish
-implements rs.projecta.object.features.Has_Position, rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Can_Collide
+implements
+  rs.projecta.object.features.Has_Position,
+  rs.projecta.object.features.Is_Drawable,
+  rs.projecta.object.features.Can_Collide
 {
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World world;
-  public rs.projecta.ogl.shapes.Circle circle;
   public rs.projecta.ogl.shapes.Arrow arrow;
   public float x, y;
   public rs.projecta.ogl.Color color;

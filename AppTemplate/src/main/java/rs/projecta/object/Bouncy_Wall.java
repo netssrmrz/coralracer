@@ -22,7 +22,7 @@ implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.
     shape=new org.jbox2d.collision.shapes.PolygonShape();
     shape.setAsBox(this.world.To_Phys_Dim(dx), this.world.To_Phys_Dim(dy), new org.jbox2d.common.Vec2(0, 0), 0);
     this.body = this.world.Add_Single_Fixture_Body
-      (shape, x, y, a_degrees, 5, false, org.jbox2d.dynamics.BodyType.STATIC, this);
+      (shape, x, y, a_degrees, 2, false, org.jbox2d.dynamics.BodyType.STATIC, this);
   
     this.rect=new rs.projecta.ogl.shapes.Rectangle();
     this.color = new rs.projecta.ogl.Color(0xff00ff00);

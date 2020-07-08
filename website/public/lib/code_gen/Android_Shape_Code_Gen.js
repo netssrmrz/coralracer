@@ -25,9 +25,9 @@ class Android_Shape_Code_Gen extends LitElement
 
     const data = this.Gen_Cmds(shapes);
     code = 
-      "public class Shape implements Is_Drawable\n" +
+      "public class Shape implements rs.projecta.ogl.Is_Drawable\n" +
       "{\n" +
-        "\tpublic static java.nio.FloatBuffer points = Context.New_Buffer(Get_Points());\n" +
+        "\tpublic static java.nio.FloatBuffer points = rs.projecta.ogl.Context.New_Buffer(Get_Points());\n" +
         "\n" +
     
         "\tpublic static float[] Get_Points()\n" +
@@ -47,7 +47,7 @@ class Android_Shape_Code_Gen extends LitElement
         "\t};\n" +
         "\n" +
 
-        "\tpublic void Draw(Context ctx)\n" +
+        "\tpublic void Draw(rs.projecta.ogl.Context ctx, int frame_idx)\n" +
         "\t{\n" +
           this.Gen_Segments(data.segments) +
         "\t}\n" +

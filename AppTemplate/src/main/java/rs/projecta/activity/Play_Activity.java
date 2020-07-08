@@ -3,7 +3,8 @@ package rs.projecta.activity;
 public class Play_Activity 
 extends android.app.Activity
 implements 
-  rs.projecta.world.World_Step_Listener
+  rs.projecta.world.World_Step_Listener,
+  android.view.View.OnTouchListener
 {
   public android.view.SurfaceView gfx_view;
   public rs.projecta.Tilt_Manager tilt_man;
@@ -62,6 +63,8 @@ implements
       new android.widget.LinearLayout.LayoutParams(
         android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
 				android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 1f));
+    
+    this.gfx_view.setOnTouchListener(this);
   }
   
   public boolean Supports_ES2()
@@ -107,5 +110,27 @@ implements
       //i.putExtra("level_class", this.curr_level.getClass().getName());
       //this.startActivity(i);
     }
+  }
+  
+  @Override
+  public boolean onTouch(android.view.View v, android.view.MotionEvent event)
+  {
+    int w = v.getWidth();
+    int h = v.getHeight();
+    
+    float x = event.getX();
+    float y = event.getY();
+    
+    x = x - w/2;
+    y = y - h/2;
+    //android.util.Log.d("onTouch()", "x, y: " + x + ", " + y);
+    //double a = java.lang.Math.atan2( -x, y ) + java.lang.Math.PI;
+    //android.util.Log.d("onTouch()", "a: " + a);
+  
+    this.world.objs.Get_Player().Force_To(x, y);
+    //this.world.objs.Get_Player().Turn_To(a);
+    //this.world.objs.Get_Player().Turn_To(a);
+  
+    return true;
   }
 }

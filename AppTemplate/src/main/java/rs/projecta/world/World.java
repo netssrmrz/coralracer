@@ -326,7 +326,8 @@ implements
   }
   
   public org.jbox2d.dynamics.Body Create_Body
-    (org.jbox2d.dynamics.FixtureDef fix_def, float x, float y, float a_degrees, org.jbox2d.dynamics.BodyType body_type, Object obj)
+    (org.jbox2d.dynamics.FixtureDef fix_def, float x, float y, float a_degrees,
+     org.jbox2d.dynamics.BodyType body_type, Object obj)
   {
     org.jbox2d.dynamics.BodyDef body_def;
     org.jbox2d.dynamics.Body body;
