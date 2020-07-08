@@ -23,8 +23,7 @@ extends Canvas_Editor
         ctx.rotate(obj.angle);
         ctx.scale(obj.scale.x, obj.scale.y);
         const avg_scale = (Math.abs(obj.scale.x) + Math.abs(obj.scale.y)) / 2;
-        const lineWidth = this.zoom[this.ctx.zoom_id].lineWidth;
-        ctx.lineWidth = lineWidth / avg_scale;
+        ctx.lineWidth = ctx.line_width / avg_scale;
 
         obj.Render(ctx);
         if (obj.selected && obj.Render_Design)

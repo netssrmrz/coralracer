@@ -17,12 +17,6 @@ class Canvas_Editor extends LitElement
     this.OnMouseUp_Canvas = this.OnMouseUp_Canvas.bind(this);
     this.Render = this.Render.bind(this);
     this.OnRemote_Click = this.OnRemote_Click.bind(this);
-    this.zoom = 
-    {
-      large_btn: { scl: 0.1, lineWidth: 16 }, 
-      medium_btn: { scl: 0.5, lineWidth: 4 }, 
-      small_btn: { scl: 2, lineWidth: 1 }
-    };
   }
   
   firstUpdated(changedProperties)
@@ -32,30 +26,30 @@ class Canvas_Editor extends LitElement
     this.remote_ctrl.on_change_fn = this.OnRemote_Click;
     this.ctx = this.canvas.getContext("2d");
     this.ctx.globalCompositeOperation = "lighter";
-    this.Set_Zoom("medium_btn");
+    this.Init_Canvas(1, this.canvas.width, this.canvas.height, 1);
     this.Set_Paint("stroke");
     this.Enable_Events();
   }
 
-  Init_Canvas(zoom_id, width, height)
+  Init_Canvas(zoom, width, height, line_width)
   {
-    const zoom = this.zoom[zoom_id].scl;
+    this.ctx.zoom = zoom;
+    this.ctx.line_width = 1/zoom;
 
     this.canvas.width = width;
     this.canvas.height = height;        
-    this.ctx.zoom_id = zoom_id;
-
     this.ctx.globalCompositeOperation = "difference";
-    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.strokeStyle="#fff";
+    this.ctx.fillStyle="#fff";
 
-    this.ctx.trn = { x: this.canvas.width/2, y: this.canvas.height/2};
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    if (!this.ctx.trn)
+    {
+      this.ctx.trn = { x: this.canvas.width/2, y: this.canvas.height/2};
+    }
     this.ctx.translate(this.ctx.trn.x, this.ctx.trn.y);
     this.ctx.scl = { x: zoom, y: zoom};
     this.ctx.scale(this.ctx.scl.x, this.ctx.scl.y);
-
-    this.ctx.strokeStyle="#fff";
-    this.ctx.fillStyle="#fff";
-    this.ctx.lineWidth = this.zoom[this.ctx.zoom_id].lineWidth;
   }
 
   Set_Transform(trn, scl)
@@ -96,19 +90,9 @@ class Canvas_Editor extends LitElement
     this.Render(this.ctx, shapes);
   }
 
-  Set_Zoom(zoom_id)
+  Set_Zoom_2(zoom)
   {
-    const large_btn = this.shadowRoot.getElementById("large_btn");
-    const medium_btn = this.shadowRoot.getElementById("medium_btn");
-    const small_btn = this.shadowRoot.getElementById("small_btn");
-
-    large_btn.classList.remove("selected");
-    medium_btn.classList.remove("selected");
-    small_btn.classList.remove("selected");
-
-    this.shadowRoot.getElementById(zoom_id).classList.add("selected");
-
-    this.Init_Canvas(zoom_id, this.canvas.width, this.canvas.height);
+    this.Init_Canvas(zoom, this.canvas.width, this.canvas.height, this.ctx.line_width);
     this.Render(this.ctx, this.shapes);
   }
 
@@ -129,7 +113,7 @@ class Canvas_Editor extends LitElement
   {
     this.style.width = width + "px";
     this.style.height = height + "px";
-    this.Init_Canvas(this.ctx.zoom_id, width, height);
+    this.Init_Canvas(this.ctx.zoom, width, height, this.ctx.line_width);
     this.Render(this.ctx, this.shapes);
   }
 
@@ -239,19 +223,14 @@ class Canvas_Editor extends LitElement
     this.Set_Paint("fill");
   }
 
-  OnClick_Large_Canvas(event)
+  OnClick_Zoom_In(event)
   {
-    this.Set_Zoom("large_btn");
+    this.Set_Zoom_2(this.ctx.zoom*1.5);
   }
 
-  OnClick_Medium_Canvas(event)
+  OnClick_Zoom_Out(event)
   {
-    this.Set_Zoom("medium_btn");
-  }
-
-  OnClick_Small_Canvas(event)
-  {
-    this.Set_Zoom("small_btn");
+    this.Set_Zoom_2(this.ctx.zoom/1.5);
   }
 
   OnClick_Show_Remote()
@@ -275,6 +254,7 @@ class Canvas_Editor extends LitElement
   {
     ctx.save();
     ctx.strokeStyle = "#111";
+    ctx.lineWidth = ctx.line_width;
 
     const x1 = -ctx.trn.x/ctx.scl.x;
     const y1 = -ctx.trn.y/ctx.scl.y;
@@ -354,9 +334,9 @@ class Canvas_Editor extends LitElement
       <div id="btn_bar">
         <button id="remote_btn" @click="${this.OnClick_Show_Remote}" title="Show Remote Control"><img src="images/remote.svg"></button>
 
-        &#183; <button id="large_btn" @click="${this.OnClick_Large_Canvas}" title="Zoom x1"><img src="images/image-size-select-actual.svg"></button>
-        <button id="medium_btn" @click="${this.OnClick_Medium_Canvas}" title="Zoom x3"><img src="images/image-size-select-large.svg"></button>
-        <button id="small_btn" @click="${this.OnClick_Small_Canvas}" title="Zoom x10"><img src="images/image-size-select-small.svg"></button>
+        &#183; 
+        <button id="zoom_in_btn" @click="${this.OnClick_Zoom_In}" title="Zoom In"><img src="images/magnify-plus-outline.svg"></button>
+        <button id="zoom_out_btn" @click="${this.OnClick_Zoom_Out}" title="Zoom Out"><img src="images/magnify-minus-outline.svg"></button>
 
         &#183; <button id="stroke" @click="${this.OnClick_Stroke}" title="Stroke"><img src="images/pentagon-outline.svg"></button>
         <button id="fill" @click="${this.OnClick_Fill}" title="Fill"><img src="images/pentagon.svg"></button>
