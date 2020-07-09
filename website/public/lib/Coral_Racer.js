@@ -167,9 +167,11 @@ export class Game_Object
 
   To_Canvas_Pt(ctx, sx, sy)
   {
-    const pt = {x: sx-ctx.trn.x, y: sy-ctx.trn.y};
-    pt.x = pt.x/ctx.scl.x;
-    pt.y = pt.y/ctx.scl.y;
+    const m = ctx.getTransform();
+    m.invertSelf();
+
+    const sp = new DOMPointReadOnly(sx, sy);
+    const pt = sp.matrixTransform(m);
 
     return pt;
   }
@@ -355,9 +357,11 @@ export class Shape
 
   To_Canvas_Pt(ctx, sx, sy)
   {
-    const pt = {x: sx-ctx.trn.x, y: sy-ctx.trn.y};
-    pt.x = pt.x/ctx.scl.x;
-    pt.y = pt.y/ctx.scl.y;
+    const m = ctx.getTransform();
+    m.invertSelf();
+
+    const sp = new DOMPointReadOnly(sx, sy);
+    const pt = sp.matrixTransform(m);
 
     return pt;
   }

@@ -38,7 +38,7 @@ class Canvas_Editor extends LitElement
 
     this.canvas.width = width;
     this.canvas.height = height;        
-    this.ctx.globalCompositeOperation = "difference";
+    this.ctx.globalCompositeOperation = "lighter";
     this.ctx.strokeStyle="#fff";
     this.ctx.fillStyle="#fff";
 
@@ -90,9 +90,25 @@ class Canvas_Editor extends LitElement
     this.Render(this.ctx, shapes);
   }
 
-  Set_Zoom_2(zoom)
+  Set_Zoom_2(zoom, screen_x, screen_y)
   {
-    this.Init_Canvas(zoom, this.canvas.width, this.canvas.height, this.ctx.line_width);
+    let pt;
+
+    pt = this.To_Canvas_Pt(this.ctx, screen_x, screen_y);
+
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.scale(zoom, zoom);
+    this.ctx.translate(-pt.x, -pt.y);
+
+    const p2 = this.To_Canvas_Pt(this.ctx, screen_x, screen_y);
+    this.ctx.translate(p2.x, p2.y);
+    this.ctx.translate(-pt.x, -pt.y);
+    
+    this.ctx.zoom = zoom;
+    this.ctx.line_width = 2/zoom;
+    this.ctx.scl = { x: zoom, y: zoom};
+    //this.ctx.trn = pt;
+
     this.Render(this.ctx, this.shapes);
   }
 
@@ -122,6 +138,27 @@ class Canvas_Editor extends LitElement
     this.Render(this.ctx, this.shapes);
   }
 
+  To_Canvas_Pt(ctx, sx, sy)
+  {
+    const m = ctx.getTransform();
+    m.invertSelf();
+
+    const sp = new DOMPointReadOnly(sx, sy);
+    const pt = sp.matrixTransform(m);
+
+    return pt;
+  }
+
+  To_Screen_Pt(ctx, cx, cy)
+  {
+    const m = ctx.getTransform();
+
+    const cp = new DOMPointReadOnly(cx, cy);
+    const pt = cp.matrixTransform(m);
+
+    return pt;
+  }
+
   // Events =======================================================================================
 
   OnRemote_Click(shape)
@@ -141,7 +178,7 @@ class Canvas_Editor extends LitElement
     {
       const dx = event.offsetX - this.cmd.x;
       const dy = event.offsetY - this.cmd.y;
-
+      
       const c_pt = { x: this.cmd.o.x + dx, y: this.cmd.o.y + dy };
       this.Set_Transform(c_pt, null);
       this.Update();
@@ -178,7 +215,7 @@ class Canvas_Editor extends LitElement
 
     if (!hit)
     {
-      this.cmd = { id: "pan", x: event.offsetX, y: event.offsetY, o: this.ctx.trn };
+      this.cmd = { id: "pan", x: event.offsetX, y: event.offsetY, o: this.To_Screen_Pt(this.ctx, 0, 0) };
     }
 
     if (hit)
@@ -238,12 +275,25 @@ class Canvas_Editor extends LitElement
     this.remote_ctrl.Show();
   }
 
+  OnWheel(event)
+  {
+    if (event.deltaY>0)
+    {
+      this.Set_Zoom_2(this.ctx.zoom/1.5, event.clientX, event.clientY);
+    }
+    else
+    {
+      this.Set_Zoom_2(this.ctx.zoom*1.5, event.clientX, event.clientY);
+    }
+  }
+
   // Gfx ==========================================================================================
   
   Clr(ctx)
   {
-    ctx.clearRect(-ctx.trn.x/ctx.scl.x, -ctx.trn.y/ctx.scl.y, 
-      ctx.canvas.width/ctx.scl.x, ctx.canvas.height/ctx.scl.y);
+    const p1 = this.To_Canvas_Pt(ctx, 0, 0);
+    const p2 = this.To_Canvas_Pt(ctx, ctx.canvas.width, ctx.canvas.height);
+    ctx.clearRect(p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
   }
 
   Render(ctx, shapes)
@@ -256,16 +306,14 @@ class Canvas_Editor extends LitElement
     ctx.strokeStyle = "#111";
     ctx.lineWidth = ctx.line_width;
 
-    const x1 = -ctx.trn.x/ctx.scl.x;
-    const y1 = -ctx.trn.y/ctx.scl.y;
-    const x2 = x1 + (this.canvas.width/ctx.scl.x);
-    const y2 = y1 + (this.canvas.height/ctx.scl.x);
+    const p1 = this.To_Canvas_Pt(ctx, 0, 0);
+    const p2 = this.To_Canvas_Pt(ctx, ctx.canvas.width, ctx.canvas.height);
     
     ctx.beginPath();
-    ctx.moveTo(x1, 0);
-    ctx.lineTo(x2, 0);
-    ctx.moveTo(0, y1);
-    ctx.lineTo(0, y2);
+    ctx.moveTo(p1.x, 0);
+    ctx.lineTo(p2.x, 0);
+    ctx.moveTo(0, p1.y);
+    ctx.lineTo(0, p2.y);
     ctx.stroke();
 
     ctx.restore();
@@ -342,7 +390,7 @@ class Canvas_Editor extends LitElement
         <button id="fill" @click="${this.OnClick_Fill}" title="Fill"><img src="images/pentagon.svg"></button>
       </div>
 
-      <canvas id="main_canvas" width="1000" height="1000"></canvas>
+      <canvas id="main_canvas" width="1000" height="1000" @wheel="${this.OnWheel}" ></canvas>
 
       <remote-ctrl id="remote_ctrl"></remote-ctrl>
     `;
