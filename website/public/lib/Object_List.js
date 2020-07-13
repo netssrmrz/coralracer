@@ -343,8 +343,7 @@ class Object_List extends LitElement
 
     const scale = { x: shape.scale.x, y: shape.scale.y };
     const angle = shape.angle;
-    const new_shape = this.Add_Shape(shape.class_name, shape.name, scale, angle);
-
+    this.Add_Shape(shape.class_name, shape.name, scale, angle);
   }
 
   OnClick_Delete(event)
@@ -584,7 +583,7 @@ class Object_List extends LitElement
       td
       {
         padding: 4px 12px;
-        font-size: 16px;
+        font-size: 15px;
       }
 
       .button
