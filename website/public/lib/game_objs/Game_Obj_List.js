@@ -30,19 +30,28 @@ extends Object_List
     return shape;
   }
 
-  Add_Shape(class_name, shape_name)
+  /*Add_Shape(class_name, shape_name)
   {
     const shape = new pl[class_name];
     shape.class_name = class_name;
     shape.name = shape_name;
 
     this.Add(shape);
+    this.moveShapeToCentre(shape);
     this.Select(shape.id);
     this.Save();
 
     if (this.on_change_fn)
     {
       this.on_change_fn(this.shapes);
+    }
+  }*/
+
+  moveShapeToCentre(shape)
+  {
+    if (this.ctx)
+    {
+      shape.pt = pl.To_Canvas_Pt(this.ctx, this.ctx.canvas.width/2, this.ctx.canvas.height/2);
     }
   }
 

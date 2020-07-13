@@ -89,6 +89,8 @@
         editor_elem.on_change_fn = Editor_OnChange;
         editor_elem.Set_Shapes(shapes_elem.shapes);
 
+        shapes_elem.ctx = editor_elem.ctx;
+        
         OnResize();
       }
 

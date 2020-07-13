@@ -72,7 +72,7 @@ export class Game_Object
 
     if (this.cmd)
     {
-      const c_pt = this.To_Canvas_Pt(ctx, event.offsetX, event.offsetY);
+      const c_pt = To_Canvas_Pt(ctx, event.offsetX, event.offsetY);
       if (this.cmd.id == "pos_btn")
       {
         this.pt.x = c_pt.x;
@@ -163,17 +163,6 @@ export class Game_Object
     }
 
     return res;
-  }
-
-  To_Canvas_Pt(ctx, sx, sy)
-  {
-    const m = ctx.getTransform();
-    m.invertSelf();
-
-    const sp = new DOMPointReadOnly(sx, sy);
-    const pt = sp.matrixTransform(m);
-
-    return pt;
   }
 
   On_Mouse_Up(event, ctx)
@@ -355,17 +344,6 @@ export class Shape
     return p;
   }
 
-  To_Canvas_Pt(ctx, sx, sy)
-  {
-    const m = ctx.getTransform();
-    m.invertSelf();
-
-    const sp = new DOMPointReadOnly(sx, sy);
-    const pt = sp.matrixTransform(m);
-
-    return pt;
-  }
-
   Pt_Translate(pt, ptd)
   {
     pt.x += ptd.x;
@@ -429,7 +407,7 @@ export class Shape
 
     if (this.cmd)
     {
-      const c_pt = this.To_Canvas_Pt(ctx, event.offsetX, event.offsetY);
+      const c_pt = To_Canvas_Pt(ctx, event.offsetX, event.offsetY);
       this.On_Mouse_Move_Cmd(ctx, c_pt, this.cmd);
     }
     else if (this.selected)
@@ -1155,4 +1133,25 @@ function Empty(v)
 function Round(num)
 {
   return Math.round((num + Number.EPSILON) * 10000) / 10000;
+}
+
+export function To_Canvas_Pt(ctx, sx, sy)
+{
+  const m = ctx.getTransform();
+  m.invertSelf();
+
+  const sp = new DOMPointReadOnly(sx, sy);
+  const pt = sp.matrixTransform(m);
+
+  return pt;
+}
+
+export function To_Screen_Pt(ctx, cx, cy)
+{
+  const m = ctx.getTransform();
+
+  const cp = new DOMPointReadOnly(cx, cy);
+  const pt = cp.matrixTransform(m);
+
+  return pt;
 }

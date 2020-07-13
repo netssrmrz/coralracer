@@ -1,5 +1,6 @@
 import {LitElement, html, css} from "./lit-element/lit-element.js";
 import "./Remote_Ctrl.js";
+import * as pl from "./Coral_Racer.js";
 
 // Editor Def ======================================================================================
 
@@ -94,22 +95,22 @@ class Canvas_Editor extends LitElement
   {
     let pt;
 
-    pt = this.To_Canvas_Pt(this.ctx, screen_x, screen_y);
+    pt = pl.To_Canvas_Pt(this.ctx, screen_x, screen_y);
 
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(zoom, zoom);
     this.ctx.translate(-pt.x, -pt.y);
 
-    const p2 = this.To_Canvas_Pt(this.ctx, screen_x, screen_y);
+    const p2 = pl.To_Canvas_Pt(this.ctx, screen_x, screen_y);
     this.ctx.translate(p2.x, p2.y);
     this.ctx.translate(-pt.x, -pt.y);
     
     this.ctx.zoom = zoom;
     this.ctx.line_width = 2/zoom;
     this.ctx.scl = { x: zoom, y: zoom};
-    //this.ctx.trn = pt;
+    this.ctx.trn = pl.To_Canvas_Pt(this.ctx, this.ctx.canvas.width/2, this.ctx.canvas.height/2);
 
-    this.Render(this.ctx, this.shapes);
+    this.Update();
   }
 
   Set_Paint(paint_style)
@@ -136,27 +137,6 @@ class Canvas_Editor extends LitElement
   Update()
   {
     this.Render(this.ctx, this.shapes);
-  }
-
-  To_Canvas_Pt(ctx, sx, sy)
-  {
-    const m = ctx.getTransform();
-    m.invertSelf();
-
-    const sp = new DOMPointReadOnly(sx, sy);
-    const pt = sp.matrixTransform(m);
-
-    return pt;
-  }
-
-  To_Screen_Pt(ctx, cx, cy)
-  {
-    const m = ctx.getTransform();
-
-    const cp = new DOMPointReadOnly(cx, cy);
-    const pt = cp.matrixTransform(m);
-
-    return pt;
   }
 
   // Events =======================================================================================
@@ -215,7 +195,7 @@ class Canvas_Editor extends LitElement
 
     if (!hit)
     {
-      this.cmd = { id: "pan", x: event.offsetX, y: event.offsetY, o: this.To_Screen_Pt(this.ctx, 0, 0) };
+      this.cmd = { id: "pan", x: event.offsetX, y: event.offsetY, o: pl.To_Screen_Pt(this.ctx, 0, 0) };
     }
 
     if (hit)
@@ -291,8 +271,8 @@ class Canvas_Editor extends LitElement
   
   Clr(ctx)
   {
-    const p1 = this.To_Canvas_Pt(ctx, 0, 0);
-    const p2 = this.To_Canvas_Pt(ctx, ctx.canvas.width, ctx.canvas.height);
+    const p1 = pl.To_Canvas_Pt(ctx, 0, 0);
+    const p2 = pl.To_Canvas_Pt(ctx, ctx.canvas.width, ctx.canvas.height);
     ctx.clearRect(p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
   }
 
@@ -306,8 +286,8 @@ class Canvas_Editor extends LitElement
     ctx.strokeStyle = "#111";
     ctx.lineWidth = ctx.line_width;
 
-    const p1 = this.To_Canvas_Pt(ctx, 0, 0);
-    const p2 = this.To_Canvas_Pt(ctx, ctx.canvas.width, ctx.canvas.height);
+    const p1 = pl.To_Canvas_Pt(ctx, 0, 0);
+    const p2 = pl.To_Canvas_Pt(ctx, ctx.canvas.width, ctx.canvas.height);
     
     ctx.beginPath();
     ctx.moveTo(p1.x, 0);

@@ -170,6 +170,13 @@ class Object_List extends LitElement
     return res;
   }
 
+  Get_Shape_By_Id(id)
+  {
+    const i = this.Get_Shape_Idx(id);
+    const shape = this.shapes[i];
+    return shape;
+  }
+
   // API ==========================================================================================
 
   Hide()
@@ -300,13 +307,22 @@ class Object_List extends LitElement
     }
   }
 
-  Add_Shape(class_name, shape_name)
+  Add_Shape(class_name, shape_name, scale, angle)
   {
     const shape = new pl[class_name];
     shape.class_name = class_name;
     shape.name = shape_name;
 
     this.Add(shape);
+    this.moveShapeToCentre(shape);
+    if (scale)
+    {
+      shape.scale = scale;
+    }
+    if (angle)
+    {
+      shape.angle = angle;
+    }
     this.Select(shape.id);
     this.Save();
 
@@ -314,10 +330,23 @@ class Object_List extends LitElement
     {
       this.on_change_fn(this.shapes);
     }
+
+    return shape;
   }
 
   // Events =======================================================================================
   
+  OnClick_Copy(event)
+  {
+    const shape_id = event.currentTarget.getAttribute("shape-id");
+    const shape = this.Get_Shape_By_Id(shape_id);
+
+    const scale = { x: shape.scale.x, y: shape.scale.y };
+    const angle = shape.angle;
+    const new_shape = this.Add_Shape(shape.class_name, shape.name, scale, angle);
+
+  }
+
   OnClick_Delete(event)
   {
     const shape_id = event.currentTarget.getAttribute("shape-id");
@@ -731,6 +760,7 @@ class Object_List extends LitElement
       <tr shape-id="${shape.id}">
         <td>
           ${this.Render_Button(shape.id, this.OnClick_Select, "target.svg", true, "Select", btn_class)}
+          ${this.Render_Button(shape.id, this.OnClick_Copy, "content-copy.svg", true, "Copy", "button")}
           ${this.Render_Button(shape.id, this.OnClick_Edit, "pencil-outline.svg", shape.can_edit, "Edit", "button")}
           ${this.Render_Button(shape.id, this.OnClick_Delete, "delete-outline.svg", shape.can_delete, "Delete", "button")}
         </td>
