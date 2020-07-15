@@ -293,31 +293,42 @@ implements
   }
   
   public org.jbox2d.dynamics.Body Add_Single_Fixture_Body
-    (org.jbox2d.collision.shapes.Shape shape, float x, float y, float a_degrees, float bounce, boolean is_sensor, Object obj)
+    (org.jbox2d.collision.shapes.Shape shape, float x, float y, float a_degrees,
+     float bounce, boolean is_sensor, Object obj)
   {
-    return Add_Single_Fixture_Body(shape, x, y, a_degrees, bounce, is_sensor, org.jbox2d.dynamics.BodyType.STATIC, obj);
+    return Add_Single_Fixture_Body
+             (shape, x, y, a_degrees, bounce, is_sensor, org.jbox2d.dynamics.BodyType.STATIC, obj);
   }
-  
+
   public org.jbox2d.dynamics.Body Add_Single_Fixture_Body
     (org.jbox2d.collision.shapes.Shape shape, float x, float y, float a_degrees,
      float bounce, boolean is_sensor, org.jbox2d.dynamics.BodyType body_type, Object obj)
   {
+    return Add_Single_Fixture_Body
+             (shape, x, y, a_degrees, bounce, is_sensor, org.jbox2d.dynamics.BodyType.STATIC, obj, 1f);
+  }
+  
+  public org.jbox2d.dynamics.Body Add_Single_Fixture_Body
+    (org.jbox2d.collision.shapes.Shape shape, float x, float y, float a_degrees,
+     float bounce, boolean is_sensor, org.jbox2d.dynamics.BodyType body_type, Object obj, float density)
+  {
     org.jbox2d.dynamics.Body body;
     org.jbox2d.dynamics.FixtureDef fix_def;
   
-    fix_def = Create_Fixture(shape, bounce, is_sensor);
+    fix_def = Create_Fixture(shape, bounce, is_sensor, density);
     body = Create_Body(fix_def, x, y, a_degrees, body_type, obj);
   
     return body;
   }
   
-  public static org.jbox2d.dynamics.FixtureDef Create_Fixture(org.jbox2d.collision.shapes.Shape shape, float bounce, boolean is_sensor)
+  public static org.jbox2d.dynamics.FixtureDef Create_Fixture
+    (org.jbox2d.collision.shapes.Shape shape, float bounce, boolean is_sensor, float density)
   {
     org.jbox2d.dynamics.FixtureDef fix_def;
 
     fix_def=new org.jbox2d.dynamics.FixtureDef();
     fix_def.shape=shape;
-    fix_def.density=1;
+    fix_def.density=density;
     fix_def.friction=0;
     fix_def.restitution=bounce;
     fix_def.isSensor=is_sensor;

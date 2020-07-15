@@ -30,23 +30,6 @@ extends Object_List
     return shape;
   }
 
-  /*Add_Shape(class_name, shape_name)
-  {
-    const shape = new pl[class_name];
-    shape.class_name = class_name;
-    shape.name = shape_name;
-
-    this.Add(shape);
-    this.moveShapeToCentre(shape);
-    this.Select(shape.id);
-    this.Save();
-
-    if (this.on_change_fn)
-    {
-      this.on_change_fn(this.shapes);
-    }
-  }*/
-
   moveShapeToCentre(shape)
   {
     if (this.ctx)
@@ -85,6 +68,15 @@ extends Object_List
   OnClick_Add_Marker()
   {
     this.Add_Shape("Game_Object", "Marker");
+  }
+
+  OnClick_Edit_Ok(shape)
+  {
+    const i = this.Get_Shape_Idx(shape.id);
+    this.shapes[i] = shape;
+    this.requestUpdate();
+    if (this.on_change_fn)
+      this.on_change_fn(this.shapes);
   }
 
   // Rendering ====================================================================================

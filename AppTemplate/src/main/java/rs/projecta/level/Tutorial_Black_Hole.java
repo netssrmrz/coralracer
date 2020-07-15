@@ -33,7 +33,7 @@ extends rs.projecta.level.Level
 
     player = new rs.projecta.object.Player(w, 0, 300, 0, 0, 0);
     finish = new rs.projecta.object.Finish(w, 0, -2200, 0, 0, 0);
-    black_hole = new rs.projecta.object.Black_Hole(w, 400, -1000, player);
+    black_hole = new rs.projecta.object.Black_Hole(w, 400, -1000, 0, 0, 0);
   
     Add_Wavy_Bkg(w, player);
     w.objs.Add(finish);

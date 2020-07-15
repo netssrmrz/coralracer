@@ -71,22 +71,7 @@ class Android_Code_Gen extends LitElement
       for (let i=0; i<shapes.length; i++)
       {
         const s = shapes[i];
-        if (s.class_name == "Bouncy_Wall")
-        {
-          const x = s.pt.x;
-          const y = s.pt.y;
-          const rx = s.scale.x*100;
-          const ry = s.scale.y*100
-          const a = s.To_Degrees(s.angle);
-          const params = "" +
-            x + "f, " +
-            y + "f, " +
-            rx + "f, " +
-            ry + "f, " +
-            a + "f";
-          res.objs += "\t\tw.objs.Add(new rs.projecta.object.Bouncy_Wall(w, " + params + "));\n";
-        }
-        else if (s.class_name == "Player")
+        if (s.class_name == "Player")
         {
           const x = s.pt.x;
           const y = s.pt.y;
@@ -102,7 +87,7 @@ class Android_Code_Gen extends LitElement
           res.player = "\t\trs.projecta.object.Player player = new rs.projecta.object.Player(w, " + params + ");\n"
           res.objs += "\t\tw.objs.Add(player);\n";
         }
-        else if (s.class_name == "Finish")
+        else
         {
           const x = s.pt.x;
           const y = s.pt.y;
@@ -115,37 +100,7 @@ class Android_Code_Gen extends LitElement
             rx + "f, " +
             ry + "f, " +
             a + "f";
-          res.objs += "\t\tw.objs.Add(new rs.projecta.object.Finish(w, " + params + "));\n";
-        }
-        else if (s.class_name == "Marker")
-        {
-          const x = s.pt.x;
-          const y = s.pt.y;
-          const rx = s.scale.x*100;
-          const ry = s.scale.y*100
-          const a = s.To_Degrees(s.angle);
-          const params = "" +
-            x + "f, " +
-            y + "f, " +
-            rx + "f, " +
-            ry + "f, " +
-            a + "f";
-          res.objs += "\t\tw.objs.Add(new rs.projecta.object.xxx(w, " + params + "));\n";
-        }
-        else if (s.class_name == "Game_Object")
-        {
-          const x = s.pt.x;
-          const y = s.pt.y;
-          const rx = s.scale.x;
-          const ry = s.scale.y
-          const a = s.To_Degrees(s.angle);
-          const params = "" +
-            x + "f, " +
-            y + "f, " +
-            rx + "f, " +
-            ry + "f, " +
-            a + "f";
-          res.objs += "\t\tw.objs.Add(new rs.projecta.object.xxx(w, " + params + "));\n";
+          res.objs += "\t\tw.objs.Add(new rs.projecta.object." + s.class_name + "(w, " + params + "));\n";
         }
       }
     }

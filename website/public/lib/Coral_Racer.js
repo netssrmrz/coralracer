@@ -271,9 +271,29 @@ extends Game_Object
   Render(ctx)
   {
     ctx.beginPath();
-    ctx.strokeStyle = "#666";
+    ctx.fillStyle = "#666";
     ctx.rect(-100, -100, 200, 200);
-    ctx.stroke();
+    ctx.fill();
+  }
+}
+
+export class Loose_Wall
+extends Game_Object
+{
+  constructor()
+  {
+    super();
+    this.name = "Wall";
+    this.class_name = "Loose_Wall";
+    this.scale = { x: 5, y: 0.2 };
+  }
+
+  Render(ctx)
+  {
+    ctx.beginPath();
+    ctx.fillStyle = "#666";
+    ctx.rect(-100, -100, 200, 200);
+    ctx.fill();
   }
 }
 
@@ -301,6 +321,18 @@ extends Game_Object
     ctx.lineTo(-100, 0);
     ctx.closePath();
     ctx.stroke();  
+  }
+}
+
+export class Black_Hole
+extends Game_Object
+{
+  constructor()
+  {
+    super();
+    this.name = "Black_Hole";
+    this.class_name = "Black_Hole";
+    this.scale = { x: 1, y: 1 };
   }
 }
 

@@ -38,7 +38,7 @@ implements
     fix_def = new org.jbox2d.dynamics.FixtureDef();
     fix_def.shape = new org.jbox2d.collision.shapes.CircleShape();
     fix_def.shape.setRadius(this.size / this.w.phys_scale);
-    fix_def.density = 0.08f;
+    fix_def.density = 0.05f;
     fix_def.friction = 0;
     fix_def.restitution = 1;
     fix_def.filter.groupIndex=-1;

@@ -10,12 +10,12 @@ public class Black_Hole
   public final float max_force = 20;
   public rs.projecta.ogl.Color color;
   
-  public Black_Hole(rs.projecta.world.World w, float x, float y, rs.projecta.object.Player player)
+  public Black_Hole(rs.projecta.world.World w, float x, float y, float dx, float dy, float a_degrees)
   {
     this.x = x;
     this.y = y;
     this.swirl = new rs.projecta.ogl.shapes.Swirl();
-    this.player = player;
+    this.player = w.objs.Get_Player();
     this.color = new rs.projecta.ogl.Color(0xffff0000);
   }
   

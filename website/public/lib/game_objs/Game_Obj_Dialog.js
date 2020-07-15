@@ -18,22 +18,6 @@ class Game_Obj_Dialog extends LitElement
     this.edit_ok_btn = this.shadowRoot.getElementById("edit_ok");
   }
 
-  New_Game_Obj(obj, class_name)
-  {
-    const shape = new pl[class_name];
-    Object.assign(shape, obj);
-    if (obj.btns && obj.btns.length>0)
-    {
-      shape.btns = [];
-      for (let i=0; i<obj.btns.length; ++i)
-      {
-        const obj_btn = obj.btns[i];
-        const path = shape.New_Btn_Path(obj_btn.id, obj_btn.x, obj_btn.y);
-      }
-    }
-    return shape;
-  }
-
   OnClick_New_Ok()
   {
     var plant = new pl[this.plant_class_elem.value];
@@ -54,9 +38,11 @@ class Game_Obj_Dialog extends LitElement
     const new_class_name = this.Get_Field_Value("c");
     if (new_class_name != shape.class_name)
     {
-      shape = this.New_Game_Obj(shape, new_class_name);
+      shape = new pl[new_class_name];
+      shape.id = this.shape.id;
     }
 
+    shape.name = this.Get_Field_Value("n");
     shape.pt.x = this.Get_Field_Value_Float("x");
     shape.pt.y = this.Get_Field_Value_Float("y");
     shape.scale.x = this.Get_Field_Value_Float("xs");
@@ -91,6 +77,7 @@ class Game_Obj_Dialog extends LitElement
     this.shape = shape;
 
     this.Show_Field("c", shape.class_name);
+    this.Show_Field("n", shape.name);
     this.Show_Field("x", shape.pt.x);
     this.Show_Field("y", shape.pt.y);
     this.Show_Field("xs", shape.scale.x);
@@ -187,6 +174,9 @@ class Game_Obj_Dialog extends LitElement
         border-bottom: 1px solid #fff;
         font-family: monospace;
         font-size: 16px;
+        color: #fff;
+        width: 200px;
+        display: none;
       }
       label
       {
@@ -249,7 +239,17 @@ class Game_Obj_Dialog extends LitElement
   {
     return html`
       <span class="title" id="type">Object Properties</span>
-      <label for="c">Class Name</label><input id="c" type="text">
+      <label for="c">Type</label>
+      <select id="c">
+        <option>Accelerator</option>
+        <option>Black_Hole</option>
+        <option>Bouncy_Wall</option>
+        <option>Finish</option>
+        <option>Game_Object</option>
+        <option>Loose_Wall</option>
+        <option>Player</option>
+      </select>
+      <label for="n">Name</label><input id="n" type="text">
       <label for="x">X</label><input id="x" type="number">
       <label for="y">Y</label><input id="y" type="number">
       <label for="xs">X Scale</label><input id="xs" type="number">
