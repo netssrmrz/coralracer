@@ -5,7 +5,8 @@ implements
   rs.projecta.object.features.Has_Position,
   rs.projecta.object.features.Is_Drawable,
   rs.projecta.object.features.Can_Collide,
-  rs.projecta.object.features.Has_Direction
+  rs.projecta.object.features.Has_Direction,
+  rs.projecta.object.features.Has_Auto_Movement
 {
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World world;
@@ -13,6 +14,8 @@ implements
   public float x, y, a_degrees;
   public rs.projecta.ogl.Color color;
   public static final float size=75;
+  public boolean update_player;
+  public Player player;
 
   public Accelerator(rs.projecta.world.World world, float x, float y, float sx, float sy, float a_degrees)
   {
@@ -29,6 +32,8 @@ implements
   
     this.draw_shape = new rs.projecta.ogl.shapes.Fast_Forward();
     this.color = new rs.projecta.ogl.Color(0xff00ff00);
+    
+    this.update_player = false;
   }
   
   public void Draw(rs.projecta.view.Game_View v, android.graphics.Canvas c)
@@ -58,14 +63,10 @@ implements
   
   public void Contact(org.jbox2d.dynamics.contacts.Contact c)
   {
-    Player player;
-  
-    player = (rs.projecta.object.Player)
-               rs.projecta.world.World.Get_Contact_Object_If_Type(c, rs.projecta.object.Player.class);
-    if (player != null)
+    this.player = rs.projecta.world.World.Get_Player_Contact(c);
+    if (this.player != null)
     {
-      player.Add_Cmd(rs.projecta.object.cmds.Cmd.TYPE_TURN_TO, this.body.getAngle());
-      player.Add_Cmd(rs.projecta.object.cmds.Cmd.TYPE_PUSH, 5000f);
+      this.update_player = true;
     }
   }
   
@@ -77,5 +78,19 @@ implements
   public void Set_Angle_Degrees(float a)
   {
   
+  }
+  
+  public void Update(float dt)
+  {
+    if (this.update_player)
+    {
+      this.player.body.setAngularVelocity(0);
+      this.player.body.setTransform(this.player.body.getPosition(), this.body.getAngle());
+
+      this.player.body.setLinearVelocity(new org.jbox2d.common.Vec2(0, 0));
+      this.player.Apply_Frwd_Force(5000f);
+      
+      this.update_player = false;
+    }
   }
 }

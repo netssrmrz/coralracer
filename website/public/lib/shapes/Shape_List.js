@@ -568,7 +568,7 @@ extends LitElement
       td
       {
         padding: 4px 12px;
-        font-size: 16px;
+        font-size: 13px;
       }
 
       .button
@@ -745,7 +745,7 @@ extends LitElement
 
     return html`
       <tr shape-id="${shape.id}">
-        <td>
+        <td nowrap>
           ${this.Render_Button(shape.id, this.OnClick_Select, "target.svg", true, "Select", btn_class)}
           ${this.Render_Button(shape.id, this.OnClick_Edit, "pencil-outline.svg", shape.can_edit, "Edit", "button")}
           ${this.Render_Button(shape.id, this.OnClick_Delete, "delete-outline.svg", shape.can_delete, "Delete", "button")}

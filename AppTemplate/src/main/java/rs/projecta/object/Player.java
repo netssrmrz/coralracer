@@ -17,14 +17,12 @@ implements
   public float suspend_secs;
   public rs.projecta.ogl.shapes.Fish1 fish1;
   public rs.projecta.ogl.Color color;
-  public java.util.ArrayList<rs.projecta.object.cmds.Cmd> cmds;
   
   public Player(rs.projecta.world.World world, float x, float y, float sx, float sy, float a_degrees)
   {
     org.jbox2d.dynamics.BodyDef body_def;
     org.jbox2d.dynamics.FixtureDef fix_def;
     
-    this.cmds = new java.util.ArrayList<rs.projecta.object.cmds.Cmd>();
     this.w = world;
     this.suspend_secs = 0;
   
@@ -195,8 +193,6 @@ implements
     }
     else
       this.suspend_secs -= sec_step;
-    
-    this.Process_Cmds();
   }
   
   public void Force_To(float x, float y)
@@ -205,34 +201,5 @@ implements
     
     force = new org.jbox2d.common.Vec2(x, y);
     this.body.applyForceToCenter(force);
-  }
-  
-  public void Add_Cmd(int type, float val)
-  {
-    rs.projecta.object.cmds.Cmd cmd;
-    
-    cmd = new rs.projecta.object.cmds.Cmd(type, val);
-    this.cmds.add(cmd);
-  }
-  
-  public void Process_Cmds()
-  {
-    if (this.cmds != null && this.cmds.size() > 0)
-    {
-      for (rs.projecta.object.cmds.Cmd cmd: this.cmds)
-      {
-        if (cmd.type == rs.projecta.object.cmds.Cmd.TYPE_TURN_TO)
-        {
-          body.setAngularVelocity(0);
-          body.setTransform(body.getPosition(), (float)cmd.val);
-        }
-        else if (cmd.type == rs.projecta.object.cmds.Cmd.TYPE_PUSH)
-        {
-          this.body.setLinearVelocity(new org.jbox2d.common.Vec2(0, 0));
-          this.Apply_Frwd_Force(cmd.val);
-        }
-      }
-      this.cmds.clear();
-    }
   }
 }

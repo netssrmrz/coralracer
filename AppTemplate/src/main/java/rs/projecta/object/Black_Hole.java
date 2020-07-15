@@ -1,13 +1,16 @@
 package rs.projecta.object;
 
 public class Black_Hole
-  implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.Has_Position, rs.projecta.object.features.Has_Auto_Movement
+implements
+  rs.projecta.object.features.Is_Drawable,
+  rs.projecta.object.features.Has_Position,
+  rs.projecta.object.features.Has_Auto_Movement
 {
   public float x, y;
   public rs.projecta.ogl.shapes.Swirl swirl;
   public rs.projecta.object.Player player;
   public final float effect_dist = 1000;
-  public final float max_force = 20;
+  public final float max_force = 140;
   public rs.projecta.ogl.Color color;
   
   public Black_Hole(rs.projecta.world.World w, float x, float y, float dx, float dy, float a_degrees)
@@ -65,7 +68,8 @@ public class Black_Hole
     {
       f_strength = -(max_force/effect_dist)*(distance-effect_dist);
       f.mulLocal(f_strength);
-      this.player.body.applyLinearImpulse(f, this.player.body.getWorldCenter());
+      //this.player.body.applyLinearImpulse(f, this.player.body.getWorldCenter());
+      this.player.body.applyForceToCenter(f);
     }
   }
 }

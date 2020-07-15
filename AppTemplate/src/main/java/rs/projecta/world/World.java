@@ -357,6 +357,11 @@ implements
     return body;
   }
   
+  public static rs.projecta.object.Player Get_Player_Contact(org.jbox2d.dynamics.contacts.Contact c)
+  {
+    return (rs.projecta.object.Player)Get_Contact_Object_If_Type(c, rs.projecta.object.Player.class);
+  }
+  
   public static Object Get_Contact_Object_If_Type(org.jbox2d.dynamics.contacts.Contact c, Class<? extends Object> obj_class)
   {
     Object a, b, res=null;

@@ -62,6 +62,15 @@ class Android_Code_Gen extends LitElement
     this.shadowRoot.getElementById("txt_area").value = code;
   }
 
+  Round(val)
+  {
+    const dec_places = 3;
+    const f = Math.pow(10, dec_places);
+    val = Math.trunc(val * f) / f;
+
+    return val;
+  }
+
   Gen_Game_Objs(shapes)
   {
     let res = { objs: "", player: ""};
@@ -73,11 +82,11 @@ class Android_Code_Gen extends LitElement
         const s = shapes[i];
         if (s.class_name == "Player")
         {
-          const x = s.pt.x;
-          const y = s.pt.y;
-          const rx = s.scale.x*100;
-          const ry = s.scale.y*100
-          const a = s.To_Degrees(s.angle);
+          const x = Math.trunc(s.pt.x);
+          const y = Math.trunc(s.pt.y);
+          const rx = this.Round(s.scale.x*100);
+          const ry = this.Round(s.scale.y*100);
+          const a = this.Round(s.To_Degrees(s.angle));
           const params = "" +
             x + "f, " +
             y + "f, " +
@@ -89,11 +98,11 @@ class Android_Code_Gen extends LitElement
         }
         else
         {
-          const x = s.pt.x;
-          const y = s.pt.y;
-          const rx = s.scale.x*100;
-          const ry = s.scale.y*100
-          const a = s.To_Degrees(s.angle);
+          const x = Math.trunc(s.pt.x);
+          const y = Math.trunc(s.pt.y);
+          const rx = this.Round(s.scale.x*100);
+          const ry = this.Round(s.scale.y*100);
+          const a = this.Round(s.To_Degrees(s.angle));
           const params = "" +
             x + "f, " +
             y + "f, " +

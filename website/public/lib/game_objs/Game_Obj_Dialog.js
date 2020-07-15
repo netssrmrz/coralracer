@@ -247,6 +247,7 @@ class Game_Obj_Dialog extends LitElement
         <option>Finish</option>
         <option>Game_Object</option>
         <option>Loose_Wall</option>
+        <option>Oil_Slick</option>
         <option>Player</option>
       </select>
       <label for="n">Name</label><input id="n" type="text">

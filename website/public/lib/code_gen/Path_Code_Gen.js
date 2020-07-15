@@ -17,6 +17,15 @@ class Path_Code_Gen extends LitElement
     this.style.display = "block";
   }
 
+  Round(val)
+  {
+    const dec_places = 3;
+    const f = Math.pow(10, dec_places);
+    val = Math.trunc(val * f) / f;
+
+    return val;
+  }
+
   Gen_Code(shapes)
   {
     let code;

@@ -19,6 +19,15 @@ class Android_Shape_Code_Gen extends LitElement
     this.style.display = "block";
   }
 
+  Round(val)
+  {
+    const dec_places = 3;
+    const f = Math.pow(10, dec_places);
+    val = Math.trunc(val * f) / f;
+
+    return val;
+  }
+
   Gen_Code(shapes)
   {
     let code;
@@ -81,7 +90,7 @@ class Android_Shape_Code_Gen extends LitElement
     {
       for (i=0; i<points.length; i++)
       {
-        res = pl.Append_Str(res, points[i] + "f", ", ");
+        res = pl.Append_Str(res, this.Round(points[i]) + "f", ", ");
         if ((i+1)%10 == 0)
         {
           res+= "\n\t\t\t";
