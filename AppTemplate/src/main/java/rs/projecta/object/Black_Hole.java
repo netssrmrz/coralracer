@@ -4,7 +4,7 @@ public class Black_Hole
 implements
   rs.projecta.object.features.Is_Drawable,
   rs.projecta.object.features.Has_Position,
-  rs.projecta.object.features.Has_Auto_Movement
+    rs.projecta.object.features.Has_Update
 {
   public float x, y;
   public rs.projecta.ogl.shapes.Swirl swirl;

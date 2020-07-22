@@ -3,11 +3,7 @@ package rs.projecta.level;
 public class Level
 {
   public rs.projecta.world.World w;
-
-  public Class<? extends Level> Get_Next_Level()
-  {
-    return null;
-  }
+  public Class<? extends Level> next_level;
   
   public String Get_Title()
   {

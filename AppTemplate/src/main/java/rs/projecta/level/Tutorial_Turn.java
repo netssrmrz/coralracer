@@ -4,10 +4,9 @@ package rs.projecta.level;
 public class Tutorial_Turn
 extends Level
 {
-  @Override
-  public Class<? extends Level> Get_Next_Level()
+  public Tutorial_Turn()
   {
-    return rs.projecta.level.Tutorial_Black_Hole.class;
+    this.next_level = rs.projecta.level.Tutorial_Black_Hole.class;
   }
   
   @Override

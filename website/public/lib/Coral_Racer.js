@@ -624,11 +624,16 @@ export class Shape_Arc extends Shape
     return res;
   }
 
+  Set_Radius(r)
+  {
+    this.cp.x = this.pt.x + r;
+    this.cp.y = this.pt.y + r;
+  }
+
   Calc_Radius()
   {
     let r = 0;
     const ptc = this.Pt_Difference(this.cp, this.pt);
-    //const r = Math.hypot(ptc.x, ptc.y);
     if (Math.abs(ptc.x)<Math.abs(ptc.y))
     {
       r = Math.abs(ptc.x);
@@ -641,10 +646,26 @@ export class Shape_Arc extends Shape
     return r;
   }
 
+  Set_Start_Angle(a)
+  {
+    const r = this.Calc_Radius() + 20;
+    //a = To_Radians(a);
+    this.sa.x = this.pt.x + Math.cos(a)*r;
+    this.sa.y = this.pt.y + Math.sin(a)*r;
+  }
+
   Calc_Start_Angle()
   {
     const pta = this.Pt_Difference(this.sa, this.pt);
     return Math.atan2(pta.y, pta.x);
+  }
+
+  Set_End_Angle(a)
+  {
+    const r = this.Calc_Radius() + 40;
+    //a = To_Radians(a);
+    this.ea.x = this.pt.x + Math.cos(a)*r;
+    this.ea.y = this.pt.y + Math.sin(a)*r;
   }
 
   Calc_End_Angle()
@@ -1213,4 +1234,14 @@ export function To_Screen_Pt(ctx, cx, cy)
   const pt = cp.matrixTransform(m);
 
   return pt;
+}
+
+function To_Degrees(r)
+{
+  return r*(180/Math.PI);
+}
+
+function To_Radians(d)
+{
+  return d*(Math.PI/180);
 }

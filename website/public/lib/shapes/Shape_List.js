@@ -177,6 +177,13 @@ extends LitElement
     return res;
   }
 
+  Get_Shape_By_Id(id)
+  {
+    const i = this.Get_Shape_Idx(id);
+    const shape = this.shapes[i];
+    return shape;
+  }
+
   // API ==========================================================================================
 
   Hide()
@@ -312,13 +319,29 @@ extends LitElement
     this.requestUpdate();
   }
 
-  Add_Shape(class_name, shape_name)
+  moveShapeToCentre(shape)
+  {
+    if (this.ctx)
+    {
+      const pt = pl.To_Canvas_Pt(this.ctx, this.ctx.canvas.width/2, this.ctx.canvas.height/2);
+      shape.pt.x = pt.x;
+      shape.pt.y = pt.y;
+    }
+  }
+
+  Add_Shape(class_name, shape_name, data)
   {
     const shape = new pl[class_name];
     shape.class_name = class_name;
     shape.name = shape_name;
 
     this.Add(shape);
+    /*this.moveShapeToCentre(shape);
+    if (class_name == "Shape_Rect")
+    {
+      shape.cp.x = data.cp.x;
+      shape.cp.y = data.cp.y;
+    }*/
     this.Select(shape.id);
     this.Save();
 
@@ -329,7 +352,20 @@ extends LitElement
   }
 
   // Events =======================================================================================
-  
+    
+  OnClick_Copy(event)
+  {
+    /*let data;
+    const shape_id = event.currentTarget.getAttribute("shape-id");
+    const shape = this.Get_Shape_By_Id(shape_id);
+
+    if (shape.class_name == "Shape_Rect")
+    {
+      data = { cp: { x: shape.cp.x, y: shape.cp.y } };
+    }
+    this.Add_Shape(shape.class_name, shape.name, data);*/
+  }
+
   OnClick_Delete(event)
   {
     const shape_id = event.currentTarget.getAttribute("shape-id");
@@ -747,6 +783,7 @@ extends LitElement
       <tr shape-id="${shape.id}">
         <td nowrap>
           ${this.Render_Button(shape.id, this.OnClick_Select, "target.svg", true, "Select", btn_class)}
+          ${this.Render_Button(shape.id, this.OnClick_Copy, "content-copy.svg", true, "Copy", "button")}
           ${this.Render_Button(shape.id, this.OnClick_Edit, "pencil-outline.svg", shape.can_edit, "Edit", "button")}
           ${this.Render_Button(shape.id, this.OnClick_Delete, "delete-outline.svg", shape.can_delete, "Delete", "button")}
         </td>

@@ -16,8 +16,8 @@ public class Object_List
   {
     for (Object obj: this.objs)
     {
-      if (obj instanceof rs.projecta.object.features.Has_Auto_Movement)
-        ((rs.projecta.object.features.Has_Auto_Movement)obj).Update(sec_step);
+      if (obj instanceof rs.projecta.object.features.Has_Update)
+        ((rs.projecta.object.features.Has_Update)obj).Update(sec_step);
     }
 
     for (Object obj: this.del_objs)
@@ -34,9 +34,10 @@ public class Object_List
     this.del_objs.add(obj);
   }
 
-  public void Add(Object obj)
+  public Object Add(Object obj)
   {
     this.objs.add(obj);
+    return obj;
   }
 
   public Object Get_One(Class obj_class, boolean get_newest)

@@ -11,6 +11,7 @@ implements
   public rs.projecta.ogl.shapes.Arrow arrow;
   public float x, y;
   public rs.projecta.ogl.Color color;
+  public Class<? extends rs.projecta.level.Level> next_level;
 
   public Finish(rs.projecta.world.World world, float x, float y, float sx, float sy, float a_degrees)
   {
@@ -38,7 +39,6 @@ implements
     fix_def.restitution=1;
     fix_def.isSensor=true;
     body.createFixture(fix_def);
-    //this.body = this.world.Add_Single_Fixture_Body(shape, x, y, 0, 1, true);
   
     this.arrow = new rs.projecta.ogl.shapes.Arrow();
     this.color = new rs.projecta.ogl.Color(0x00ff00ff);
@@ -56,22 +56,20 @@ implements
 
   public float Get_X()
   {
-    return rs.projecta.Util.Get_Transform(this.world, this.body, rs.projecta.Util.TID_X);
+    return this.x;
   }
 
   public float Get_Y()
   {
-    return rs.projecta.Util.Get_Transform(this.world, this.body, rs.projecta.Util.TID_Y);
+    return this.y;
   }
   
   public void Set_X(float x)
   {
-    rs.projecta.Util.Set_Transform(this.world, this.body, x, null, null);
   }
 
   public void Set_Y(float y)
   {
-    rs.projecta.Util.Set_Transform(this.world, this.body, null, y, null);
   }
   
   public void Contact(org.jbox2d.dynamics.contacts.Contact c)
@@ -81,6 +79,7 @@ implements
     player = (Player)rs.projecta.world.World.Get_Contact_Object_If_Type(c, Player.class);
     if (player != null)
     {
+      this.world.level.next_level = this.next_level;
       this.world.Change_State(rs.projecta.world.World.STATE_LEVELCOMPLETE);
     }
   }

@@ -3,10 +3,9 @@ package rs.projecta.level;
 public class Tutorial_Accelerator
   extends Level
 {
-  @Override
-  public Class<? extends Level> Get_Next_Level()
+  public Tutorial_Accelerator()
   {
-    return rs.projecta.level.Flappy_Bird.class;
+    this.next_level = null;
   }
   
   @Override
@@ -25,7 +24,16 @@ public class Tutorial_Accelerator
   public void Build(rs.projecta.world.World w)
   {
     super.Build(w);
+    
     rs.projecta.object.Player player = new rs.projecta.object.Player(w, 0f, 250f, 25f, 25f, 180f);
+    rs.projecta.object.Portal portal = new rs.projecta.object.Portal(w, 0f, -2164f, 100f, 100f, 0f);
+    portal.to_x = 0f;
+    portal.to_y = -5485f;
+    rs.projecta.object.Finish finish1 = new rs.projecta.object.Finish(w, 1000f, 250f, 50f, 50f, 0f);
+    finish1.next_level = rs.projecta.level.Flappy_Bird.class;
+    rs.projecta.object.Finish finish2 = new rs.projecta.object.Finish(w, 1500f, 250f, 50f, 50f, 0f);
+    finish2.next_level = rs.projecta.level.Tutorial_Accelerator.class;
+    
     Add_Wavy_Bkg(w, player);
     w.objs.Add(player);
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 500f, -2500f, 3000f, 20f, 90f));
@@ -62,7 +70,8 @@ public class Tutorial_Accelerator
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 14292f, -8367f, 5500f, 20f, 20.677f));
     w.objs.Add(new rs.projecta.object.Accelerator(w, 10657f, -8294f, 100f, 100f, -40.238f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 11576f, -6915f, 3000f, 20f, -184.216f));
-    w.objs.Add(new rs.projecta.object.Finish(w, 1000f, 250f, 50f, 50f, 0f));
+    w.objs.Add(finish1);
+    w.objs.Add(finish2);
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 9500f, 500f, 10000f, 20f, 0f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 19445f, -2941f, 3500f, 20f, 90f));
     w.objs.Add(new rs.projecta.object.Accelerator(w, 11377f, -7445f, 100f, 100f, -122.535f));
@@ -88,5 +97,6 @@ public class Tutorial_Accelerator
     w.objs.Add(new rs.projecta.object.Loose_Wall(w, 14061f, -6534f, 415.968f, 63.07f, -123.146f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 16441f, -4874f, 3000f, 20f, -184.216f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 13457f, -5656f, 1000f, 20f, 90f));
+    w.objs.Add(portal);
   }
 }

@@ -7,10 +7,9 @@ extends Level
   public float trg_pos, trg_step;
   public int score;
 
-  @Override
-  public Class<? extends Level> Get_Next_Level()
+  public Flappy_Bird()
   {
-    return null;
+    this.next_level = null;
   }
 
   @Override

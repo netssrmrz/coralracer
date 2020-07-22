@@ -6,13 +6,16 @@ implements
   rs.projecta.object.features.Is_Drawable,
   rs.projecta.object.features.Can_Collide,
   rs.projecta.object.features.Has_Direction,
-  rs.projecta.object.features.Has_Auto_Movement
+  rs.projecta.object.features.Has_Update
 {
   public float x, y, a_degrees;
   public rs.projecta.ogl.Color color;
   public rs.projecta.ogl.shapes.Blob draw_shape;
   public rs.projecta.world.World world;
   public org.jbox2d.dynamics.Body body;
+  public Player player;
+  public boolean update_player;
+  java.util.Random rnd;
   
   public Oil_Slick(rs.projecta.world.World world, float x, float y, float sx, float sy, float a_degrees)
   {
@@ -26,16 +29,18 @@ implements
     org.jbox2d.collision.shapes.CircleShape shape=new org.jbox2d.collision.shapes.CircleShape();
     shape.setRadius(this.world.To_Phys_Dim(100));
     this.body = this.world.Add_Single_Fixture_Body(shape, x, y, a_degrees, 1, true, this);
+    
+    this.update_player = false;
+    this.rnd = new java.util.Random();
   }
   
   @Override
   public void Contact(org.jbox2d.dynamics.contacts.Contact c)
   {
-    Player player;
-  
-    player = rs.projecta.world.World.Get_Player_Contact(c);
-    if (player != null)
+    this.player = rs.projecta.world.World.Get_Player_Contact(c);
+    if (this.player != null)
     {
+      this.update_player = true;
     }
   }
   
@@ -84,6 +89,14 @@ implements
   @Override
   public void Update(float dt)
   {
-  
+    if (this.update_player)
+    {
+      float v = this.rnd.nextFloat() * 50f + 50f;
+      boolean d = this.rnd.nextBoolean();
+      if (d) v = -v;
+      
+      this.player.body.setAngularVelocity(v);
+      this.update_player = false;
+    }
   }
 }

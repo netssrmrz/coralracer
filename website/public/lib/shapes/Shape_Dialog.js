@@ -21,7 +21,7 @@ class Shape_Dialog extends LitElement
     this.radius_x_elem = this.shadowRoot.getElementById("rx");
     this.radius_y_elem = this.shadowRoot.getElementById("ry");
     this.start_angle_elem = this.shadowRoot.getElementById("sa");
-    this.end_angle_elem = this.shadowRoot.getElementById("en");
+    this.end_angle_elem = this.shadowRoot.getElementById("ea");
     this.width_elem = this.shadowRoot.getElementById("w");
     this.height_elem = this.shadowRoot.getElementById("h");
     this.ctrl_pt_x_elem = this.shadowRoot.getElementById("cpx");
@@ -60,7 +60,20 @@ class Shape_Dialog extends LitElement
         shape.pt.x = Number.parseFloat(this.x_elem.value);
         shape.pt.y = Number.parseFloat(this.y_elem.value);
         break;
-    }
+      case "Shape_Arc":
+        shape.pt.x = Number.parseFloat(this.x_elem.value);
+        shape.pt.y = Number.parseFloat(this.y_elem.value);
+        shape.Set_Radius(Number.parseFloat(this.radius_elem.value));
+        shape.Set_Start_Angle(Number.parseFloat(this.start_angle_elem.value));
+        shape.Set_End_Angle(Number.parseFloat(this.end_angle_elem.value));
+        break;
+      case "Shape_Rect":
+        shape.pt.x = Number.parseFloat(this.x_elem.value);
+        shape.pt.y = Number.parseFloat(this.y_elem.value);
+        shape.cp.x = Number.parseFloat(this.x2_elem.value);
+        shape.cp.y = Number.parseFloat(this.y2_elem.value);
+        break;
+      }
 
     this.Hide();
     this.onclick_edit_ok(shape);
@@ -100,7 +113,20 @@ class Shape_Dialog extends LitElement
         this.Show_Field("x", shape.pt.x);
         this.Show_Field("y", shape.pt.y);
         break;
-    }
+      case "Shape_Arc":
+        this.Show_Field("x", shape.pt.x);
+        this.Show_Field("y", shape.pt.y);
+        this.Show_Field("r", shape.Calc_Radius());
+        this.Show_Field("sa", shape.Calc_Start_Angle());
+        this.Show_Field("ea", shape.Calc_End_Angle());
+        break;
+      case "Shape_Rect":
+        this.Show_Field("x", shape.pt.x);
+        this.Show_Field("y", shape.pt.y);
+        this.Show_Field("x2", shape.cp.x);
+        this.Show_Field("y2", shape.cp.y);
+        break;
+      }
 
     this.new_ok_btn.style.display = "none";
     this.edit_ok_btn.style.display = "inline-block";

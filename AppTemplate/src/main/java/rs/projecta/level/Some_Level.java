@@ -3,10 +3,9 @@ package rs.projecta.level;
 public class Some_Level
   extends Level
 {
-  @Override
-  public Class<? extends Level> Get_Next_Level()
+  public Some_Level()
   {
-    return rs.projecta.level.Some_Level.class;
+    this.next_level = rs.projecta.level.Some_Level.class;
   }
   
   @Override

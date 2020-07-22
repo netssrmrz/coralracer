@@ -176,7 +176,7 @@ implements
     Class<? extends rs.projecta.level.Level> next_level_class;
     rs.projecta.level.Level next_level;
   
-    next_level_class = this.level.Get_Next_Level();
+    next_level_class = this.level.next_level;
     next_level = rs.projecta.level.Level.Get(next_level_class);
     this.Init_Level(next_level);
   }
@@ -375,5 +375,15 @@ implements
       res=b;
     
     return res;
+  }
+  
+  public static boolean Is_Contact_Of_Type(org.jbox2d.dynamics.contacts.Contact c, Class<? extends Object> obj_class)
+  {
+    return Get_Contact_Object_If_Type(c, obj_class) != null;
+  }
+  
+  public static boolean Is_Player_Contact(org.jbox2d.dynamics.contacts.Contact c)
+  {
+    return Is_Contact_Of_Type(c, rs.projecta.object.Player.class);
   }
 }

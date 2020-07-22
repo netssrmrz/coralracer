@@ -4,10 +4,9 @@ package rs.projecta.level;
 public class Tutorial_Bouncy_Castle
 extends Level
 {
-  @Override
-  public Class<? extends Level> Get_Next_Level()
+  public Tutorial_Bouncy_Castle()
   {
-    return rs.projecta.level.Tutorial_Accelerator.class;
+    this.next_level = rs.projecta.level.Tutorial_Accelerator.class;
   }
   
   @Override

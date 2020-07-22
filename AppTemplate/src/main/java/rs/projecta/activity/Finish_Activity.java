@@ -41,7 +41,7 @@ android.widget.Button.OnClickListener
 
     i=new android.content.Intent(this, Play_Activity.class);
     i.setFlags(android.content.Intent.FLAG_ACTIVITY_NO_HISTORY);
-    i.putExtra("level_class", this.curr_level.Get_Next_Level());
+    i.putExtra("level_class", this.curr_level.next_level);
     this.startActivity(i);
   }
 }

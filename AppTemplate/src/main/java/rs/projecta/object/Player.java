@@ -6,7 +6,7 @@ implements
   rs.projecta.object.features.Has_Position,
   rs.projecta.object.features.Has_Direction,
   rs.projecta.object.features.Can_Collide,
-  rs.projecta.object.features.Has_Auto_Movement
+    rs.projecta.object.features.Has_Update
 {
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World w;

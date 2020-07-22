@@ -8,6 +8,7 @@ implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.
   public rs.projecta.world.World w;
   public rs.projecta.ogl.shapes.Star star;
   public rs.projecta.ogl.Color color;
+  public boolean restart_on_hit;
   
   public Explosion(rs.projecta.world.World w, float cx, float cy)
   {
@@ -17,6 +18,7 @@ implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.
     this.r_delta=3f;
     this.r_max=1500f;
     this.r=0;
+    this.restart_on_hit=false;
     
     if (this.w.sounds!=null)
       this.w.sounds.play(this.w.soundid_whack, 1, 1, 0, 0, 1);
@@ -33,9 +35,9 @@ implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.
     this.r=this.r+this.r_delta*((float)this.w.lapsed_time/1000000f);
     if (this.r>r_max)
     {
-      //android.util.Log.d("Explosion", "Draw(): this.r>r_max");
       w.objs.Remove(this);
-      w.Change_State(rs.projecta.world.World.STATE_LEVELFAIL);
+      if (this.restart_on_hit)
+        w.Change_State(rs.projecta.world.World.STATE_LEVELFAIL);
     }
     else
     {
@@ -69,7 +71,18 @@ implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.
   
   public static void Add(rs.projecta.world.World w, float cx, float cy)
   {
+    Add(w, cx, cy, true);
+  }
+  
+  public static void Add(rs.projecta.world.World w, float cx, float cy, boolean restart_on_hit)
+  {
+    Explosion explosion;
+    
     if (w.objs.Get_Count(Explosion.class)<3)
-      w.objs.Add(new Explosion(w, cx, cy));
+    {
+      explosion = new Explosion(w, cx, cy);
+      explosion.restart_on_hit = restart_on_hit;
+      w.objs.Add(explosion);
+    }
   }
 }
