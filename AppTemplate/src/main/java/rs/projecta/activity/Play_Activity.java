@@ -4,13 +4,16 @@ public class Play_Activity
 extends android.app.Activity
 implements 
   rs.projecta.world.World_Step_Listener,
-  android.view.View.OnTouchListener
+  android.view.View.OnTouchListener,
+  android.view.GestureDetector.OnGestureListener
 {
   public android.view.SurfaceView gfx_view;
   public rs.projecta.Tilt_Manager tilt_man;
   public rs.projecta.world.World world;
   public rs.projecta.level.Level curr_level;
   public android.widget.LinearLayout main_view;
+  public android.support.v4.view.GestureDetectorCompat gesture_man;
+  public boolean has_tilt_sensors;
 
   @Override
   public void onCreate(android.os.Bundle saved_state)
@@ -33,7 +36,6 @@ implements
     else
       this.world=new rs.projecta.world.World(this, this.curr_level, rs.projecta.world.World.HINT_NONE);
     this.world.Set_Listener(this);
-    this.tilt_man=new rs.projecta.Tilt_Manager(this, this.world);
     if (supports_es2)
       this.gfx_view = new rs.projecta.view.OpenGL_View(this, this.world);
     else
@@ -63,8 +65,17 @@ implements
       new android.widget.LinearLayout.LayoutParams(
         android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
 				android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-    
-    this.gfx_view.setOnTouchListener(this);
+
+    this.has_tilt_sensors = rs.projecta.Tilt_Manager.Has_Tilt_Sensors(this);
+    if (this.has_tilt_sensors)
+    {
+      this.tilt_man=new rs.projecta.Tilt_Manager(this, this.world);
+      this.gesture_man = new android.support.v4.view.GestureDetectorCompat(this, this);
+    }
+    else
+    {
+      this.gfx_view.setOnTouchListener(this);
+    }
   }
   
   public boolean Supports_ES2()
@@ -81,7 +92,9 @@ implements
     
     //android.util.Log.d("onResume()", "Entered");
     ((rs.projecta.view.Game_View)this.gfx_view).onResume();
-    this.tilt_man.Register();
+    
+    if (this.tilt_man != null)
+      this.tilt_man.Register();
   }
 
   @Override
@@ -90,7 +103,8 @@ implements
     super.onPause();
     
     //android.util.Log.d("onPause()", "Entered");
-    this.tilt_man.Unregister();
+    if (this.tilt_man != null)
+      this.tilt_man.Unregister();
     ((rs.projecta.view.Game_View)this.gfx_view).onPause();
   }
   
@@ -113,23 +127,83 @@ implements
   }
   
   @Override
+  public boolean onTouchEvent(android.view.MotionEvent event)
+  {
+    boolean res = false;
+  
+    if (this.has_tilt_sensors)
+    {
+      res = this.gesture_man.onTouchEvent(event);
+    }
+    else
+    {
+      res = super.onTouchEvent(event);
+    }
+    
+    return res;
+  }
+  
   public boolean onTouch(android.view.View v, android.view.MotionEvent event)
   {
     int w = v.getWidth();
-    int h = v.getHeight();
+    //int h = v.getHeight();
     
     float x = event.getX();
-    float y = event.getY();
+    //float y = event.getY();
     
     x = x - w/2;
-    y = y - h/2;
-    //android.util.Log.d("onTouch()", "x, y: " + x + ", " + y);
-    //double a = java.lang.Math.atan2( -x, y ) + java.lang.Math.PI;
-    //android.util.Log.d("onTouch()", "a: " + a);
+    //y = y - h/2;
+    
+    x = x / 2000f;
   
-    this.world.objs.Get_Player().Force_To(x, y);
-    //this.world.objs.Get_Player().Turn_To(a);
-    //this.world.objs.Get_Player().Turn_To(a);
+    this.world.objs.Get_Player().Turn(x);
+ 
+    return true;
+  }
+  
+  @Override
+  public boolean onDown(android.view.MotionEvent e)
+  {
+    //android.util.Log.d("onDown()", "entered");
+    return false;
+  }
+  
+  @Override
+  public void onShowPress(android.view.MotionEvent e)
+  {
+    //android.util.Log.d("onShowPress()", "entered");
+  }
+  
+  @Override
+  public boolean onSingleTapUp(android.view.MotionEvent e)
+  {
+    //android.util.Log.d("onSingleTapUp()", "entered");
+    return false;
+  }
+  
+  @Override
+  public boolean onScroll(android.view.MotionEvent e1, android.view.MotionEvent e2, float distanceX, float distanceY)
+  {
+    //android.util.Log.d("onScroll()", "entered");
+    return false;
+  }
+  
+  @Override
+  public void onLongPress(android.view.MotionEvent e)
+  {
+    //android.util.Log.d("onLongPress()", "entered");
+  }
+  
+  @Override
+  public boolean onFling(android.view.MotionEvent e1, android.view.MotionEvent e2, float pixel_vx, float pixel_vy)
+  {
+    int w = this.gfx_view.getWidth();
+    int h = this.gfx_view.getHeight();
+    float vx = pixel_vx/w;
+    float vy = pixel_vy/h;
+    float factor = -500f;
+
+    this.world.objs.Get_Player().Apply_Force(vx*factor, vy*factor);
   
     return true;
   }

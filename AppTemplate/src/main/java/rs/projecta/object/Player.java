@@ -92,10 +92,6 @@ implements
     rs.projecta.Util.Set_Transform(this.w, this.body, null, null, a);
   }
 
-  public void xUser_Action(float f, float t)
-  {
-  }
-
 	public void Turn(float tilt)
 	{
     float curr_v, trgt_v, f=0;
@@ -184,9 +180,6 @@ implements
       req_rel_vel = new org.jbox2d.common.Vec2(0, trgt_v);
       req_abs_vel = this.body.getWorldVector(req_rel_vel);
       diff_abs_vel = req_abs_vel.sub(curr_abs_vel);
-      
-      //impulse = diff_abs_vel.mul(this.body.getMass());
-      //this.body.applyLinearImpulse(impulse, this.body.getWorldCenter());
   
       diff_abs_vel = diff_abs_vel.mul(2f);
       this.body.applyForceToCenter(diff_abs_vel);
@@ -195,11 +188,12 @@ implements
       this.suspend_secs -= sec_step;
   }
   
-  public void Force_To(float x, float y)
+  public void Apply_Force(float x, float y)
   {
-    org.jbox2d.common.Vec2 force;
-    
-    force = new org.jbox2d.common.Vec2(x, y);
-    this.body.applyForceToCenter(force);
+    org.jbox2d.common.Vec2 body_force, world_force;
+  
+    body_force = new org.jbox2d.common.Vec2(x, y);
+    world_force = this.body.getWorldVector(body_force);
+    this.body.applyForceToCenter(world_force);
   }
 }

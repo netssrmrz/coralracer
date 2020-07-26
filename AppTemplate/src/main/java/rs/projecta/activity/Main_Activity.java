@@ -27,7 +27,6 @@ implements android.widget.Button.OnClickListener
     text_view=new android.widget.TextView(this);
     text_view.setTextColor(0xff009900);
     text_view.setTextSize(18);
-    text_view.setText(level.Get_Description());
     text_view.setGravity(
       android.view.Gravity.BOTTOM|android.view.Gravity.CENTER_HORIZONTAL);
     list_view.addView(text_view,
@@ -45,10 +44,13 @@ implements android.widget.Button.OnClickListener
     button.setId(1);
     list_view.addView(button, layout);
     
-    if (!rs.projecta.Tilt_Manager.Has_Tilt_Sensors(this))
+    if (rs.projecta.Tilt_Manager.Has_Tilt_Sensors(this))
     {
-      text_view.setText("Time to get a better mobile!");
-      button.setEnabled(false);
+      text_view.setText("Tilt the device left or right to maneuver.\n\n" + level.Get_Description());
+    }
+    else
+    {
+      text_view.setText("Touch the screen on the left or right to maneuver.\n\n" + level.Get_Description());
     }
     
     this.setContentView(list_view,

@@ -222,56 +222,6 @@ implements
     this.objs.Process(sec_step); // remove and update
   }
 
-  public String Gen_Level_Script()
-  {
-    String s;
-
-    s =
-      "package rs.projecta.level;\n\n" +
-      "public class ???\n" +
-      "extends Level\n" +
-      "{\n" +
-      "  @Override\n" +
-      "  public String Get_Next_Level()\n" +
-      "  {\n" +
-      "    return rs.projecta.level.???.class.getName();\n" +
-      "  }\n\n" +
-      "  @Override\n" +
-      "  public String Get_Title()\n" +
-      "  {\n" +
-      "    return \"???\";\n" +
-      "  }\n\n" +
-      "  @Override\n" +
-      "  public String Get_Description()\n" +
-      "  {\n" +
-      "    return \"???\";\n" +
-      "  }\n\n" +
-      "  @Override\n" +
-      "  public void Build(rs.projecta.World w)\n" +
-      "  {\n";
-
-    for (Object obj: this.objs.objs)
-    {
-      if (obj instanceof rs.projecta.object.Finish)
-      {
-        s += "    w.objs.add(new rs.projecta.object.Finish(w, " +
-          ((rs.projecta.object.Finish)obj).Get_X() + ", " +
-          ((rs.projecta.object.Finish)obj).Get_Y() + "));\n";
-      }
-    }
-    /*w.objs.add(new rs.projecta.object.Finish(w, 0, -3800));
-     w.objs.add(new rs.projecta.object.Wall(w, 0, -3900, 180, 10, 0)); // top
-     w.objs.add(new rs.projecta.object.Wall(w, 200, -1900, 10, 2000, 0)); // right
-     w.objs.add(new rs.projecta.object.Wall(w, -200, -1900, 10, 2000, 0)); // left
-     w.objs.add(new rs.projecta.object.Wall(w, 0, 100, 180, 10, 0)); // bottom
-     w.objs.add(new rs.projecta.object.Player(0, 0, w));
-     w.objs.add(new rs.projecta.object.Background());*/
-    s = s +
-      "  }\n" +
-      "}\n";
-    return s;
-  }
-
   public void onLoadComplete(android.media.SoundPool sounds, int id, int status)
   {
     if (status == 0)
