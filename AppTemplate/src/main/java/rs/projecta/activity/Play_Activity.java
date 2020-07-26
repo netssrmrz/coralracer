@@ -45,8 +45,7 @@ implements
       new com.google.android.gms.ads.AdView(this);
     mAdView.setAdSize(com.google.android.gms.ads.AdSize.SMART_BANNER);
     mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); // sample banner ad for dev and testing
-    //mAdView.setAdUnitId("ca-app-pub-7012708134579766/4040982339"); // prod
-    com.google.android.gms.ads.AdRequest adRequest = 
+    com.google.android.gms.ads.AdRequest adRequest =
       new com.google.android.gms.ads.AdRequest.Builder().build();
     mAdView.loadAd(adRequest);
     
