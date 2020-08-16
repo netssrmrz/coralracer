@@ -764,7 +764,7 @@ class Object_List extends LitElement
           ${this.Render_Button(shape.id, this.OnClick_Delete, "delete-outline.svg", shape.can_delete, "Delete", "button")}
         </td>
         <td>${i+1}</td>
-        <td>${shape.name}</td>
+        <td>${shape.class_name}</td>
         <td>${unsafeHTML(shape.Params_Str())}</td>
       </tr>
       `;

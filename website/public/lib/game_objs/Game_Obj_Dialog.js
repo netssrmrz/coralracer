@@ -245,10 +245,13 @@ class Game_Obj_Dialog extends LitElement
         <option>Black_Hole</option>
         <option>Bouncy_Wall</option>
         <option>Finish</option>
+        <option>Flappy_Wall</option>
         <option>Game_Object</option>
         <option>Loose_Wall</option>
+        <option>Mine</option>
         <option>Oil_Slick</option>
         <option>Player</option>
+        <option>Portal</option>
       </select>
       <label for="n">Name</label><input id="n" type="text">
       <label for="x">X</label><input id="x" type="number">

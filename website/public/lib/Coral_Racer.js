@@ -297,6 +297,26 @@ extends Game_Object
   }
 }
 
+export class Flappy_Wall
+extends Game_Object
+{
+  constructor()
+  {
+    super();
+    this.name = "Flappy Wall";
+    this.class_name = "Flappy_Wall";
+    this.scale = { x: 5, y: 0.2 };
+  }
+
+  Render(ctx)
+  {
+    ctx.beginPath();
+    ctx.fillStyle = "#666";
+    ctx.rect(-100, -100, 200, 200);
+    ctx.fill();
+  }
+}
+
 export class Accelerator
 extends Game_Object
 {
@@ -359,6 +379,30 @@ extends Game_Object
     super();
     this.name = "Black_Hole";
     this.class_name = "Black_Hole";
+    this.scale = { x: 1, y: 1 };
+  }
+}
+
+export class Mine
+extends Game_Object
+{
+  constructor()
+  {
+    super();
+    this.name = "Mine";
+    this.class_name = "Mine";
+    this.scale = { x: 1, y: 1 };
+  }
+}
+
+export class Portal
+extends Game_Object
+{
+  constructor()
+  {
+    super();
+    this.name = "Portal";
+    this.class_name = "Portal";
     this.scale = { x: 1, y: 1 };
   }
 }
