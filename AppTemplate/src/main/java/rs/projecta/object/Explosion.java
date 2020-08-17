@@ -82,7 +82,7 @@ implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.
     {
       explosion = new Explosion(w, cx, cy);
       explosion.restart_on_hit = restart_on_hit;
-      w.objs.Add(explosion);
+      w.objs.Add_Later(explosion);
     }
   }
 }

@@ -12,9 +12,11 @@ implements
   public final float effect_dist = 1000;
   public final float max_force = 140;
   public rs.projecta.ogl.Color color;
+  public rs.projecta.world.World w;
   
   public Black_Hole(rs.projecta.world.World w, float x, float y, float dx, float dy, float a_degrees)
   {
+    this.w = w;
     this.x = x;
     this.y = y;
     this.swirl = new rs.projecta.ogl.shapes.Swirl();
@@ -59,7 +61,8 @@ implements
   {
     org.jbox2d.common.Vec2 f;
     float distance, f_strength;
-    
+  
+    this.player = w.objs.Get_Player();
     f = new org.jbox2d.common.Vec2();
     f.x = this.x - this.player.Get_X();
     f.y = this.y - this.player.Get_Y();

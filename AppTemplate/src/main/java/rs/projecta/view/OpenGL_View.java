@@ -22,14 +22,12 @@ implements
     this.ogl_ctx = new rs.projecta.ogl.Context();
     this.setEGLContextClientVersion(2);
     this.setRenderer(this);
-    //this.setRenderMode(android.opengl.GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     this.Init(world);
   }
 
   public void Init(rs.projecta.world.World w)
   {
     this.world = w;
-    //this.camera = w.objs.Get_Player();
 
     if (this.world.debug)
     {

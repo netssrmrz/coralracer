@@ -17,7 +17,7 @@ public class Context
     java.nio.FloatBuffer b;
   
     //android.util.Log.d("onSurfaceCreated()", "Entered");
-    android.opengl.GLES20.glClearColor(0, 0, 0, 0.13f);
+    android.opengl.GLES20.glClearColor(0f, 0, 0, 0f);
   
     source =
       "uniform mat4 u_Matrix;" +
@@ -41,8 +41,15 @@ public class Context
       col_loc = android.opengl.GLES20.glGetUniformLocation(prog_id, "u_Color");
       mat_loc = android.opengl.GLES20.glGetUniformLocation(prog_id, "u_Matrix");
       att_loc = android.opengl.GLES20.glGetAttribLocation(prog_id, "a_Position");
-    
-      android.opengl.GLES20.glLineWidth(6);
+  
+      android.opengl.GLES20.glLineWidth(3f);
+      android.opengl.GLES20.glDisable(android.opengl.GLES20.GL_CULL_FACE);
+      android.opengl.GLES20.glDisable(android.opengl.GLES20.GL_DEPTH_TEST);
+      android.opengl.GLES20.glEnable(android.opengl.GLES20.GL_BLEND);
+      //android.opengl.GLES20.glBlendFunc(android.opengl.GLES20.GL_ONE, android.opengl.GLES20.GL_ONE);
+      //float r[] = new float[2];
+      //android.opengl.GLES20.glGetFloatv(android.opengl.GLES20.GL_ALIASED_LINE_WIDTH_RANGE, r, 0);
+      //android.util.Log.d("Init()", "r: " + r[0] + ", " + r[1]);
     }
   }
   

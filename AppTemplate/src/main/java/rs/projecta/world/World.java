@@ -204,22 +204,39 @@ implements
   public void Update()
   {
     long now;
-    float sec_step;
-    int i;
+    float tot_sim_time, sim_time, min_sim_time = 0.01f, rem_sim_time;
     
     now = System.nanoTime();
     this.lapsed_time = now - this.last_update;
     this.last_update = now;
   
-    sec_step = this.lapsed_time / 1800000000f;
-    this.phys_world.step(sec_step, 8, 8);
+    tot_sim_time = this.lapsed_time / 1800000000f;
+  
+    rem_sim_time = tot_sim_time;
+    while (rem_sim_time > 0)
+    {
+      if (rem_sim_time > min_sim_time)
+      {
+        sim_time = min_sim_time;
+      }
+      else
+      {
+        sim_time = rem_sim_time;
+      }
+      
+      this.phys_world.step(sim_time, 20, 20);
+      rem_sim_time -= sim_time;
+    }
+  
+    //tot_sim_time = this.lapsed_time / 1800000000f;
+    //this.phys_world.step(tot_sim_time, 8, 8);
   
     this.Notify_Update();
   
     if (this.level != null)
       this.level.Update();
   
-    this.objs.Process(sec_step); // remove and update
+    this.objs.Process(tot_sim_time); // remove and update
   }
 
   public void onLoadComplete(android.media.SoundPool sounds, int id, int status)

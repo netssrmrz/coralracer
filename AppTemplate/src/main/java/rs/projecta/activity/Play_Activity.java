@@ -12,7 +12,7 @@ implements
   public rs.projecta.world.World world;
   public rs.projecta.level.Level curr_level;
   public android.widget.LinearLayout main_view;
-  public android.support.v4.view.GestureDetectorCompat gesture_man;
+  public androidx.core.view.GestureDetectorCompat gesture_man;
   public boolean has_tilt_sensors;
 
   @Override
@@ -38,8 +38,6 @@ implements
     this.world.Set_Listener(this);
     if (supports_es2)
       this.gfx_view = new rs.projecta.view.OpenGL_View(this, this.world);
-    else
-      this.gfx_view = new rs.projecta.view.Canvas_View(this, this.world);
     
     com.google.android.gms.ads.AdView mAdView =
       new com.google.android.gms.ads.AdView(this);
@@ -69,7 +67,7 @@ implements
     if (this.has_tilt_sensors)
     {
       this.tilt_man=new rs.projecta.Tilt_Manager(this, this.world);
-      this.gesture_man = new android.support.v4.view.GestureDetectorCompat(this, this);
+      this.gesture_man = new androidx.core.view.GestureDetectorCompat(this, this);
     }
     else
     {

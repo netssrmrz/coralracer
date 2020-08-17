@@ -2,7 +2,7 @@ package rs.projecta.world;
 
 public class Object_List
 {
-  public java.util.ArrayList<Object> objs, del_objs;
+  public java.util.ArrayList<Object> objs, del_objs, add_objs;
   public World world;
 
   public Object_List(World w)
@@ -10,16 +10,25 @@ public class Object_List
     this.world = w;
     this.objs = new java.util.ArrayList<Object>();
     this.del_objs = new java.util.ArrayList<Object>();
+    this.add_objs = new java.util.ArrayList<Object>();
   }
 
   public void Process(float sec_step)
   {
+    for (Object obj: this.add_objs)
+    {
+      this.objs.add(obj);
+      //if (obj instanceof rs.projecta.object.features.Has_Cleanup)
+      //  ((rs.projecta.object.features.Has_Cleanup)obj).Remove();
+    }
+    this.add_objs.clear();
+    
     for (Object obj: this.objs)
     {
       if (obj instanceof rs.projecta.object.features.Has_Update)
         ((rs.projecta.object.features.Has_Update)obj).Update(sec_step);
     }
-
+  
     for (Object obj: this.del_objs)
     {
       this.objs.remove(obj);
@@ -33,10 +42,16 @@ public class Object_List
   {
     this.del_objs.add(obj);
   }
-
+  
   public Object Add(Object obj)
   {
     this.objs.add(obj);
+    return obj;
+  }
+  
+  public Object Add_Later(Object obj)
+  {
+    this.add_objs.add(obj);
     return obj;
   }
 
