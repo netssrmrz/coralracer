@@ -167,7 +167,7 @@ implements
 
   public void Contact(org.jbox2d.dynamics.contacts.Contact c)
   {
-    this.suspend_secs = 0.2f;
+    //this.suspend_secs = 0.2f;
   }
   
   public void Update(float sec_step)

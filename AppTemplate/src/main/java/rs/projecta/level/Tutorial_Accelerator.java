@@ -45,7 +45,7 @@ public class Tutorial_Accelerator
   
     Add_Wavy_Bkg(w, player);
     w.objs.Add(player);
-    w.objs.Add(new rs.projecta.object.Mine(w, 0f, -1000f, 100f, 100f, 0f));
+    w.objs.Add(new rs.projecta.object.Loose_Wall(w, 0f, -1000f, 100f, 100f, 0f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 500f, -2500f, 3000f, 20f, 90f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 597f, -5988f, 500f, 20f, -258.952f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 932f, -6916f, 500f, 20f, -241.03f));
@@ -89,16 +89,16 @@ public class Tutorial_Accelerator
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 11990f, -7439f, 1937.329f, 29.809f, -269.858f));
     w.objs.Add(new rs.projecta.object.Oil_Slick(w, 11489f, -8831f, 100f, 100f, 0f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 15547f, -4689f, 3713.343f, 37.968f, 0f));
-    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 12648f, -6717f, 2012.481f, 29.784f, -269.766f));
-    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 13361f, -7340f, 2012.481f, 29.784f, -269.766f));
-    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 14090f, -6740f, 2012.481f, 29.784f, -269.766f));
+    w.objs.Add(new rs.projecta.object.Loose_Wall(w, 12648f, -6770f, 2012.481f, 29.784f, -269.766f));
+    w.objs.Add(new rs.projecta.object.Loose_Wall(w, 13361f, -7320f, 2012.481f, 29.784f, -269.766f));
+    w.objs.Add(new rs.projecta.object.Loose_Wall(w, 14090f, -6760f, 2012.481f, 29.784f, -269.766f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 8261f, -8347f, 500f, 20f, 0f));
     w.objs.Add(new rs.projecta.object.Accelerator(w, 11454f, -6983f, 100f, 100f, -178.844f));
     w.objs.Add(new rs.projecta.object.Accelerator(w, 7233f, -6909f, 100f, 100f, -1.163f));
     w.objs.Add(new rs.projecta.object.Oil_Slick(w, 7290f, -5191f, 100f, 100f, 0f));
     w.objs.Add(new rs.projecta.object.Accelerator(w, 9363f, -5157f, 100f, 100f, -181.054f));
     w.objs.Add(new rs.projecta.object.Accelerator(w, 9340f, -8847f, 100f, 100f, -0.702f));
-    w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 14762f, -7389f, 2012.481f, 29.784f, -269.766f));
+    w.objs.Add(new rs.projecta.object.Loose_Wall(w, 14762f, -7320f, 2012.481f, 29.784f, -269.766f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 15615f, -5447f, 500f, 20f, -269.937f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 16418f, -7036f, 500f, 20f, -269.937f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 17204f, -5515f, 500f, 20f, -269.937f));

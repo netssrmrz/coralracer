@@ -314,6 +314,8 @@ implements
     pos = new org.jbox2d.common.Vec2(x, y);
   
     body_def=new org.jbox2d.dynamics.BodyDef();
+    body_def.linearDamping = 0.2f;
+    body_def.angularDamping = 0.2f;
     body_def.type=body_type;
     body_def.position=To_Phys_Pt(pos);
     body_def.angle=(float) Math.toRadians(a_degrees);
