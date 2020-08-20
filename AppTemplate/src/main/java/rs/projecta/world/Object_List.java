@@ -2,56 +2,36 @@ package rs.projecta.world;
 
 public class Object_List
 {
-  public java.util.ArrayList<Object> objs, del_objs, add_objs;
+  public java.util.ArrayList<Object> objs;
   public World world;
 
   public Object_List(World w)
   {
     this.world = w;
     this.objs = new java.util.ArrayList<Object>();
-    this.del_objs = new java.util.ArrayList<Object>();
-    this.add_objs = new java.util.ArrayList<Object>();
   }
 
   public void Process(float sec_step)
   {
-    for (Object obj: this.add_objs)
-    {
-      this.objs.add(obj);
-      //if (obj instanceof rs.projecta.object.features.Has_Cleanup)
-      //  ((rs.projecta.object.features.Has_Cleanup)obj).Remove();
-    }
-    this.add_objs.clear();
+    Object objs_array[] = this.objs.toArray();
     
-    for (Object obj: this.objs)
+    for (Object obj: objs_array)
     {
       if (obj instanceof rs.projecta.object.features.Has_Update)
         ((rs.projecta.object.features.Has_Update)obj).Update(sec_step);
     }
-  
-    for (Object obj: this.del_objs)
-    {
-      this.objs.remove(obj);
-      if (obj instanceof rs.projecta.object.features.Has_Cleanup)
-        ((rs.projecta.object.features.Has_Cleanup)obj).Remove();
-    }
-    this.del_objs.clear();
   }
 
   public void Remove(Object obj)
   {
-    this.del_objs.add(obj);
+    this.objs.remove(obj);
+    if (obj instanceof rs.projecta.object.features.Has_Cleanup)
+      ((rs.projecta.object.features.Has_Cleanup)obj).Remove();
   }
   
   public Object Add(Object obj)
   {
     this.objs.add(obj);
-    return obj;
-  }
-  
-  public Object Add_Later(Object obj)
-  {
-    this.add_objs.add(obj);
     return obj;
   }
 
@@ -61,7 +41,7 @@ public class Object_List
 
     for (Object obj: this.objs)
     {
-      if (obj.getClass() == obj_class && !this.del_objs.contains(obj))
+      if (obj.getClass() == obj_class)
       {
         res = obj;
         if (!get_newest)
