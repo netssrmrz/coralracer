@@ -1,6 +1,6 @@
 package rs.projecta.object;
 
-public class Accelerator
+public class Current
 implements
   rs.projecta.object.features.Has_Position,
   rs.projecta.object.features.Is_Drawable,
@@ -10,27 +10,33 @@ implements
 {
   public org.jbox2d.dynamics.Body body;
   public rs.projecta.world.World world;
-  public rs.projecta.ogl.shapes.Fast_Forward draw_shape;
-  public float x, y, a_degrees;
+  public rs.projecta.ogl.shapes.Rectangle draw_shape;
+  public float x, y, sx, sy, a_degrees;
   public rs.projecta.ogl.Color color;
-  public static final float size=75;
   public boolean update_player;
-  public Player player;
+  public rs.projecta.object.Player player;
 
-  public Accelerator(rs.projecta.world.World world, float x, float y, float sx, float sy, float a_degrees)
+  public Current(rs.projecta.world.World world, float x, float y, float sx, float sy, float a_degrees)
   {
-    org.jbox2d.collision.shapes.CircleShape shape;
+    org.jbox2d.collision.shapes.PolygonShape shape;
     
     this.world=world;
     this.x = x;
     this.y = y;
+    this.sx = sx;
+    this.sy = sy;
     this.a_degrees = a_degrees;
   
-    shape=new org.jbox2d.collision.shapes.CircleShape();
-    shape.setRadius(this.world.To_Phys_Dim(size));
+    shape=new org.jbox2d.collision.shapes.PolygonShape();
+    shape.setAsBox(
+      this.world.To_Phys_Dim(sx),
+      this.world.To_Phys_Dim(sy),
+      new org.jbox2d.common.Vec2(0, 0),
+      0);
     this.body = this.world.Add_Single_Fixture_Body(shape, x, y, a_degrees, 1, true, this);
+    //this.body = this.world.Add_Single_Fixture_Body(shape, x, y, a_degrees, 2, false, org.jbox2d.dynamics.BodyType.STATIC, this);
   
-    this.draw_shape = new rs.projecta.ogl.shapes.Fast_Forward();
+    this.draw_shape = new rs.projecta.ogl.shapes.Rectangle();
     this.color = new rs.projecta.ogl.Color(0xff00ff00);
     
     this.update_player = false;
@@ -40,7 +46,7 @@ implements
   {
     rs.projecta.ogl.Context ctx = ((rs.projecta.view.OpenGL_View)v).ogl_ctx;
   
-    ctx.Draw(this.color, this.draw_shape);
+    ctx.Draw(sx, sy,0, 0, 0, this.color, this.draw_shape, 0);
   }
 
   public float Get_X()
@@ -61,15 +67,22 @@ implements
   {
   }
   
-  public void Contact(org.jbox2d.dynamics.contacts.Contact c, boolean is_start)
+  public void Contact(org.jbox2d.dynamics.contacts.Contact c, boolean is_Start)
   {
-    if (is_start)
+    if (is_Start)
     {
+      //android.util.Log.d("Fn Contact", "has contact");
       this.player = rs.projecta.world.World.Get_Player_Contact(c);
       if (this.player != null)
       {
         this.update_player = true;
+        //android.util.Log.d("Fn Contact", "contact is player");
       }
+    }
+    else
+    {
+      this.update_player = false;
+      //android.util.Log.d("Fn Contact", "has lost contact");
     }
   }
   
@@ -80,20 +93,17 @@ implements
   
   public void Set_Angle_Degrees(float a)
   {
-  
   }
   
   public void Update(float dt)
   {
     if (this.update_player)
     {
-      this.player.body.setAngularVelocity(0);
-      this.player.body.setTransform(this.player.body.getPosition(), this.body.getAngle());
-
-      this.player.body.setLinearVelocity(new org.jbox2d.common.Vec2(0, 0));
-      this.player.Apply_Frwd_Force(5000f);
+      org.jbox2d.common.Vec2 current_vec = new org.jbox2d.common.Vec2(0, 400f);
+      org.jbox2d.common.Vec2 force_vec = this.body.getWorldVector(current_vec);
+      this.player.body.applyForceToCenter(force_vec);
       
-      this.update_player = false;
+      //android.util.Log.d("Fn Update", "player updated");
     }
   }
 }

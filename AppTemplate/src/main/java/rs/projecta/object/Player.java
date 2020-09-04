@@ -5,7 +5,7 @@ implements
   rs.projecta.object.features.Is_Drawable,
   rs.projecta.object.features.Has_Position,
   rs.projecta.object.features.Has_Direction,
-  rs.projecta.object.features.Can_Collide,
+  //rs.projecta.object.features.Can_Collide,
     rs.projecta.object.features.Has_Update
 {
   public org.jbox2d.dynamics.Body body;
@@ -181,7 +181,7 @@ implements
       req_abs_vel = this.body.getWorldVector(req_rel_vel);
       diff_abs_vel = req_abs_vel.sub(curr_abs_vel);
   
-      diff_abs_vel = diff_abs_vel.mul(2f);
+      //diff_abs_vel = diff_abs_vel.mul(2f);
       this.body.applyForceToCenter(diff_abs_vel);
     }
     else

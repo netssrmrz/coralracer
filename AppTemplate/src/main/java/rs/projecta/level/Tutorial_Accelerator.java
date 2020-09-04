@@ -45,7 +45,7 @@ public class Tutorial_Accelerator
   
     Add_Wavy_Bkg(w, player);
     w.objs.Add(player);
-    w.objs.Add(new rs.projecta.object.Loose_Wall(w, 0f, -1000f, 100f, 100f, 0f));
+    w.objs.Add(new rs.projecta.object.Current(w, 0f, -1000f, 200f, 1000f, 180f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 500f, -2500f, 3000f, 20f, 90f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 597f, -5988f, 500f, 20f, -258.952f));
     w.objs.Add(new rs.projecta.object.Bouncy_Wall(w, 932f, -6916f, 500f, 20f, -241.03f));

@@ -34,12 +34,15 @@ public class Mine
   }
   
   @Override
-  public void Contact(org.jbox2d.dynamics.contacts.Contact c)
+  public void Contact(org.jbox2d.dynamics.contacts.Contact c, boolean is_start)
   {
-    this.player = rs.projecta.world.World.Get_Player_Contact(c);
-    if (this.player != null)
+    if (is_start)
     {
-      this.update_player = true;
+      this.player = rs.projecta.world.World.Get_Player_Contact(c);
+      if (this.player != null)
+      {
+        this.update_player = true;
+      }
     }
   }
   

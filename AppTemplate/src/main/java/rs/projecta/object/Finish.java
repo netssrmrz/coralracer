@@ -72,15 +72,18 @@ implements
   {
   }
   
-  public void Contact(org.jbox2d.dynamics.contacts.Contact c)
+  public void Contact(org.jbox2d.dynamics.contacts.Contact c, boolean is_start)
   {
     rs.projecta.object.Player player;
     
-    player = (Player)rs.projecta.world.World.Get_Contact_Object_If_Type(c, Player.class);
-    if (player != null)
+    if (is_start)
     {
-      this.world.level.next_level = this.next_level;
-      this.world.Change_State(rs.projecta.world.World.STATE_LEVELCOMPLETE);
+      player = (Player)rs.projecta.world.World.Get_Contact_Object_If_Type(c, Player.class);
+      if (player != null)
+      {
+        this.world.level.next_level = this.next_level;
+        this.world.Change_State(rs.projecta.world.World.STATE_LEVELCOMPLETE);
+      }
     }
   }
 }

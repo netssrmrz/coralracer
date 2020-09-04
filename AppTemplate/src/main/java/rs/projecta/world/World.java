@@ -113,28 +113,34 @@ implements
     for (i=0; i<this.world_update_listeners.size(); i++)
       this.world_update_listeners.get(i).On_World_Update(this);
   }
-
+  
   public void beginContact(org.jbox2d.dynamics.contacts.Contact c)
+  {
+    Do_Contact(c, true);
+  }
+  
+  public void endContact(org.jbox2d.dynamics.contacts.Contact c)
+  {
+    Do_Contact(c, false);
+  }
+  
+  public void Do_Contact(org.jbox2d.dynamics.contacts.Contact c, boolean is_contact_start)
   {
     Object obj;
 
     obj = c.getFixtureA().getBody().getUserData();
     if (obj != null && obj instanceof rs.projecta.object.features.Can_Collide)
     {
-      ((rs.projecta.object.features.Can_Collide)obj).Contact(c);
+      ((rs.projecta.object.features.Can_Collide)obj).Contact(c, is_contact_start);
       //android.util.Log.d("World", "beginContact(): body A is " + obj.getClass().getName());
     }
     
     obj = c.getFixtureB().getBody().getUserData();
     if (obj != null && obj instanceof rs.projecta.object.features.Can_Collide)
     {
-      ((rs.projecta.object.features.Can_Collide)obj).Contact(c);
+      ((rs.projecta.object.features.Can_Collide)obj).Contact(c, is_contact_start);
       //android.util.Log.d("World", "beginContact(): body B is " + obj.getClass().getName());
     }
-  }
-
-  public void endContact(org.jbox2d.dynamics.contacts.Contact p1)
-  {
   }
 
   public void preSolve(org.jbox2d.dynamics.contacts.Contact p1, org.jbox2d.collision.Manifold p2)

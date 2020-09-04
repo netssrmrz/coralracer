@@ -56,9 +56,12 @@ implements
   {
   }
   
-  public void Contact(org.jbox2d.dynamics.contacts.Contact c)
+  public void Contact(org.jbox2d.dynamics.contacts.Contact c, boolean is_start)
   {
-    this.contact_player = rs.projecta.world.World.Get_Player_Contact(c);
+    if (is_start)
+    {
+      this.contact_player = rs.projecta.world.World.Get_Player_Contact(c);
+    }
   }
   
   public void Update(float dt)

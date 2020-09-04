@@ -207,15 +207,18 @@ implements rs.projecta.object.features.Is_Drawable, rs.projecta.object.features.
     this.world.phys_world.destroyBody(this.body);
   }
   
-  public void Contact(org.jbox2d.dynamics.contacts.Contact c)
+  public void Contact(org.jbox2d.dynamics.contacts.Contact c, boolean is_start)
   {
     rs.projecta.object.Player player;
   
-    player = (Player)rs.projecta.world.World.Get_Contact_Object_If_Type(c, Player.class);
-    if (player != null)
+    if (is_start)
     {
-      Explosion.Add(this.world, player.Get_X(), player.Get_Y());
-      //android.util.Log.d("Player", "Contact(): instanceof Wall");
+      player = (Player)rs.projecta.world.World.Get_Contact_Object_If_Type(c, Player.class);
+      if (player != null)
+      {
+        Explosion.Add(this.world, player.Get_X(), player.Get_Y());
+        //android.util.Log.d("Player", "Contact(): instanceof Wall");
+      }
     }
   }
 }
